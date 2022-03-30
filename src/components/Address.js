@@ -30,7 +30,17 @@ export function Address({
     }
 
     const innerContent = showTooltip ? (
-        <Tooltip placement="bottom" title={`ETH:${address}`}>
+        <Tooltip
+            placement="bottom"
+            title={`ETH:${address}`}
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                textAlign: 'center',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+            }}
+        >
             {displayAddress}
         </Tooltip>
     ) : (

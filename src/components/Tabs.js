@@ -11,8 +11,8 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
             style={{
                 width: widthPerTab,
                 textAlign: 'center',
+                float: 'left',
             }}
-
             key={tab.key}
         >
             {tab.title}

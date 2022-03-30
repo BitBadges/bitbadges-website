@@ -57,8 +57,9 @@ export function Pending() {
     const pending = tab == 'incoming' ? inPending : outPending;
 
     return (
-        <Content style={{ padding: '0', width: '100%', height: 30 }}>
-            <PageHeader title={`Pending`} />
+        <Content
+            style={{ padding: '0', width: '100%', backgroundColor: 'white' }}
+        >
             <Tabs
                 setTab={setTab}
                 tabInfo={[

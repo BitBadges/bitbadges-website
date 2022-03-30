@@ -3,6 +3,7 @@ import { BadgeDisplay } from '../components/BadgeDisplay';
 import { PageHeader } from '../components/PageHeader';
 import { ShowingResultsFor } from '../components/ShowingResultsFor';
 import { useParams } from 'react-router-dom';
+import { Pending } from './Pending';
 const React = require('react');
 const { useState, useEffect } = require('react');
 const { Layout, Menu, Input, Select } = require('antd');
@@ -48,14 +49,18 @@ export function User() {
                 setTab={setTab}
                 tabInfo={[
                     { key: 'received', title: 'Owned Badges' },
-                    { key: 'offering', title: 'Badges Being Offered' },
                     { key: 'issued', title: 'Created Badges' },
+                    { key: 'offering', title: 'Badges Being Offered' },
+
+                    { key: 'pending', title: 'Pending Badges' },
                 ]}
-                widthPerTab={'33.31%'}
+                widthPerTab={'calc(100% / 4)'}
             />
+
             {tab == 'issued' && <BadgeDisplay badges={issued} />}
             {tab == 'received' && <BadgeDisplay badges={received} />}
             {tab == 'offering' && <BadgeDisplay badges={[]} />}
+            {tab == 'pending' && <Pending />}
         </Content>
     );
 }
