@@ -138,23 +138,31 @@ export function MintTimeline() {
                             </Col>
                         </Row>
                     </span>
-                    <Button
-                        type="primary"
-                        style={{ width: '50%' }}
-                        onClick={async () => {
-                            setCurrStepNumber(4);
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
                         }}
                     >
-                        Confirm
-                    </Button>
-                    <Button
-                        style={{ width: '50%' }}
-                        onClick={async () => {
-                            setCurrStepNumber(2);
-                        }}
-                    >
-                        Go Back
-                    </Button>
+                        <Button
+                            type="primary"
+                            style={{ width: '48%' }}
+                            onClick={async () => {
+                                setCurrStepNumber(4);
+                            }}
+                        >
+                            Confirm
+                        </Button>
+                        <Button
+                            style={{ width: '48%' }}
+                            onClick={async () => {
+                                setCurrStepNumber(2);
+                            }}
+                        >
+                            Go Back
+                        </Button>
+                    </div>
                 </div>
             ),
         },
@@ -185,45 +193,57 @@ export function MintTimeline() {
                                 </Select>
                             </Form.Item>
                         </Form>
-                        <Button
-                            type="primary"
-                            style={{ width: '50%', marginTop: 4 }}
-                            onClick={async () => {
-                                setTxnSubmitted(true);
-                                setTransactionIsLoading(true);
-
-                                const data = {
-                                    metadata: {
-                                        ...badge,
-                                    },
-                                    recipients,
-                                    permissions,
-                                };
-
-                                await signAndSubmitTxn('/badges/create', data);
-
-                                //once completed, display links to block explorer, where they can view it, etc
-                                window.localStorage.setItem(
-                                    'savedBadgeData',
-                                    '{}'
-                                );
-
-                                setTransactionIsLoading(false);
+                        <div
+                            style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
                             }}
-                            loading={transactionIsLoading}
-                            disabled={txnSubmitted}
                         >
-                            Submit Transaction
-                        </Button>
-                        <Button
-                            style={{ width: '50%' }}
-                            onClick={async () => {
-                                setCurrStepNumber(3);
-                            }}
-                            disabled={txnSubmitted}
-                        >
-                            Go Back
-                        </Button>
+                            <Button
+                                type="primary"
+                                style={{ width: '48%' }}
+                                onClick={async () => {
+                                    setTxnSubmitted(true);
+                                    setTransactionIsLoading(true);
+
+                                    const data = {
+                                        metadata: {
+                                            ...badge,
+                                        },
+                                        recipients,
+                                        permissions,
+                                    };
+
+                                    await signAndSubmitTxn(
+                                        '/badges/create',
+                                        data
+                                    );
+
+                                    //once completed, display links to block explorer, where they can view it, etc
+                                    window.localStorage.setItem(
+                                        'savedBadgeData',
+                                        '{}'
+                                    );
+
+                                    setTransactionIsLoading(false);
+                                }}
+                                loading={transactionIsLoading}
+                                disabled={txnSubmitted}
+                            >
+                                Submit Transaction
+                            </Button>
+                            <Button
+                                style={{ width: '48%' }}
+                                onClick={async () => {
+                                    setCurrStepNumber(3);
+                                }}
+                                disabled={txnSubmitted}
+                            >
+                                Go Back
+                            </Button>
+                        </div>
                     </div>
                     {txnSubmitted && !transactionIsLoading && (
                         <div

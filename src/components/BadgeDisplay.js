@@ -42,7 +42,7 @@ export function BadgeDisplay({ badges, balanceMap }) {
                 padding: '0',
                 margin: 0,
                 minHeight: '60vh',
-                backgroundColor: '#fafafa',
+                backgroundColor: 'whitesmoke',
                 width: '100%',
             }}
         >
@@ -88,7 +88,12 @@ export function BadgeDisplay({ badges, balanceMap }) {
             ) : (
                 <Collapse
                     accordion
-                    style={{ padding: '0', margin: 0, width: '100%' }}
+                    style={{
+                        padding: '0',
+                        margin: 0,
+                        width: '100%',
+                        backgroundColor: 'whitesmoke',
+                    }}
                 >
                     {Object.keys(badgesByType)
                         .sort()

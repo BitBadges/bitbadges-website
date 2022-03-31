@@ -79,7 +79,7 @@ code {
   .site-layout-content {
     height: '100%';
     padding: 20px;
-    background: #fff;
+    background-color: #fff;
   }
 
   #components-layout-demo-top .logo {

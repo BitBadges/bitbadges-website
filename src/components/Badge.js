@@ -101,6 +101,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 title: 'Transfer',
                 description: 'Transfer this badge.',
                 icon: <SwapOutlined />,
+                visible: transferIsVisible,
                 content: (
                     <>
                         {transferIsVisible && (
@@ -202,6 +203,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 title: 'Mint',
                 description: 'Mint more of this badge.',
                 icon: <PlusOutlined />,
+                visible: mintMoreIsVisible,
                 content: (
                     <>
                         {mintMoreIsVisible && (
@@ -301,6 +303,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 title: 'Lock Supply',
                 icon: <LockOutlined />,
                 description: 'Disable minting privileges permanently.',
+                visible: lockSupplyIsVisible,
                 content: (
                     <>
                         {lockSupplyIsVisible && (
@@ -401,6 +404,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 title: 'Revoke',
                 description: 'Revoke a badge from an existing owner.',
                 icon: <UndoOutlined />,
+                visible: revokeIsVisible,
                 content: (
                     <>
                         {revokeIsVisible && (
@@ -499,6 +503,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 title: 'Lock Revoke Permissions',
                 description: 'Disable revoking privileges permanently.',
                 icon: <LockOutlined />,
+                visible: lockRevokeIsVisible,
                 content: (
                     <>
                         {lockRevokeIsVisible && (
@@ -599,6 +604,7 @@ export function Badge({ badge, size, hidePermissions }) {
             title: 'Transfer Manager Role',
             description: 'Transfer manager privileges to new address.',
             icon: <SwapRightOutlined />,
+            visible: transferManagerIsVisible,
             content: (
                 <>
                     {transferManagerIsVisible && (
@@ -741,6 +747,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 style={{
                     width: 230,
                     margin: 8,
+                    textAlign: 'center',
                 }}
                 onClick={() => setModalIsVisible(true)}
                 hoverable
@@ -1158,6 +1165,12 @@ export function Badge({ badge, size, hidePermissions }) {
                                                             onClick={() => {
                                                                 item.showModal();
                                                             }}
+                                                            style={{
+                                                                backgroundColor:
+                                                                    item.visible
+                                                                        ? 'lightgrey'
+                                                                        : undefined,
+                                                            }}
                                                         >
                                                             <List.Item
                                                                 actions={[
@@ -1203,8 +1216,8 @@ export function Badge({ badge, size, hidePermissions }) {
                                                                 </Skeleton>
                                                             </List.Item>
                                                         </div>
+
                                                         <div>
-                                                            {' '}
                                                             {item.content}
                                                         </div>
                                                         <Divider

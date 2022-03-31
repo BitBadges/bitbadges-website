@@ -47,7 +47,14 @@ export function WalletHeader() {
 
     return (
         <Header className="App-header">
-            <a style={{ display: 'flex', alignItems: 'center' }} href="/">
+            <div
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                }}
+                onClick={() => navigate('')}
+            >
                 <img
                     src={'./bitbadgeslogo.png'}
                     className="App-logo"
@@ -59,7 +66,7 @@ export function WalletHeader() {
                 >
                     BitBadges
                 </Typography>
-            </a>
+            </div>
 
             <div
                 className="navbar-expanded"

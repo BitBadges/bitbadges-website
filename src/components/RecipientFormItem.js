@@ -91,7 +91,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
     }
 
     return (
-        <Form.Item label={<Text strong>Recipients</Text>}>
+        <Form.Item label={<Text strong>Recipients ({recipients.length})</Text>}>
             {recipients.length > 0 && (
                 <>
                     {recipients.map((recipient, idx) => (
@@ -133,14 +133,20 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                             </div>
                         </div>
                     ))}
-                    <Divider />
+                    <Divider style={{ margin: 4 }} />
                 </>
             )}
             <div>
                 {!visible && !fileModalVisible && (
                     <>
+                        <Typography
+                            style={{ fontWeight: 'bold' }}
+                            align="center"
+                        >
+                            Add Recipients?
+                        </Typography>
                         <Button
-                            style={{ width: '50%' }}
+                            style={{ marginTop: 5, width: '50%' }}
                             size="small"
                             onClick={showUserModal}
                         >
@@ -155,14 +161,19 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                             Add by CSV
                             <UserAddOutlined />
                         </Button>
+                        {recipients.length > 0 && <Divider />}
                     </>
                 )}
             </div>
             {visible && (
                 <>
-                    <Form.Item
-                        label={<Text strong>Add Recipients Manually</Text>}
-                    >
+                    <Form.Item>
+                        <Typography
+                            style={{ fontWeight: 'bold' }}
+                            align="center"
+                        >
+                            Manual Add
+                        </Typography>
                         <Input.Group compact>
                             <Select
                                 value={addedUserChain}
@@ -236,13 +247,18 @@ export function RecipientFormItem({ setRecipients, recipients }) {
             )}
             {fileModalVisible && (
                 <>
-                    <Form.Item
-                        label={<Text strong>Add Recipients via CSV</Text>}
-                    >
+                    <Form.Item>
+                        <Typography
+                            style={{ fontWeight: 'bold' }}
+                            align="center"
+                        >
+                            CSV Add
+                        </Typography>
                         <Upload
                             maxCount={1}
                             name="file"
                             onChange={(info) => {
+                                console.log(info);
                                 if (info.file.status !== 'uploading') {
                                     console.log(info.file, info.fileList);
                                 }

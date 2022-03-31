@@ -101,29 +101,37 @@ export function PermissionsForm({
                                 `No: Badge owners will not have transfer or burn permissions.`}
                         </Text>
                     </Form.Item>
-
-                    <Button
-                        type="primary"
-                        style={{ width: '50%' }}
-                        onClick={() => {
-                            setCurrStepNumber(3);
-                            setPermissions({
-                                canMintMore,
-                                canRevoke,
-                                canOwnerTransfer,
-                            });
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}
                     >
-                        Confirm Data
-                    </Button>
-                    <Button
-                        style={{ width: '50%' }}
-                        onClick={async () => {
-                            setCurrStepNumber(1);
-                        }}
-                    >
-                        Go Back
-                    </Button>
+                        <Button
+                            type="primary"
+                            style={{ width: '48%' }}
+                            onClick={() => {
+                                setCurrStepNumber(3);
+                                setPermissions({
+                                    canMintMore,
+                                    canRevoke,
+                                    canOwnerTransfer,
+                                });
+                            }}
+                        >
+                            Confirm Data
+                        </Button>
+                        <Button
+                            style={{ width: '48%' }}
+                            onClick={async () => {
+                                setCurrStepNumber(1);
+                            }}
+                        >
+                            Go Back
+                        </Button>
+                    </div>
                 </Form>
             </Form.Provider>
         </div>

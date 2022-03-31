@@ -46,7 +46,7 @@ export function User() {
             }}
         >
             <ShowingResultsFor address={urlParams.userId.split(':')[1]} />
-            
+
             <Tabs
                 setTab={setTab}
                 tabInfo={[
@@ -57,7 +57,7 @@ export function User() {
                 ]}
                 widthPerTab={'calc(100% / 4)'}
             />
-            <div style={{ backgroundColor: 'white' }}>
+            <div>
                 {tab === 'issued' && <BadgeDisplay badges={issued} />}
                 {tab === 'received' && <BadgeDisplay badges={received} />}
                 {tab === 'offering' && <BadgeDisplay badges={[]} />}

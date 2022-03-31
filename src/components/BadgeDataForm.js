@@ -419,40 +419,57 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
 
                     {badgeData && badgeData.name && (
                         <Form.Item label={<Text strong>Badge Preview</Text>}>
-                            <Badge
-                                size={60}
-                                badge={{
-                                    metadata: badgeData,
-                                    supply,
-                                    manager: `ETH:${address}`,
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    flexWrap: 'wrap',
+                                    textAlign: 'center',
                                 }}
-                                hidePermissions
-                            />
+                            >
+                                <Badge
+                                    size={100}
+                                    badge={{
+                                        metadata: badgeData,
+                                        supply,
+                                        manager: `ETH:${address}`,
+                                    }}
+                                    hidePermissions
+                                />
+                            </div>
                         </Form.Item>
                     )}
-
-                    <Button
-                        disabled={
-                            !title.length ||
-                            (expirationDate && !expirationDateValue)
-                        }
-                        type="primary"
-                        style={{ width: '50%' }}
-                        onClick={() => {
-                            setCurrStepNumber(2);
-                            setBadge(badgeData);
+                    <div
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}
                     >
-                        Confirm Data
-                    </Button>
-                    <Button
-                        style={{ width: '50%' }}
-                        onClick={async () => {
-                            setCurrStepNumber(0);
-                        }}
-                    >
-                        Go Back
-                    </Button>
+                        <Button
+                            disabled={
+                                !title.length ||
+                                (expirationDate && !expirationDateValue)
+                            }
+                            type="primary"
+                            style={{ width: '48%' }}
+                            onClick={() => {
+                                setCurrStepNumber(2);
+                                setBadge(badgeData);
+                            }}
+                        >
+                            Confirm Data
+                        </Button>
+                        <Button
+                            style={{ width: '48%' }}
+                            onClick={async () => {
+                                setCurrStepNumber(0);
+                            }}
+                        >
+                            Go Back
+                        </Button>
+                    </div>
 
                     <Button
                         size="small"
