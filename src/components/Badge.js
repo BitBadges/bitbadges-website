@@ -42,6 +42,8 @@ const {
     LockFilled,
     UnlockFilled,
     RollbackOutlined,
+    RightOutlined,
+    DownOutlined,
 } = require('@ant-design/icons');
 const { useSelector } = require('react-redux');
 const { signAndSubmitTxn } = require('../api/api');
@@ -170,6 +172,9 @@ export function Badge({ badge, size, hidePermissions }) {
                         )}
                     </>
                 ),
+                showModal: () => {
+                    setTransferIsVisible(!transferIsVisible);
+                },
                 popover: (
                     <>
                         {
@@ -179,7 +184,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                     setTransferIsVisible(!transferIsVisible)
                                 }
                             >
-                                {transferIsVisible ? 'hide' : 'show'}
+                                {transferIsVisible ? (
+                                    <DownOutlined />
+                                ) : (
+                                    <RightOutlined />
+                                )}
                             </a>
                         }
                     </>
@@ -263,6 +272,9 @@ export function Badge({ badge, size, hidePermissions }) {
                         )}
                     </>
                 ),
+                showModal: () => {
+                    setMintMoreIsVisible(!mintMoreIsVisible);
+                },
                 popover: (
                     <>
                         {
@@ -272,7 +284,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                     setMintMoreIsVisible(!mintMoreIsVisible)
                                 }
                             >
-                                {mintMoreIsVisible ? 'hide' : 'show'}
+                                {mintMoreIsVisible ? (
+                                    <DownOutlined />
+                                ) : (
+                                    <RightOutlined />
+                                )}
                             </a>
                         }
                     </>
@@ -355,6 +371,9 @@ export function Badge({ badge, size, hidePermissions }) {
                         )}
                     </>
                 ),
+                showModal: () => {
+                    setLockSupplyIsVisible(!lockSupplyIsVisible);
+                },
                 popover: (
                     <>
                         {
@@ -364,7 +383,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                     setLockSupplyIsVisible(!lockSupplyIsVisible)
                                 }
                             >
-                                {lockSupplyIsVisible ? 'hide' : 'show'}
+                                {lockSupplyIsVisible ? (
+                                    <DownOutlined />
+                                ) : (
+                                    <RightOutlined />
+                                )}
                             </a>
                         }
                     </>
@@ -448,6 +471,9 @@ export function Badge({ badge, size, hidePermissions }) {
                         )}
                     </>
                 ),
+                showModal: () => {
+                    setRevokeIsVisible(!revokeIsVisible);
+                },
                 popover: (
                     <>
                         {
@@ -457,7 +483,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                     setRevokeIsVisible(!revokeIsVisible)
                                 }
                             >
-                                {revokeIsVisible ? 'hide' : 'show'}
+                                {revokeIsVisible ? (
+                                    <DownOutlined />
+                                ) : (
+                                    <RightOutlined />
+                                )}
                             </a>
                         }
                     </>
@@ -539,7 +569,9 @@ export function Badge({ badge, size, hidePermissions }) {
                         )}
                     </>
                 ),
-
+                showModal: () => {
+                    setLockRevokeIsVisible(!lockRevokeIsVisible);
+                },
                 popover: (
                     <>
                         {
@@ -549,7 +581,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                     setLockRevokeIsVisible(!lockRevokeIsVisible)
                                 }
                             >
-                                {lockRevokeIsVisible ? 'hide' : 'show'}
+                                {lockRevokeIsVisible ? (
+                                    <DownOutlined />
+                                ) : (
+                                    <RightOutlined />
+                                )}
                             </a>
                         }
                     </>
@@ -666,6 +702,9 @@ export function Badge({ badge, size, hidePermissions }) {
                     )}
                 </>
             ),
+            showModal: () => {
+                setTransferManagerIsVisible(!transferManagerIsVisible);
+            },
             popover: (
                 <>
                     {
@@ -677,7 +716,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                 )
                             }
                         >
-                            {transferManagerIsVisible ? 'hide' : 'show'}
+                            {transferManagerIsVisible ? (
+                                <DownOutlined />
+                            ) : (
+                                <RightOutlined />
+                            )}
                         </a>
                     }
                 </>
@@ -790,7 +833,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 alignItems: 'center',
                             }}
                         >
-                            <Text strong style={{ fontSize: 50 }}>
+                            <Text strong style={{ fontSize: 30 }}>
                                 {badge.metadata.name}
                             </Text>
                         </div>
@@ -818,14 +861,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                     badge.metadata.validFrom.end ? (
                                         <CheckCircleFilled
                                             style={{
-                                                fontSize: 40,
+                                                fontSize: 30,
                                                 color: 'green',
                                             }}
                                         />
                                     ) : (
                                         <WarningFilled
                                             style={{
-                                                fontSize: 40,
+                                                fontSize: 30,
                                                 color: 'red',
                                             }}
                                         />
@@ -841,10 +884,10 @@ export function Badge({ badge, size, hidePermissions }) {
                                 >
                                     {badge.permissions.canMintMore ? (
                                         <UnlockFilled
-                                            style={{ fontSize: 40 }}
+                                            style={{ fontSize: 30 }}
                                         />
                                     ) : (
-                                        <LockFilled style={{ fontSize: 40 }} />
+                                        <LockFilled style={{ fontSize: 30 }} />
                                     )}
                                 </Tooltip>
                                 <Divider type="vertical" />
@@ -857,11 +900,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                 >
                                     {badge.permissions.canOwnerTransfer ? (
                                         <SwapOutlined
-                                            style={{ fontSize: 40 }}
+                                            style={{ fontSize: 30 }}
                                         />
                                     ) : (
                                         <FontAwesomeIcon
-                                            style={{ fontSize: 40 }}
+                                            style={{ fontSize: 30 }}
                                             icon={faSnowflake}
                                         />
                                     )}
@@ -876,11 +919,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                 >
                                     {badge.permissions.canRevoke ? (
                                         <RollbackOutlined
-                                            style={{ fontSize: 40 }}
+                                            style={{ fontSize: 30 }}
                                         />
                                     ) : (
                                         <FontAwesomeIcon
-                                            style={{ fontSize: 40 }}
+                                            style={{ fontSize: 30 }}
                                             icon={faUserLock}
                                         />
                                     )}
@@ -908,7 +951,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                     <Address
                                         address={badge.manager.split(':')[1]}
                                         fontColor="black"
-                                        fontSize={24}
+                                        fontSize={18}
                                         showTooltip
                                     />
                                 </div>
@@ -929,7 +972,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                             badge.metadata.creator.split(':')[1]
                                         }
                                         fontColor="black"
-                                        fontSize={24}
+                                        fontSize={18}
                                         showTooltip
                                     />
                                 </div>
@@ -1062,48 +1105,70 @@ export function Badge({ badge, size, hidePermissions }) {
                                                 itemLayout="horizontal"
                                                 dataSource={permissionsData}
                                                 renderItem={(item) => (
-                                                    <div>
-                                                        <List.Item
-                                                            actions={[
-                                                                <a key="list-loadmore-edit">
-                                                                    {
-                                                                        item.popover
-                                                                    }
-                                                                </a>,
-                                                            ]}
+                                                    <>
+                                                        <div
+                                                            className="action-item"
+                                                            onClick={() => {
+                                                                item.showModal();
+                                                            }}
                                                         >
-                                                            <Skeleton
-                                                                avatar
-                                                                title={false}
-                                                                loading={
-                                                                    item.loading
-                                                                }
-                                                                active
+                                                            <List.Item
+                                                                actions={[
+                                                                    <a key="list-loadmore-edit">
+                                                                        {
+                                                                            item.popover
+                                                                        }
+                                                                    </a>,
+                                                                ]}
+                                                                style={{
+                                                                    paddingLeft: 8,
+                                                                }}
                                                             >
-                                                                <List.Item.Meta
-                                                                    avatar={
-                                                                        <Avatar
-                                                                            style={{
-                                                                                backgroundColor:
-                                                                                    'black',
-                                                                            }}
-                                                                            icon={
-                                                                                item.icon
-                                                                            }
-                                                                        />
-                                                                    }
+                                                                <Skeleton
+                                                                    avatar
                                                                     title={
-                                                                        item.title
+                                                                        false
                                                                     }
-                                                                    description={
-                                                                        item.description
+                                                                    loading={
+                                                                        item.loading
                                                                     }
-                                                                />
-                                                            </Skeleton>
-                                                        </List.Item>
-
-                                                        {item.content}
-                                                    </div>
+                                                                    active
+                                                                >
+                                                                    <List.Item.Meta
+                                                                        avatar={
+                                                                            <Avatar
+                                                                                style={{
+                                                                                    backgroundColor:
+                                                                                        'black',
+                                                                                }}
+                                                                                icon={
+                                                                                    item.icon
+                                                                                }
+                                                                            />
+                                                                        }
+                                                                        title={
+                                                                            item.title
+                                                                        }
+                                                                        description={
+                                                                            item.description
+                                                                        }
+                                                                    />
+                                                                </Skeleton>
+                                                            </List.Item>
+                                                        </div>
+                                                        <div>
+                                                            {' '}
+                                                            {item.content}
+                                                        </div>
+                                                        <Divider
+                                                            style={{
+                                                                color: 'black',
+                                                                backgroundColor:
+                                                                    'black',
+                                                                margin: 0,
+                                                            }}
+                                                        />
+                                                    </>
                                                 )}
                                             />
                                         </>

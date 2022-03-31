@@ -36,7 +36,12 @@ export function MintTimeline() {
     const steps = [
         {
             idx: 0,
-            title: <Text>Confirm Wallet to Issue From</Text>,
+            title: (
+                <Text>
+                    Confirm Wallet to Issue From (
+                    {address?.substr(0, 5) + '...' + address?.substr(-4)})
+                </Text>
+            ),
             content: (
                 <div>
                     <Button
@@ -58,6 +63,10 @@ export function MintTimeline() {
                             'Please connect wallet.'
                         )}
                     </Button>
+                    <Typography>
+                        *To use a different wallet, please connect to the site
+                        with that wallet.
+                    </Typography>
                 </div>
             ),
         },

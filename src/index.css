@@ -134,3 +134,12 @@ code {
 .ant-popover-placement-top {
     left: 0;
 }
+
+.action-item {
+    cursor: pointer;
+}
+
+
+.action-item:hover {
+    background-color: lightgray;
+}

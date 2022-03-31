@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBadgeDataForAddress } from '../api/api';
 import { Tabs } from './Tabs';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-const { Typography, Layout, Select } = require('antd');
+import Web3 from 'web3';
+const { Typography, Layout, Select, message } = require('antd');
 const React = require('react');
 const Web3ModalButtons = require('./Web3ModalButtons').Web3ModalButtons;
 const { Header } = Layout;
@@ -27,6 +28,11 @@ export function WalletHeader() {
 
     const onSearch = async (value) => {
         if (!value) return;
+
+        if (!Web3.utils.isAddress(value)) {
+            message.warn(`${value} is not a valid ETH address.`, 1);
+            return;
+        }
 
         navigate('/user/ETH:' + value);
         setInputAddress(value);
