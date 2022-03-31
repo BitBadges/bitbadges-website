@@ -1,5 +1,6 @@
+import Meta from 'antd/lib/card/Meta';
 import { Badge } from './Badge';
-const { Typography, Layout, Collapse, Select, Empty } = require('antd');
+const { Typography, Layout, Collapse, Select, Empty, Card } = require('antd');
 
 const React = require('react');
 
@@ -98,7 +99,13 @@ export function BadgeDisplay({ badges, balanceMap }) {
                                         header={`${type} (${badgesByType[type].length})`}
                                         key={type}
                                     >
-                                        <>
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                flexWrap: 'wrap',
+                                            }}
+                                        >
                                             {badgesByType[type].map((badge) => (
                                                 <Badge
                                                     size={100}
@@ -115,26 +122,35 @@ export function BadgeDisplay({ badges, balanceMap }) {
                                                     }
                                                 />
                                             ))}
-                                        </>
+                                        </div>
                                     </Panel>
                                 )}
                                 {groupBy === 'all' && (
                                     <>
-                                        {badgesByType[type].map((badge) => (
-                                            <Badge
-                                                size={100}
-                                                badge={badge}
-                                                balance={
-                                                    balanceMap &&
-                                                    balanceMap[badge._id] &&
-                                                    balanceMap[badge._id]
-                                                        .received
-                                                        ? balanceMap[badge._id]
-                                                              .received
-                                                        : undefined
-                                                }
-                                            />
-                                        ))}
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                flexWrap: 'wrap',
+                                            }}
+                                        >
+                                            {badgesByType[type].map((badge) => (
+                                                <Badge
+                                                    size={100}
+                                                    badge={badge}
+                                                    balance={
+                                                        balanceMap &&
+                                                        balanceMap[badge._id] &&
+                                                        balanceMap[badge._id]
+                                                            .received
+                                                            ? balanceMap[
+                                                                  badge._id
+                                                              ].received
+                                                            : undefined
+                                                    }
+                                                />
+                                            ))}
+                                        </div>
                                     </>
                                 )}
                             </>

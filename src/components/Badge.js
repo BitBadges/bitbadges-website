@@ -2,6 +2,7 @@ import { RecipientFormItem } from './RecipientFormItem';
 import { BurnOwnerFormItem } from './BurnOwnerFormItem';
 import { Tabs } from './Tabs';
 import { Address } from './Address';
+import Meta from 'antd/lib/card/Meta';
 
 const {
     Avatar,
@@ -18,6 +19,7 @@ const {
     Table,
     Menu,
     Empty,
+    Card,
 } = require('antd');
 const { default: Text } = require('antd/lib/typography/Text');
 const { FontAwesomeIcon } = require('@fortawesome/react-fontawesome');
@@ -735,44 +737,89 @@ export function Badge({ badge, size, hidePermissions }) {
 
     return (
         <>
-            <Tooltip
-                placement="bottom"
-                title={`${badge.metadata.name}${
-                    balance ? ' (x' + balance + ')' : ''
-                }`}
+            <Card
+                style={{
+                    width: 230,
+                    margin: 8,
+                }}
+                onClick={() => setModalIsVisible(true)}
+                hoverable
+                cover={
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <Tooltip
+                            placement="bottom"
+                            title={`${badge.metadata.name}${
+                                balance ? ' (x' + balance + ')' : ''
+                            }`}
+                        >
+                            {badge.metadata.image ? (
+                                <Avatar
+                                    style={{
+                                        verticalAlign: 'middle',
+                                        border: '3px solid',
+                                        borderColor: badge.metadata.color,
+                                        margin: '1rem',
+                                        cursor: 'pointer',
+                                    }}
+                                    className="badge-avatar"
+                                    src={badge.metadata.image}
+                                    size={size}
+                                    onError={(e) => {
+                                        return false;
+                                    }}
+                                />
+                            ) : (
+                                <Avatar
+                                    style={{
+                                        backgroundColor: badge.metadata.color,
+                                        verticalAlign: 'middle',
+                                        border: '3px solid black',
+                                        margin: '1rem',
+                                        cursor: 'pointer',
+                                    }}
+                                    size={size}
+                                    className="badge-avatar"
+                                    onClick={() => setModalIsVisible(true)}
+                                ></Avatar>
+                            )}
+                        </Tooltip>
+                    </div>
+                }
             >
-                {badge.metadata.image ? (
-                    <Avatar
-                        style={{
-                            verticalAlign: 'middle',
-                            border: '3px solid',
-                            borderColor: badge.metadata.color,
-                            margin: '1rem',
-                            cursor: 'pointer',
-                        }}
-                        className="badge-avatar"
-                        src={badge.metadata.image}
-                        size={size}
-                        onClick={() => setModalIsVisible(true)}
-                        onError={(e) => {
-                            return false;
-                        }}
-                    />
-                ) : (
-                    <Avatar
-                        style={{
-                            backgroundColor: badge.metadata.color,
-                            verticalAlign: 'middle',
-                            border: '3px solid black',
-                            margin: '1rem',
-                            cursor: 'pointer',
-                        }}
-                        size={size}
-                        className="badge-avatar"
-                        onClick={() => setModalIsVisible(true)}
-                    ></Avatar>
-                )}
-            </Tooltip>
+                <Meta
+                    title={badge.metadata.name}
+                    description={
+                        <>
+                            <div style={{ fontSize: 20 }}>
+                                {badge.supply} Owned
+                            </div>
+                            <br />
+                            <div>Creator </div>
+                            <Address
+                                address={badge.metadata.creator.split(':')[1]}
+                                fontColor="black"
+                                fontSize={15}
+                                showTooltip
+                            />
+                            <br />
+                            <div>Manager </div>
+                            <Address
+                                address={badge.metadata.creator.split(':')[1]}
+                                fontColor="black"
+                                fontSize={15}
+                                showTooltip
+                            />
+                        </>
+                    }
+                />
+            </Card>
+
             <Drawer
                 size="large"
                 headerStyle={{ padding: '0px 12px' }}
