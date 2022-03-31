@@ -62,6 +62,8 @@ export function WalletFooter() {
                             margin: '1rem',
                         }}
                         type="primary"
+                        href="https://bitbadges.github.io/"
+                        target="_blank"
                     >
                         Docs
                     </Button>
@@ -77,6 +79,8 @@ export function WalletFooter() {
                             margin: '1rem',
                         }}
                         type="primary"
+                        href="https://decentralizeduniversity.org/"
+                        target="_blank"
                     >
                         Decentralized University
                     </Button>
@@ -92,6 +96,8 @@ export function WalletFooter() {
                             margin: '1rem',
                         }}
                         type="primary"
+                        href="https://github.com/BitBadges"
+                        target={'_blank'}
                     >
                         GitHub
                     </Button>
