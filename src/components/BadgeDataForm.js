@@ -206,7 +206,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
         <div>
             <Form.Provider>
                 <Form
-                    labelCol={{ span: 4 }}
+                    labelCol={{ span: 6 }}
                     wrapperCol={{ span: 14 }}
                     layout="horizontal"
                 >

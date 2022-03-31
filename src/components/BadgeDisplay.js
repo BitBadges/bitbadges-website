@@ -40,7 +40,7 @@ export function BadgeDisplay({ badges, balanceMap }) {
             style={{
                 padding: '0',
                 margin: 0,
-                minHeight: 600,
+                minHeight: '60vh',
                 backgroundColor: '#fafafa',
                 width: '100%',
             }}
@@ -93,7 +93,7 @@ export function BadgeDisplay({ badges, balanceMap }) {
                         .sort()
                         .map((type) => (
                             <>
-                                {groupBy == 'type' && (
+                                {groupBy === 'type' && (
                                     <Panel
                                         header={`${type} (${badgesByType[type].length})`}
                                         key={type}
@@ -118,7 +118,7 @@ export function BadgeDisplay({ badges, balanceMap }) {
                                         </>
                                     </Panel>
                                 )}
-                                {groupBy == 'all' && (
+                                {groupBy === 'all' && (
                                     <>
                                         {badgesByType[type].map((badge) => (
                                             <Badge

@@ -35,7 +35,7 @@ export function PermissionsForm({
         <div>
             <Form.Provider>
                 <Form
-                    labelCol={{ span: 4 }}
+                    labelCol={{ span: 6 }}
                     wrapperCol={{ span: 14 }}
                     layout="horizontal"
                 >
@@ -78,7 +78,11 @@ export function PermissionsForm({
                     </Form.Item>
 
                     <Form.Item
-                        label={<Text strong>Can Badge Owner Transfer?</Text>}
+                        label={
+                            <Text strong style={{ display: 'flex' }}>
+                                Transferable?
+                            </Text>
+                        }
                     >
                         {
                             <Switch

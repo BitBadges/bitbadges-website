@@ -9,6 +9,7 @@ import { User } from './screens/User';
 import { Swap } from './screens/Swap';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { WalletFooter } from './components/WalletFooter';
+import { Account } from './screens/Account';
 const React = require('react');
 const { Layout } = require('antd');
 
@@ -35,6 +36,7 @@ function App() {
                         <Route path="user/:userId" element={<User />} />
                         <Route path="pending" element={<Pending />} />
                         <Route path="swap" element={<Swap />} />
+                        <Route path="account" element={<Account />} />
                     </Routes>
 
                     <WalletFooter />

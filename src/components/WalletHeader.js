@@ -27,7 +27,7 @@ export function WalletHeader() {
 
     const onSearch = async (value) => {
         if (!value) return;
-        
+
         navigate('/user/ETH:' + value);
         setInputAddress(value);
         const { issued, received } = await getBadgeDataForAddress(
@@ -73,6 +73,7 @@ export function WalletHeader() {
                         width: '100%',
                         padding: 8,
                     }}
+                    defaultValue="0xe00dD9D317573f7B4868D8f2578C65544B153A27"
                     placeholder="Enter Address (0x....)"
                     onSearch={onSearch}
                     enterButton
@@ -91,11 +92,8 @@ export function WalletHeader() {
                 <Tabs
                     setTab={(e) => {
                         setTab(e);
-                        if (e === 'account') {
-                            navigate(`/user/ETH:${address}`);
-                        } else {
-                            navigate(`/${e}`);
-                        }
+
+                        navigate(`/${e}`);
                     }}
                     noSelectedKeys
                     tabInfo={[

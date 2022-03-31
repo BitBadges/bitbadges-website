@@ -104,12 +104,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{
                                     width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Form
-                                    labelCol={{ span: 4 }}
-                                    wrapperCol={{ span: 14 }}
+                                    // labelCol={{ span: 4 }}
+                                    // wrapperCol={{ span: 14 }}
                                     layout="horizontal"
+                                    style={{ width: '50vw' }}
                                 >
                                     <RecipientFormItem
                                         recipients={transferRecipients}
@@ -196,12 +198,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{
                                     width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Form
-                                    labelCol={{ span: 4 }}
-                                    wrapperCol={{ span: 14 }}
+                                    // labelCol={{ span: 4 }}
+                                    // wrapperCol={{ span: 14 }}
                                     layout="horizontal"
+                                    style={{ width: '50vw' }}
                                 >
                                     <RecipientFormItem
                                         recipients={recipients}
@@ -286,12 +290,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{
                                     width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Form
-                                    labelCol={{ span: 4 }}
-                                    wrapperCol={{ span: 14 }}
+                                    // labelCol={{ span: 4 }}
+                                    // wrapperCol={{ span: 14 }}
                                     layout="horizontal"
+                                    style={{ width: '50vw' }}
                                 >
                                     <Form.Item>
                                         <Text>
@@ -377,12 +383,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{
                                     width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Form
-                                    labelCol={{ span: 4 }}
-                                    wrapperCol={{ span: 14 }}
+                                    // labelCol={{ span: 4 }}
+                                    // wrapperCol={{ span: 14 }}
                                     layout="horizontal"
+                                    style={{ width: '50vw' }}
                                 >
                                     <BurnOwnerFormItem
                                         owners={owners}
@@ -466,12 +474,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{
                                     width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Form
-                                    labelCol={{ span: 4 }}
-                                    wrapperCol={{ span: 14 }}
+                                    // labelCol={{ span: 4 }}
+                                    // wrapperCol={{ span: 14 }}
                                     layout="horizontal"
+                                    style={{ width: '50vw' }}
                                 >
                                     <Form.Item>
                                         <Text>
@@ -558,12 +568,14 @@ export function Badge({ badge, size, hidePermissions }) {
                             style={{
                                 width: '100%',
                                 display: 'flex',
+                                justifyContent: 'center',
                             }}
                         >
                             <Form
-                                labelCol={{ span: 4 }}
-                                wrapperCol={{ span: 14 }}
+                                // labelCol={{ span: 4 }}
+                                // wrapperCol={{ span: 14 }}
                                 layout="horizontal"
+                                style={{ width: '50vw' }}
                             >
                                 <Form.Item
                                     label={<Text strong>New Manager</Text>}
@@ -692,7 +704,7 @@ export function Badge({ badge, size, hidePermissions }) {
                             verticalAlign: 'middle',
                             border: '3px solid',
                             borderColor: badge.metadata.color,
-                            margin: 4,
+                            margin: '1rem',
                             cursor: 'pointer',
                         }}
                         className="badge-avatar"
@@ -709,7 +721,7 @@ export function Badge({ badge, size, hidePermissions }) {
                             backgroundColor: badge.metadata.color,
                             verticalAlign: 'middle',
                             border: '3px solid black',
-                            margin: 4,
+                            margin: '1rem',
                             cursor: 'pointer',
                         }}
                         size={size}

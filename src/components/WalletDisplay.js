@@ -1,12 +1,25 @@
+import { useNavigate } from 'react-router-dom';
 import { Address } from './Address';
+import { Tabs } from './Tabs';
+import { Pending } from '../screens/Pending';
 
 const React = require('react');
-const { Layout, Menu, Avatar, Typography, Button, Badge } = require('antd');
+const { useState } = require('react');
+const {
+    Layout,
+    Menu,
+    Avatar,
+    Typography,
+    Button,
+    Badge,
+    Drawer,
+} = require('antd');
 
 const {
     PlusOutlined,
     SearchOutlined,
     BellOutlined,
+    SwapOutlined,
 } = require('@ant-design/icons');
 const { Content } = Layout;
 const { Text } = Typography;
@@ -17,15 +30,17 @@ export function WalletDisplay({}) {
     const address = useSelector((state) => state.user.address);
     const numPending = useSelector((state) => state.user.numPending);
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [pendingModalVisible, setPendingModalVisible] = useState(false);
+    const [tab, setTab] = useState('incoming');
 
     const buttons = [
         { name: 'Mint', icon: <PlusOutlined />, screen: 'mint', numPending: 0 },
         {
-            name: 'Browse',
-            icon: <SearchOutlined />,
-            screen: 'browse',
+            name: 'Swap',
+            icon: <SwapOutlined />,
+            screen: 'swap',
             numPending: 0,
         },
         {
@@ -48,35 +63,6 @@ export function WalletDisplay({}) {
             }}
         >
             <Menu theme="dark" style={{ width: '100%' }}>
-                <div
-                    style={{
-                        textAlign: 'center',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar
-                        style={{ height: 100, width: 100 }}
-                        src="https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png"
-                    />
-                </div>
-                <div
-                    style={{
-                        padding: '0',
-                        textAlign: 'center',
-                        color: 'white',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        color: 'white',
-                        marginTop: 40,
-                    }}
-                >
-                    {web3Modal && web3Modal.cachedProvider && address && (
-                        <Address address={address} />
-                    )}
-                </div>
                 {/* <div
                     style={{
                         padding: '10',
@@ -99,15 +85,7 @@ export function WalletDisplay({}) {
                     >
                         10 $BADGE
                     </Text>
-                    <Button
-                        style={{ marginLeft: 5 }}
-                        type="primary"
-                        shape="circle"
-                        icon={<SwapOutlined />}
-                        size="small"
-                        className="screen-button"
-                        onClick={() => dispatch(setScreen('swap')}
-                    />
+
                 </div>
                 <div
                     style={{
@@ -150,7 +128,7 @@ export function WalletDisplay({}) {
                 >
                     {buttons.map((button) => {
                         return (
-                            <div style={{ width: '20%' }}>
+                            <div style={{ minWidth: '5vw' }}>
                                 <div>
                                     <Badge count={button.numPending}>
                                         <Avatar
@@ -163,11 +141,19 @@ export function WalletDisplay({}) {
                                                 alignItems: 'center',
                                             }}
                                             size="large"
-                                            // onClick={() =>
-                                            // dispatch(
-                                            //     setScreen(button.screen)
-                                            // )
-                                            // }
+                                            onClick={() => {
+                                                if (
+                                                    button.screen === 'pending'
+                                                ) {
+                                                    setPendingModalVisible(
+                                                        true
+                                                    );
+                                                } else {
+                                                    navigate(
+                                                        '../' + button.screen
+                                                    );
+                                                }
+                                            }}
                                             className="screen-button"
                                         >
                                             {button.icon}
@@ -184,6 +170,28 @@ export function WalletDisplay({}) {
                     })}
                 </div>
             </Menu>
+            <Drawer
+                size="large"
+                headerStyle={{ padding: '0px 12px' }}
+                title={
+                    <Tabs
+                        tabInfo={[
+                            { key: 'incoming', title: 'Inbox' },
+                            { key: 'outgoing', title: 'Outbox' },
+                        ]}
+                        setTab={setTab}
+                        widthPerTab={undefined}
+                        theme="light"
+                    />
+                }
+                placement={'bottom'}
+                visible={pendingModalVisible}
+                key={'bottom'}
+                onClose={() => setPendingModalVisible(false)}
+                bodyStyle={{ paddingTop: 8, fontSize: 20 }}
+            >
+                <Pending tab={tab} />
+            </Drawer>
         </Content>
     );
 }

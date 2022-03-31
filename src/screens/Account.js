@@ -4,6 +4,7 @@ import { PageHeader } from '../components/PageHeader';
 import { ShowingResultsFor } from '../components/ShowingResultsFor';
 import { useParams } from 'react-router-dom';
 import { Pending } from './Pending';
+import { useSelector } from 'react-redux';
 import { WalletDisplay } from '../components/WalletDisplay';
 const React = require('react');
 const { useState, useEffect } = require('react');
@@ -14,16 +15,14 @@ const { Search } = Input;
 const { Option } = Select;
 const { getBadgeDataForAddress } = require('../api/api');
 
-export function User() {
-    const [inputAddress, setInputAddress] = useState();
+export function Account() {
     const [tab, setTab] = useState('received');
     const [issued, setIssued] = useState([]);
     const [received, setReceived] = useState([]);
-    const urlParams = useParams();
+    const address = useSelector((state) => state.user.address);
 
     useEffect(() => {
         async function updateValues(value) {
-            setInputAddress(value);
             const { issued, received } = await getBadgeDataForAddress(
                 'ETH',
                 value,
@@ -33,8 +32,8 @@ export function User() {
             setIssued(issued);
             setReceived(received);
         }
-        updateValues(urlParams.userId.split(':')[1]);
-    }, [urlParams]);
+        updateValues(address);
+    }, [address]);
 
     return (
         <Content
@@ -45,8 +44,8 @@ export function User() {
                 backgroundColor: '#001529',
             }}
         >
-            <ShowingResultsFor address={urlParams.userId.split(':')[1]} />
-            
+            <ShowingResultsFor address={address ? address : ''} />
+            <WalletDisplay />
             <Tabs
                 setTab={setTab}
                 tabInfo={[
