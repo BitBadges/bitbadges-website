@@ -1,7 +1,4 @@
-import { PageHeader } from '../components/PageHeader';
 import { Badge } from '../components/Badge';
-import { useState } from 'react';
-import { Tabs } from '../components/Tabs';
 
 const React = require('react');
 const {
@@ -10,7 +7,6 @@ const {
     Tooltip,
     Divider,
     Empty,
-    message,
     List,
     Typography,
 } = require('antd');
@@ -92,7 +88,7 @@ export function Pending({ tab }) {
                                     size={100}
                                     balance={pendingData.amount}
                                 />
-                                {tab == 'incoming' && (
+                                {tab === 'incoming' && (
                                     <>
                                         <div
                                             style={{
@@ -105,7 +101,7 @@ export function Pending({ tab }) {
                                             }}
                                         >
                                             <Text strong>
-                                                {pendingData.from !=
+                                                {pendingData.from !==
                                                 ETH_NULL_ADDRESS ? (
                                                     <>
                                                         <Tooltip
@@ -215,7 +211,7 @@ export function Pending({ tab }) {
                                         </div>
                                     </>
                                 )}
-                                {tab == 'outgoing' && (
+                                {tab === 'outgoing' && (
                                     <>
                                         <div
                                             style={{
@@ -262,7 +258,7 @@ export function Pending({ tab }) {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    {tab == 'incoming' ? (
+                                    {tab === 'incoming' ? (
                                         <>
                                             <Tooltip title="Accept">
                                                 <Button

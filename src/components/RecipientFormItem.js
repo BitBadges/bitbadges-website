@@ -1,11 +1,9 @@
 const {
     UserAddOutlined,
     UploadOutlined,
-    DownloadOutlined,
     DeleteOutlined,
 } = require('@ant-design/icons');
 const {
-    Skeleton,
     Typography,
     Form,
     Avatar,
@@ -21,7 +19,7 @@ const React = require('react');
 const web3 = require('web3');
 const Papa = require('papaparse');
 
-const { useEffect, useState } = require('react');
+const { useState } = require('react');
 const { Text } = Typography;
 const { Option } = Select;
 
@@ -51,7 +49,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
     };
 
     function getCSV(file) {
-        const res = Papa.parse(file, {
+        Papa.parse(file, {
             complete: (results) => {
                 const data = results.data;
                 const newRecipients = [];
@@ -62,7 +60,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                     const amount = Number(row[2]);
 
                     if (
-                        chain != 'ETH' ||
+                        chain !== 'ETH' ||
                         !web3.utils.isAddress(address) ||
                         amount <= 0
                     ) {
@@ -117,7 +115,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                 {` (x${recipient.amount})`}
                             </div>
                             <div>
-                                <a>
+                                <button className="link-button">
                                     {' '}
                                     <DeleteOutlined
                                         onClick={() => {
@@ -129,7 +127,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                             setRecipients(recipientsClone);
                                         }}
                                     />
-                                </a>
+                                </button>
                             </div>
                         </div>
                     ))}
@@ -351,7 +349,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                             )}  (x${recipient.amount})`}
                                         </div>
                                         <div>
-                                            <a>
+                                            <button className="link-button">
                                                 {' '}
                                                 <DeleteOutlined
                                                     onClick={() => {
@@ -369,7 +367,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                                         );
                                                     }}
                                                 />
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -423,20 +421,20 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                                 >{` (x${recipient.amount})`}</span>
                                             </div>
                                             <div>
-                                                <a>
+                                                <button className="link-button">
                                                     {' '}
                                                     <DeleteOutlined
                                                         onClick={() => {
                                                             setIllegalEntries(
                                                                 illegalEntries.filter(
                                                                     (elem) =>
-                                                                        elem.id !=
+                                                                        elem.id !==
                                                                         recipient.id
                                                                 )
                                                             );
                                                         }}
                                                     />
-                                                </a>
+                                                </button>
                                             </div>
                                         </div>
                                     ))}

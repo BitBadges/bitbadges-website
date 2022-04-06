@@ -22,7 +22,7 @@ const {
 } = require('./eip712Types');
 const { message } = require('antd');
 
-export async function getBadgeDataForAddress(
+async function getBadgeDataForAddress(
     chain,
     userAddress,
     isSignedInUser
@@ -102,7 +102,7 @@ export async function getBadgeDataForAddress(
             badgesToFetch = [...new Set(badgesToFetch)];
         });
 
-    if (badgesToFetch.length != 0) {
+    if (badgesToFetch.length !== 0) {
         await axios
             .post(`${NODE_URL}/badges/getByIds`, {
                 badgeIds: badgesToFetch,

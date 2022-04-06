@@ -5,7 +5,7 @@ const { Text } = Typography;
 const { getInjectedProviderName } = require('web3modal');
 const { useSelector } = require('react-redux');
 
-function Disconnected({}) {
+function Disconnected() {
     const address = useSelector((state) => state.user.address);
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
 
@@ -50,7 +50,7 @@ function Disconnected({}) {
                         Please connect a wallet to continue.
                     </Text>
                 </Content>
-                <img src="./bitbadgeslogo.png" />
+                <img src="./bitbadgeslogo.png" alt="BitBadges Logo" />
             </div>
         </>
     );

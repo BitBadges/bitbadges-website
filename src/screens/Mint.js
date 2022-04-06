@@ -1,5 +1,4 @@
 import { MintTimeline } from '../components/MintTimeline';
-import { PageHeader } from '../components/PageHeader';
 const React = require('react');
 const { Layout, Row, Typography, Col } = require('antd');
 const { Content } = Layout;

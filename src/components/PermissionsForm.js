@@ -1,19 +1,7 @@
-const {
-    Typography,
-    Form,
-    Input,
-    Button,
-    Select,
-    DatePicker,
-    InputNumber,
-    Switch,
-    Avatar,
-} = require('antd');
+const { Typography, Form, Button, Switch } = require('antd');
 
 const React = require('react');
-const { useEffect, useState } = require('react');
-const Badge = require('./Badge');
-const RecipientFormItem = require('./RecipientFormItem');
+const { useState } = require('react');
 
 const { Text } = Typography;
 
@@ -54,7 +42,7 @@ export function PermissionsForm({
                             {canMintMore &&
                                 'Yes: You will be able to mint more of this badge in the future. You can lock the supply at anytime.'}
                             {!canMintMore &&
-                                `No: This badge\'s supply will be locked forever at ${supply} after the initial ${supply} mints to ${recipients.length} recipients specified in the metadata section.`}
+                                `No: This badge's supply will be locked forever at ${supply} after the initial ${supply} mints to ${recipients.length} recipients specified in the metadata section.`}
                         </Text>
                     </Form.Item>
 

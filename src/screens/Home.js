@@ -1,13 +1,8 @@
 import React from 'react';
-import { useState } from 'react';
-import { WalletDisplay } from '../components/WalletDisplay';
-import { Tabs } from '../components/Tabs';
-import { BadgeDisplay } from '../components/BadgeDisplay';
-import { useSelector } from 'react-redux';
-import { Button, Layout, Typography, Row, Col } from 'antd';
+import { Layout, Typography, Row, Col } from 'antd';
 import YoutubeEmbed from '../components/YouTubeEmbed';
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
 export function Home() {
     return (
@@ -279,6 +274,7 @@ export function Home() {
                                                 width: '100%',
                                                 height: 'auto',
                                             }}
+                                            alt="Andrew M. K. Nassief"
                                         />
                                     </Col>
                                     <Col span={20}>
@@ -337,6 +333,7 @@ export function Home() {
                                                 width: '100%',
                                                 height: 'auto',
                                             }}
+                                            alt="Trevor Miller"
                                         />
                                     </Col>
                                     <Col span={20}>

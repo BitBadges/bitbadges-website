@@ -1,6 +1,5 @@
-import Meta from 'antd/lib/card/Meta';
 import { Badge } from './Badge';
-const { Typography, Layout, Collapse, Select, Empty, Card } = require('antd');
+const { Typography, Layout, Collapse, Select, Empty } = require('antd');
 
 const React = require('react');
 

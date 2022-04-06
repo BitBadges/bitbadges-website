@@ -15,9 +15,6 @@ const {
     Skeleton,
     Divider,
     Input,
-    Typography,
-    Table,
-    Menu,
     Empty,
     Card,
 } = require('antd');
@@ -39,7 +36,6 @@ const {
     SwapOutlined,
     SwapRightOutlined,
     CheckCircleFilled,
-    CloseCircleFilled,
     WarningFilled,
     LockFilled,
     UnlockFilled,
@@ -50,8 +46,6 @@ const {
 const { useSelector } = require('react-redux');
 const { signAndSubmitTxn } = require('../api/api');
 const web3 = require('web3');
-const { default: Title } = require('antd/lib/typography/Title');
-const { Content } = require('antd/lib/layout/layout');
 
 const { Option } = Select;
 
@@ -86,10 +80,10 @@ export function Badge({ badge, size, hidePermissions }) {
     console.log(balance);
     console.log(balanceMap);
 
-    let displayAddress =
-        badge.metadata.creator.substr(0, 10) +
-        '...' +
-        badge.metadata.creator.substr(-4);
+    // let displayAddress =
+    //     badge.metadata.creator.substr(0, 10) +
+    //     '...' +
+    //     badge.metadata.creator.substr(-4);
 
     const managerPermissionsData = [];
     const ownerPermissionsData = [];
@@ -163,7 +157,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                             loading={transactionIsLoading}
                                             disabled={
                                                 txnSubmitted ||
-                                                transferRecipients.length == 0
+                                                transferRecipients.length === 0
                                             }
                                         >
                                             Sign and Submit
@@ -181,7 +175,8 @@ export function Badge({ badge, size, hidePermissions }) {
                 popover: (
                     <>
                         {
-                            <a
+                            <button
+                                className="link-button"
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setTransferIsVisible(!transferIsVisible)
@@ -192,7 +187,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 ) : (
                                     <RightOutlined />
                                 )}
-                            </a>
+                            </button>
                         }
                     </>
                 ),
@@ -264,7 +259,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                             loading={transactionIsLoading}
                                             disabled={
                                                 txnSubmitted ||
-                                                recipients.length == 0
+                                                recipients.length === 0
                                             }
                                         >
                                             Sign and Submit
@@ -282,7 +277,8 @@ export function Badge({ badge, size, hidePermissions }) {
                 popover: (
                     <>
                         {
-                            <a
+                            <button
+                                className="link-button"
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setMintMoreIsVisible(!mintMoreIsVisible)
@@ -293,7 +289,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 ) : (
                                     <RightOutlined />
                                 )}
-                            </a>
+                            </button>
                         }
                     </>
                 ),
@@ -382,7 +378,8 @@ export function Badge({ badge, size, hidePermissions }) {
                 popover: (
                     <>
                         {
-                            <a
+                            <button
+                                className="link-button"
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setLockSupplyIsVisible(!lockSupplyIsVisible)
@@ -393,7 +390,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 ) : (
                                     <RightOutlined />
                                 )}
-                            </a>
+                            </button>
                         }
                     </>
                 ),
@@ -465,7 +462,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                             loading={transactionIsLoading}
                                             disabled={
                                                 txnSubmitted ||
-                                                owners.length == 0
+                                                owners.length === 0
                                             }
                                         >
                                             Sign and Submit
@@ -483,7 +480,8 @@ export function Badge({ badge, size, hidePermissions }) {
                 popover: (
                     <>
                         {
-                            <a
+                            <button
+                                className="link-button"
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setRevokeIsVisible(!revokeIsVisible)
@@ -494,7 +492,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 ) : (
                                     <RightOutlined />
                                 )}
-                            </a>
+                            </button>
                         }
                     </>
                 ),
@@ -582,7 +580,8 @@ export function Badge({ badge, size, hidePermissions }) {
                 popover: (
                     <>
                         {
-                            <a
+                            <button
+                                className="link-button"
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setLockRevokeIsVisible(!lockRevokeIsVisible)
@@ -593,7 +592,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 ) : (
                                     <RightOutlined />
                                 )}
-                            </a>
+                            </button>
                         }
                     </>
                 ),
@@ -716,7 +715,8 @@ export function Badge({ badge, size, hidePermissions }) {
             popover: (
                 <>
                     {
-                        <a
+                        <button
+                            className="link-button"
                             key="list-loadmore-edit"
                             onClick={() =>
                                 setTransferManagerIsVisible(
@@ -729,14 +729,14 @@ export function Badge({ badge, size, hidePermissions }) {
                             ) : (
                                 <RightOutlined />
                             )}
-                        </a>
+                        </button>
                     }
                 </>
             ),
         });
 
         permissionsData.push(...ownerPermissionsData);
-        if (address == badge.manager.split(':')[1]) {
+        if (address === badge.manager.split(':')[1]) {
             permissionsData.push(...managerPermissionsData);
         }
     }
@@ -848,7 +848,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 onClose={() => setModalIsVisible(false)}
                 bodyStyle={{ paddingTop: 8, fontSize: 20 }}
             >
-                {tab == 'overview' && (
+                {tab === 'overview' && (
                     <>
                         <div
                             style={{
@@ -902,7 +902,7 @@ export function Badge({ badge, size, hidePermissions }) {
                             >
                                 <Tooltip
                                     title={`Valid ${
-                                        badge.metadata.validFrom.end !=
+                                        badge.metadata.validFrom.end !==
                                         MAX_DATE_TIMESTAMP
                                             ? 'Until ' +
                                               new Date(
@@ -1067,6 +1067,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                     <a
                                         href={badge.metadata.url}
                                         target="_blank"
+                                        rel="noreferrer"
                                     >
                                         {badge.metadata.url}
                                     </a>
@@ -1143,7 +1144,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 )} */}
                     </>
                 )}
-                {tab == 'actions' && (
+                {tab === 'actions' && (
                     <>
                         <div
                             style={{
@@ -1174,11 +1175,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                                         >
                                                             <List.Item
                                                                 actions={[
-                                                                    <a key="list-loadmore-edit">
+                                                                    <button
+                                                                        className="link-button"
+                                                                        key="list-loadmore-edit"
+                                                                    >
                                                                         {
                                                                             item.popover
                                                                         }
-                                                                    </a>,
+                                                                    </button>,
                                                                 ]}
                                                                 style={{
                                                                     paddingLeft: 8,
@@ -1249,7 +1253,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         </div>
                     </>
                 )}
-                {tab == 'activity' && (
+                {tab === 'activity' && (
                     <Empty
                         description="No Activity"
                         image={Empty.PRESENTED_IMAGE_SIMPLE}

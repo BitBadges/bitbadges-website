@@ -1,37 +1,24 @@
 import { useNavigate } from 'react-router-dom';
-import { Address } from './Address';
 import { Tabs } from './Tabs';
 import { Pending } from '../screens/Pending';
 
 const React = require('react');
 const { useState } = require('react');
-const {
-    Layout,
-    Menu,
-    Avatar,
-    Typography,
-    Button,
-    Badge,
-    Drawer,
-} = require('antd');
+const { Layout, Menu, Avatar, Typography, Badge, Drawer } = require('antd');
 
 const {
     PlusOutlined,
-    SearchOutlined,
     BellOutlined,
     SwapOutlined,
 } = require('@ant-design/icons');
 const { Content } = Layout;
 const { Text } = Typography;
-const { useSelector, useDispatch } = require('react-redux');
+const { useSelector } = require('react-redux');
 // const { setScreen } = require('../redux/screenSlice');
 
-export function WalletDisplay({}) {
-    const address = useSelector((state) => state.user.address);
+export function WalletDisplay() {
     const numPending = useSelector((state) => state.user.numPending);
-    const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [pendingModalVisible, setPendingModalVisible] = useState(false);
     const [tab, setTab] = useState('incoming');
 
@@ -119,7 +106,6 @@ export function WalletDisplay({}) {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        color: 'white',
                         marginTop: 12,
                         marginBottom: 30,
                         backgroundColor: 'inherit',

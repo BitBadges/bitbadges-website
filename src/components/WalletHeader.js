@@ -1,30 +1,24 @@
 import Search from 'antd/lib/input/Search';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getBadgeDataForAddress } from '../api/api';
+import { useSelector } from 'react-redux';
 import { Tabs } from './Tabs';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 const { Typography, Layout, Select, message } = require('antd');
 const React = require('react');
 const Web3ModalButtons = require('./Web3ModalButtons').Web3ModalButtons;
 const { Header } = Layout;
-const { Text } = Typography;
 const { Option } = Select;
 // const { setScreen } = require('../redux/screenSlice');
 
 export function WalletHeader() {
     const navigate = useNavigate();
-    const location = useLocation();
-    const params = useParams();
     const address = useSelector((state) => state.user.address);
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
 
-    const [tab, setTab] = useState('');
-    const dispatch = useDispatch();
-    const [inputAddress, setInputAddress] = useState();
-    const [issued, setIssued] = useState([]);
-    const [received, setReceived] = useState([]);
+    // const [tab, setTab] = useState('');
+    // const [inputAddress, setInputAddress] = useState();
+    // const [issued, setIssued] = useState([]);
+    // const [received, setReceived] = useState([]);
 
     const onSearch = async (value) => {
         if (!value) return;
@@ -35,14 +29,14 @@ export function WalletHeader() {
         }
 
         navigate('/user/ETH:' + value);
-        setInputAddress(value);
-        const { issued, received } = await getBadgeDataForAddress(
-            'ETH',
-            value,
-            false
-        );
-        setIssued(issued);
-        setReceived(received);
+        // setInputAddress(value);
+        // const { issued, received } = await getBadgeDataForAddress(
+        //     'ETH',
+        //     value,
+        //     false
+        // );
+        // setIssued(issued);
+        // setReceived(received);
     };
 
     return (
@@ -104,7 +98,7 @@ export function WalletHeader() {
             >
                 <Tabs
                     setTab={(e) => {
-                        setTab(e);
+                        // setTab(e);
 
                         navigate(`/${e}`);
                     }}

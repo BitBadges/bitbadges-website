@@ -1,21 +1,16 @@
 import { Tabs } from '../components/Tabs';
 import { BadgeDisplay } from '../components/BadgeDisplay';
-import { PageHeader } from '../components/PageHeader';
 import { ShowingResultsFor } from '../components/ShowingResultsFor';
 import { useParams } from 'react-router-dom';
-import { Pending } from './Pending';
-import { WalletDisplay } from '../components/WalletDisplay';
 const React = require('react');
 const { useState, useEffect } = require('react');
-const { Layout, Menu, Input, Select } = require('antd');
+const { Layout } = require('antd');
 
 const { Content } = Layout;
-const { Search } = Input;
-const { Option } = Select;
 const { getBadgeDataForAddress } = require('../api/api');
 
 export function User() {
-    const [inputAddress, setInputAddress] = useState();
+    // const [inputAddress, setInputAddress] = useState();
     const [tab, setTab] = useState('received');
     const [issued, setIssued] = useState([]);
     const [received, setReceived] = useState([]);
@@ -23,7 +18,7 @@ export function User() {
 
     useEffect(() => {
         async function updateValues(value) {
-            setInputAddress(value);
+            // setInputAddress(value);
             const { issued, received } = await getBadgeDataForAddress(
                 'ETH',
                 value,

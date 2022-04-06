@@ -309,7 +309,7 @@ export function MintTimeline() {
                                 fontSize: 12,
                             }}
                         >
-                            {step.idx == currStepNumber && step.content}
+                            {step.idx === currStepNumber && step.content}
                         </span>
                     </Timeline.Item>
                 );

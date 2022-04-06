@@ -1,33 +1,9 @@
-import { Tabs } from '../components/Tabs';
-import { BadgeDisplay } from '../components/BadgeDisplay';
-import { PageHeader } from '../components/PageHeader';
-import { ShowingResultsFor } from '../components/ShowingResultsFor';
-import { Badge } from '../components/Badge';
-
 const React = require('react');
-const { useState } = require('react');
-const {
-    Layout,
-    Menu,
-    Input,
-    Select,
-    Typography,
-    Col,
-    Row,
-    Avatar,
-} = require('antd');
+const { Layout, Typography, Col, Row, Avatar } = require('antd');
 
 const { Content } = Layout;
-const { Search } = Input;
-const { Option } = Select;
-const { getBadgeDataForAddress } = require('../api/api');
 
 export function Browse() {
-    const [inputAddress, setInputAddress] = useState();
-    const [tab, setTab] = useState('received');
-    const [issued, setIssued] = useState([]);
-    const [received, setReceived] = useState([]);
-
     return (
         <Layout>
             <Content

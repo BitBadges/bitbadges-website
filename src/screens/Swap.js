@@ -1,9 +1,8 @@
 const React = require('react');
 const { Layout, Typography } = require('antd');
-const PageHeader = require('../components/PageHeader');
 const { Content } = Layout;
 
-export function Swap({}) {
+export function Swap() {
     return (
         <Layout>
             <Content

@@ -2,10 +2,9 @@ import { Address } from './Address';
 import Blockies from 'react-blockies';
 
 const React = require('react');
-const { Layout, Menu, Typography, Avatar } = require('antd');
+const { Layout, Menu, Avatar } = require('antd');
 
 const { Content } = Layout;
-const { Text } = Typography;
 
 export function ShowingResultsFor({ address }) {
     return (
@@ -28,7 +27,6 @@ export function ShowingResultsFor({ address }) {
                         color: 'white',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        color: 'white',
                         marginTop: 20,
                     }}
                 >

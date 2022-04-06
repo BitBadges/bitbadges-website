@@ -1,18 +1,13 @@
 import { Tabs } from '../components/Tabs';
 import { BadgeDisplay } from '../components/BadgeDisplay';
-import { PageHeader } from '../components/PageHeader';
 import { ShowingResultsFor } from '../components/ShowingResultsFor';
-import { useParams } from 'react-router-dom';
-import { Pending } from './Pending';
 import { useSelector } from 'react-redux';
 import { WalletDisplay } from '../components/WalletDisplay';
 const React = require('react');
 const { useState, useEffect } = require('react');
-const { Layout, Menu, Input, Select } = require('antd');
+const { Layout } = require('antd');
 
 const { Content } = Layout;
-const { Search } = Input;
-const { Option } = Select;
 const { getBadgeDataForAddress } = require('../api/api');
 
 export function Account() {

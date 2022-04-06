@@ -3,10 +3,8 @@ const { Menu, Typography } = require('antd');
 const { CaretLeftFilled } = require('@ant-design/icons');
 // const { setScreen } = require('../redux/screenSlice');
 const { Text } = Typography;
-const { useSelector, useDispatch } = require('react-redux');
 
 export function PageHeader({ title }) {
-    const dispatch = useDispatch();
     return (
         <Menu
             theme="dark"
@@ -18,7 +16,8 @@ export function PageHeader({ title }) {
                 justifyContent: 'center',
             }}
         >
-            <a
+            <button
+                // className="link-button"
                 style={{
                     position: 'absolute',
                     left: 5,
@@ -27,11 +26,11 @@ export function PageHeader({ title }) {
                     fontSize: 17,
                 }}
                 // onClick={() => dispatch(setScreen('home'))}
-                className="opacity"
+                className="opacity link-button"
             >
                 <CaretLeftFilled size={40} />
                 Back
-            </a>
+            </button>
 
             <span
                 style={{

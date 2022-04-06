@@ -2,8 +2,8 @@ const { Typography, Tooltip } = require('antd');
 const React = require('react');
 const { Text } = Typography;
 
-const blockExplorerLink = (address, blockExplorer) =>
-    `${blockExplorer || 'https://etherscan.io/'}address/${address}`;
+// const blockExplorerLink = (address, blockExplorer) =>
+//     `${blockExplorer || 'https://etherscan.io/'}address/${address}`;
 
 export function Address({
     address,
@@ -13,7 +13,7 @@ export function Address({
     fontColor,
     showTooltip,
 }) {
-    const etherscanLink = blockExplorerLink(address, blockExplorer);
+    // const etherscanLink = blockExplorerLink(address, blockExplorer);
     let displayAddress = '';
 
     if (address) {

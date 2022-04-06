@@ -1,8 +1,5 @@
-import { Link } from 'react-router-dom';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
 const React = require('react');
-const { Layout, Menu } = require('antd');
-const { Content } = Layout;
+const { Menu } = require('antd');
 
 export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
     const tabs = tabInfo.map((tab) => (

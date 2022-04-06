@@ -1,7 +1,6 @@
 import { WalletHeader } from './components/WalletHeader';
 import { Home } from './screens/Home';
 import { Mint } from './screens/Mint';
-import Disconnected from './screens/Disconnected';
 import { Pending } from './screens/Pending';
 import { Browse } from './screens/Browse';
 
@@ -13,7 +12,7 @@ import { Account } from './screens/Account';
 const React = require('react');
 const { Layout } = require('antd');
 
-const { useSelector, useDispatch } = require('react-redux');
+const { useDispatch } = require('react-redux');
 const { createWeb3Modal } = require('./utils/Web3Modal');
 const { setWeb3Modal } = require('./redux/web3ModalSlice');
 

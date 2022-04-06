@@ -1,13 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// TODO: fix this react hooks warning
 const { Button } = require('antd');
 const { ethers } = require('ethers');
 const React = require('react');
 const { useSelector, useDispatch } = require('react-redux');
 const { setInjectedProvider, setUserSigner } = require('../redux/userSlice');
-const { useCallback, useEffect, useState } = require('react');
+const { useCallback, useEffect } = require('react');
 const { setAddress } = require('../redux/userSlice');
 const { getBadgeDataForAddress } = require('../api/api');
 
-export function Web3ModalButtons({}) {
+export function Web3ModalButtons() {
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
     const injectedProvider = useSelector(
         (state) => state.user.injectedProvider

@@ -8,9 +8,7 @@ const {
     Button,
     Select,
     DatePicker,
-    InputNumber,
     Switch,
-    Avatar,
     Space,
     Divider,
 } = require('antd');
@@ -191,16 +189,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
 
     useEffect(() => {
         updateBadgeData();
-    }, [
-        title,
-        description,
-        category,
-        externalUrl,
-        backgroundColor,
-        imageUrl,
-        expirationDateValue,
-        recipients,
-    ]);
+    });
 
     return (
         <div>
@@ -243,7 +232,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
 
                     <Form.Item
                         label={<Text strong>Category</Text>}
-                        required={type == 0}
+                        required={type === 0}
                     >
                         <Select
                             value={category}
@@ -282,7 +271,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
 
                     <Form.Item
                         label={<Text strong>Image URI</Text>}
-                        required={type == 0}
+                        required={type === 0}
                     >
                         {/* <Input
                             value={imageUrl}
@@ -328,6 +317,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
                                             src={item.value}
                                             height="20px"
                                             style={{ paddingRight: 10 }}
+                                            alt="Label"
                                         />
                                         <div>{item.label}</div>
                                     </div>

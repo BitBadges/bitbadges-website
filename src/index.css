@@ -88,11 +88,11 @@ code {
     margin: 16px 24px 16px 0;
     background: rgba(255, 255, 255, 0.3);
   }
-
+/* 
   .ant-row-rtl #components-layout-demo-top .logo {
-    /* float: right; */
-    /* margin: 16px 0 16px 24px; */
-  }
+    float: right;
+    margin: 16px 0 16px 24px;
+  } */
   .screen-button {
       background: inherit;
       transition: background 0.3s, border-color 0.3s, color 0.3s;
@@ -143,3 +143,14 @@ code {
 .action-item:hover {
     background-color: lightgray;
 }
+
+.link-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+  
