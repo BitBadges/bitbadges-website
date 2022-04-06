@@ -22,7 +22,11 @@ const {
 } = require('./eip712Types');
 const { message } = require('antd');
 
-async function getBadgeDataForAddress(chain, userAddress, isSignedInUser) {
+export async function getBadgeDataForAddress(
+    chain,
+    userAddress,
+    isSignedInUser
+) {
     let badgesToFetch = [];
     let userNonce, issuedBadges, receivedBadges, pendingBadges;
     let numPendingCount = 0;
