@@ -66,6 +66,17 @@ code {
         }
     }
 
+    @media (max-width: 550px) { 
+        .navbar-super-collapsed {
+            display: none !important;
+        }
+
+        .App-header {
+            justify-content: center;
+        }
+    }
+  
+
     @media (min-width: 920px) { 
         .navbar-collapsed {
             display: none !important;

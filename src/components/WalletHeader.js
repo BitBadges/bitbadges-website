@@ -4,7 +4,13 @@ import { Tabs } from './Tabs';
 import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import Blockies from 'react-blockies';
-import { UserOutlined } from '@ant-design/icons';
+import {
+    GlobalOutlined,
+    HomeOutlined,
+    PlusOutlined,
+    SearchOutlined,
+    UserOutlined,
+} from '@ant-design/icons';
 
 const { Typography, Layout, Select, message, Avatar, Menu } = require('antd');
 const React = require('react');
@@ -45,13 +51,17 @@ export function WalletHeader() {
     };
 
     return (
-        <Header className="App-header">
+        <Header
+            className="App-header"
+            style={{ width: '100%', display: 'flex' }}
+        >
             <div
                 style={{
                     display: 'flex',
                     alignItems: 'center',
                     cursor: 'pointer',
                 }}
+                className="navbar-super-collapsed"
                 onClick={() => navigate('')}
             >
                 <img
@@ -109,11 +119,140 @@ export function WalletHeader() {
                     }}
                     noSelectedKeys
                     tabInfo={[
-                        { key: '', content: 'Home' },
-                        { key: 'browse', content: 'Browse' },
+                        {
+                            key: '',
+                            content: (
+                                <>
+                                    <HomeOutlined /> Home
+                                </>
+                            ),
+                        },
+                        {
+                            key: 'browse',
+                            content: (
+                                <>
+                                    <GlobalOutlined /> Browse
+                                </>
+                            ),
+                        },
                         {
                             key: 'mint',
-                            content: 'Mint',
+                            content: (
+                                <>
+                                    <PlusOutlined /> Mint
+                                </>
+                            ),
+                        },
+                        {
+                            key: `account`,
+                            subMenuOverlay: (
+                                <Menu
+                                    style={{ width: 200, displat: 'flex' }}
+                                    theme={'light'}
+                                    mode="horizontal"
+                                >
+                                    <Menu.Item
+                                        key="profile"
+                                        onClick={() => navigate('/account')}
+                                    >
+                                        Profile
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key="disconnect"
+                                        onClick={async () => {
+                                            await web3Modal.clearCachedProvider();
+                                            if (
+                                                injectedProvider &&
+                                                injectedProvider.provider &&
+                                                typeof injectedProvider.provider
+                                                    .disconnect == 'function'
+                                            ) {
+                                                await injectedProvider.provider.disconnect();
+                                            }
+                                            window.location.reload();
+                                        }}
+                                    >
+                                        Disconnect
+                                    </Menu.Item>
+                                </Menu>
+                            ),
+                            content: (
+                                <>
+                                    {!address ? (
+                                        <Avatar src={<UserOutlined />} />
+                                    ) : (
+                                        <Avatar
+                                            src={
+                                                <Blockies
+                                                    seed={address.toLowerCase()}
+                                                    size={40}
+                                                />
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ),
+                            // disabled:
+                            //     !web3Modal ||
+                            //     !web3Modal.cachedProvider ||
+                            //     !address,
+                        },
+                    ]}
+                />
+                {/* <Web3ModalButtons /> */}
+            </div>
+            <div className="navbar-collapsed">
+                <Tabs
+                    setTab={(e) => {
+                        // setTab(e);
+
+                        navigate(`/${e}`);
+                    }}
+                    noSelectedKeys
+                    tabInfo={[
+                        { key: '', content: <Avatar src={<HomeOutlined />} /> },
+                        {
+                            key: 'search',
+                            content: <Avatar src={<SearchOutlined />} />,
+                            onClick: () => {
+                                console.log('Do Nothing');
+                            },
+                            // subMenuTrigger: ['click'],
+                            popoverContent: (
+                                <div
+                                    style={{
+                                        backgroundColor: 'white',
+                                        width: '100%',
+                                    }}
+                                >
+                                    <Search
+                                        addonBefore={
+                                            <Select defaultValue={'eth'}>
+                                                <Option value="eth">ETH</Option>
+                                            </Select>
+                                        }
+                                        style={{
+                                            width: '100%',
+                                            padding: 8,
+                                        }}
+                                        defaultValue="0xe00dD9D317573f7B4868D8f2578C65544B153A27"
+                                        placeholder="Enter Address (0x....)"
+                                        onSearch={onSearch}
+                                        enterButton
+                                        allowClear
+                                        size="large"
+                                    />
+                                </div>
+                            ),
+                        },
+
+                        {
+                            key: 'browse',
+                            content: <Avatar src={<GlobalOutlined />} />,
+                        },
+                        {
+                            key: 'mint',
+                            content: <Avatar src={<PlusOutlined />} />,
                             // disabled:
                             //     !web3Modal ||
                             //     !web3Modal.cachedProvider ||
@@ -175,9 +314,7 @@ export function WalletHeader() {
                         },
                     ]}
                 />
-                {/* <Web3ModalButtons /> */}
             </div>
-            <div className="navbar-collapsed">TODO: NAVBAR COLLAPSE</div>
         </Header>
     );
 }
