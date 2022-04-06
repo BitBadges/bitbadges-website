@@ -1,20 +1,34 @@
+import { useNavigate } from 'react-router-dom';
+
 const React = require('react');
-const { Menu } = require('antd');
+const { Menu, Dropdown } = require('antd');
 
 export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
-    const tabs = tabInfo.map((tab) => (
-        <Menu.Item
-            disabled={tab.disabled}
-            style={{
-                width: widthPerTab,
-                textAlign: 'center',
-                float: 'left',
-            }}
-            key={tab.key}
-        >
-            {tab.title}
-        </Menu.Item>
-    ));
+    const navigate = useNavigate();
+
+    const tabs = tabInfo.map((tab) => {
+        return (
+            <Dropdown
+                placement="bottom"
+                overlay={tab.subMenuOverlay ? tab.subMenuOverlay : <></>}
+            >
+                <Menu.Item
+                    disabled={tab.disabled}
+                    style={{
+                        width: widthPerTab,
+                        textAlign: 'center',
+                        float: 'left',
+                    }}
+                    key={tab.key}
+                    onClick={() => {
+                        navigate(`/${tab.key}`);
+                    }}
+                >
+                    {tab.content}
+                </Menu.Item>
+            </Dropdown>
+        );
+    });
 
     return (
         // <Content style={{ padding: '0' }}>
@@ -24,9 +38,9 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
             mode="horizontal"
             defaultSelectedKeys={noSelectedKeys ? undefined : [tabInfo[0].key]}
             selectedKeys={noSelectedKeys ? [] : undefined}
-            onClick={({ item, key, keyPath, domEvent }) => {
-                setTab(key);
-            }}
+            // onClick={({ item, key, keyPath, domEvent }) => {
+            //     setTab(key);
+            // }}
         >
             {tabs}
         </Menu>

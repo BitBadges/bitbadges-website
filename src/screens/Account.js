@@ -44,10 +44,10 @@ export function Account() {
             <Tabs
                 setTab={setTab}
                 tabInfo={[
-                    { key: 'received', title: 'Owned Badges' },
-                    { key: 'issued', title: 'Created Badges' },
-                    { key: 'offering', title: 'Badges Being Offered' },
-                    { key: 'activity', title: 'Activity' },
+                    { key: 'received', content: 'Owned Badges' },
+                    { key: 'issued', content: 'Created Badges' },
+                    { key: 'offering', content: 'Badges Being Offered' },
+                    { key: 'activity', content: 'Activity' },
                 ]}
                 widthPerTab={'calc(100% / 4)'}
             />

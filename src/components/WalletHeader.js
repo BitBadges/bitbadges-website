@@ -3,9 +3,11 @@ import { useSelector } from 'react-redux';
 import { Tabs } from './Tabs';
 import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
-const { Typography, Layout, Select, message } = require('antd');
+import Blockies from 'react-blockies';
+import { UserOutlined } from '@ant-design/icons';
+
+const { Typography, Layout, Select, message, Avatar, Menu } = require('antd');
 const React = require('react');
-const Web3ModalButtons = require('./Web3ModalButtons').Web3ModalButtons;
 const { Header } = Layout;
 const { Option } = Select;
 // const { setScreen } = require('../redux/screenSlice');
@@ -14,6 +16,9 @@ export function WalletHeader() {
     const navigate = useNavigate();
     const address = useSelector((state) => state.user.address);
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
+    const injectedProvider = useSelector(
+        (state) => state.user.injectedProvider
+    );
 
     // const [tab, setTab] = useState('');
     // const [inputAddress, setInputAddress] = useState();
@@ -104,27 +109,73 @@ export function WalletHeader() {
                     }}
                     noSelectedKeys
                     tabInfo={[
-                        { key: '', title: 'Home' },
-                        { key: 'browse', title: 'Browse' },
+                        { key: '', content: 'Home' },
+                        { key: 'browse', content: 'Browse' },
                         {
                             key: 'mint',
-                            title: 'Mint',
-                            disabled:
-                                !web3Modal ||
-                                !web3Modal.cachedProvider ||
-                                !address,
+                            content: 'Mint',
+                            // disabled:
+                            //     !web3Modal ||
+                            //     !web3Modal.cachedProvider ||
+                            //     !address,
                         },
                         {
                             key: `account`,
-                            title: 'Account',
-                            disabled:
-                                !web3Modal ||
-                                !web3Modal.cachedProvider ||
-                                !address,
+                            subMenuOverlay: (
+                                <Menu
+                                    style={{ width: 200, displat: 'flex' }}
+                                    theme={'light'}
+                                    mode="horizontal"
+                                >
+                                    <Menu.Item
+                                        key="account"
+                                        onClick={() => navigate('/account')}
+                                    >
+                                        Profile
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        key="disconnect"
+                                        onClick={async () => {
+                                            await web3Modal.clearCachedProvider();
+                                            if (
+                                                injectedProvider &&
+                                                injectedProvider.provider &&
+                                                typeof injectedProvider.provider
+                                                    .disconnect == 'function'
+                                            ) {
+                                                await injectedProvider.provider.disconnect();
+                                            }
+                                            window.location.reload();
+                                        }}
+                                    >
+                                        Disconnect
+                                    </Menu.Item>
+                                </Menu>
+                            ),
+                            content: (
+                                <>
+                                    {!address ? (
+                                        <Avatar src={<UserOutlined />} />
+                                    ) : (
+                                        <Avatar
+                                            src={
+                                                <Blockies
+                                                    seed={address.toLowerCase()}
+                                                    size={40}
+                                                />
+                                            }
+                                        />
+                                    )}
+                                </>
+                            ),
+                            // disabled:
+                            //     !web3Modal ||
+                            //     !web3Modal.cachedProvider ||
+                            //     !address,
                         },
                     ]}
                 />
-                <Web3ModalButtons />
+                {/* <Web3ModalButtons /> */}
             </div>
             <div className="navbar-collapsed">TODO: NAVBAR COLLAPSE</div>
         </Header>

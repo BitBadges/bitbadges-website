@@ -9,6 +9,7 @@ import { Swap } from './screens/Swap';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { WalletFooter } from './components/WalletFooter';
 import { Account } from './screens/Account';
+import DisconnectedWrapper from './screens/Disconnected';
 const React = require('react');
 const { Layout } = require('antd');
 
@@ -30,12 +31,32 @@ function App() {
 
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="mint" element={<Mint />} />
+                        <Route
+                            path="mint"
+                            element={
+                                <DisconnectedWrapper screenNode={<Mint />} />
+                            }
+                        />
                         <Route path="browse" element={<Browse />} />
                         <Route path="user/:userId" element={<User />} />
-                        <Route path="pending" element={<Pending />} />
-                        <Route path="swap" element={<Swap />} />
-                        <Route path="account" element={<Account />} />
+                        <Route
+                            path="pending"
+                            element={
+                                <DisconnectedWrapper screenNode={<Pending />} />
+                            }
+                        />
+                        <Route
+                            path="swap"
+                            element={
+                                <DisconnectedWrapper screenNode={<Swap />} />
+                            }
+                        />
+                        <Route
+                            path="account"
+                            element={
+                                <DisconnectedWrapper screenNode={<Account />} />
+                            }
+                        />
                     </Routes>
 
                     <WalletFooter />
