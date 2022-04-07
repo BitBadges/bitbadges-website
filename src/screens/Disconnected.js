@@ -1,7 +1,8 @@
 import { Web3ModalButtons } from '../components/Web3ModalButtons';
+import { getInjectedProviderName } from 'web3modal';
 
 const React = require('react');
-const { Layout, Typography } = require('antd');
+const { Layout, Typography, Alert } = require('antd');
 const { Content } = Layout;
 const { Text } = Typography;
 const { useSelector } = require('react-redux');
@@ -18,7 +19,7 @@ function DisconnectedWrapper({ screenNode }) {
                     display: 'flex',
                     // alignItems: 'center',
                     minHeight: '100vh',
-                    padding: '2rem 0',
+                    padding: '0',
                     textAlign: 'center',
                 }}
             >
@@ -65,19 +66,13 @@ function DisconnectedWrapper({ screenNode }) {
                                     strong
                                     style={{ fontSize: 20, color: 'white' }}
                                 >
-                                    Please connect a wallet to continue.
+                                    {web3Modal &&
+                                    web3Modal.cachedProvider &&
+                                    !address
+                                        ? `Please sign in to ${getInjectedProviderName()} or connect a new wallet to continue.`
+                                        : 'Please connect a wallet to continue.'}
                                 </Text>
                             </div>
-                            {/* {web3Modal &&
-                                web3Modal.cachedProvider &&
-                                !address && (
-                                    <Alert
-                                        message={`Provider Found: ${getInjectedProviderName()}`}
-                                        description={`Make sure you are signed in on this provider to continue.`}
-                                        type="warning"
-                                        closable
-                                    />
-                                )} */}
 
                             <div
                                 style={{

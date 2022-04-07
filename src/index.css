@@ -152,7 +152,7 @@ code {
 
 
 .action-item:hover {
-    background-color: lightgray;
+    background-color: #192c3e;
 }
 
 .link-button {
@@ -164,4 +164,66 @@ code {
     margin: 0;
     padding: 0;
   }
+
+  .link-button-nav {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    
+    display: inline;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link-button-nav:hover {
+    text-decoration: underline;
+  }
   
+  
+  .ant-timeline-item-head-custom {
+      padding: 0;
+  }
+  
+  .selector > .ant-select-selector {
+    background-color: #001529 !important;
+  }
+
+  .selector > .ant-select-selector.selector::after {
+    color: white;
+  }
+
+  .ant-picker-input > input {
+      color: white;
+  }
+
+  .ant-radio-inner {
+    width: 40px;
+    height: 40px;
+  
+    
+  }
+  .ant-radio-inner::after {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .ant-checkbox-inner {
+    width: 40px;
+    height: 40px;
+  }
+  .ant-checkbox-inner::after {
+    width: 8px;
+    height: 20px;
+  }
+  .ant-radio,
+  .ant-checkbox {
+    font-size: 40px;
+  }
+
+  .ant-switch {
+    background-color: grey;
+}
+
+  .ant-switch-checked {
+      background-color: #1890ff;
+  }

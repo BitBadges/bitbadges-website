@@ -45,9 +45,9 @@ export function User() {
             <Tabs
                 setTab={setTab}
                 tabInfo={[
-                    { key: 'received', content: 'Owned Badges' },
-                    { key: 'issued', content: 'Created Badges' },
-                    { key: 'offering', content: 'Badges Being Offered' },
+                    { key: 'received', content: 'Collected' },
+                    { key: 'issued', content: 'Created' },
+                    { key: 'offering', content: 'Offering' },
                     { key: 'activity', content: 'Activity' },
                 ]}
                 widthPerTab={'calc(100% / 4)'}

@@ -114,7 +114,11 @@ export function WalletDisplay() {
                 >
                     {buttons.map((button) => {
                         return (
-                            <div style={{ minWidth: '5vw' }}>
+                            <div
+                                style={{
+                                    minWidth: 75,
+                                }}
+                            >
                                 <div>
                                     <Badge count={button.numPending}>
                                         <Avatar
@@ -162,8 +166,8 @@ export function WalletDisplay() {
                 title={
                     <Tabs
                         tabInfo={[
-                            { key: 'incoming', title: 'Inbox' },
-                            { key: 'outgoing', title: 'Outbox' },
+                            { key: 'incoming', content: 'Inbox' },
+                            { key: 'outgoing', content: 'Outbox' },
                         ]}
                         setTab={setTab}
                         widthPerTab={undefined}

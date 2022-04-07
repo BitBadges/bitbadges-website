@@ -32,7 +32,11 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
 
     return (
         <Form.Item
-            label={<Text strong>Owners</Text>}
+            label={
+                <Text strong style={{ color: 'white' }}>
+                    Owners
+                </Text>
+            }
             shouldUpdate={(prevValues, curValues) =>
                 prevValues.users !== curValues.users
             }
@@ -40,7 +44,13 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
             {owners.length > 0 && (
                 <>
                     {owners.map((owner) => (
-                        <div style={{ marginBottom: 3 }}>
+                        <div
+                            style={{
+                                marginBottom: 3,
+                                color: 'white',
+                                fontWeight: 'bold',
+                            }}
+                        >
                             <Avatar
                                 src={
                                     'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png'
@@ -60,7 +70,11 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
             <div>
                 {!visible && (
                     <Button
-                        style={{ width: '100%' }}
+                        style={{
+                            width: '100%',
+                            backgroundColor: '#001529',
+                            color: 'white',
+                        }}
                         size="small"
                         onClick={showUserModal}
                     >
@@ -71,8 +85,8 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
             </div>
             {visible && (
                 <>
-                    <Form.Item>
-                        <Input.Group compact>
+                    <Input
+                        addonBefore={
                             <Select
                                 value={addedUserChain}
                                 onSelect={(e) => setAddedUserChain(e)}
@@ -80,24 +94,42 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                             >
                                 <Option value="ETH">ETH</Option>
                             </Select>
-                            <Input
-                                style={{ width: '55%' }}
-                                value={addedUserAddress}
-                                onChange={(e) =>
-                                    setAddedUserAddress(e.target.value)
-                                }
-                            />
+                        }
+                        style={{ width: '100%' }}
+                        value={addedUserAddress}
+                        onChange={(e) => setAddedUserAddress(e.target.value)}
+                        suffix={
                             <InputNumber
-                                style={{ width: '20%' }}
                                 value={addedUserAmount}
                                 onChange={(e) => setAddedUserAmount(e)}
                             />
-                        </Input.Group>
-                    </Form.Item>
+                        }
+                    />
 
-                    <Form.Item>
+                    <div
+                        style={{
+                            marginTop: 10,
+                            display: 'flex',
+                            width: '100%',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <Button
+                            htmlType="button"
+                            style={{
+                                width: '48%',
+                                backgroundColor: '#001529',
+                                color: 'white',
+                            }}
+                            onClick={hideUserModal}
+                        >
+                            Cancel
+                        </Button>
                         <Button
                             type="primary"
+                            style={{
+                                width: '48%',
+                            }}
                             onClick={() => {
                                 setOwners([
                                     ...owners,
@@ -125,19 +157,12 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                                     : addedUserAddress
                             }`}
                         </Button>
-                        <Button
-                            htmlType="button"
-                            style={{
-                                margin: '0 8px',
-                            }}
-                            onClick={hideUserModal}
-                        >
-                            Cancel
-                        </Button>
-                    </Form.Item>
+                    </div>
 
                     {!web3.utils.isAddress(addedUserAddress) && (
-                        <Text>*Invalid address specified</Text>
+                        <Text style={{ color: 'lightgrey' }}>
+                            *Invalid address specified
+                        </Text>
                     )}
                     <hr />
                 </>

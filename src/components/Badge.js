@@ -17,6 +17,7 @@ const {
     Input,
     Empty,
     Card,
+    Menu,
 } = require('antd');
 const { default: Text } = require('antd/lib/typography/Text');
 const { FontAwesomeIcon } = require('@fortawesome/react-fontawesome');
@@ -42,6 +43,7 @@ const {
     RollbackOutlined,
     RightOutlined,
     DownOutlined,
+    CloseOutlined,
 } = require('@ant-design/icons');
 const { useSelector } = require('react-redux');
 const { signAndSubmitTxn } = require('../api/api');
@@ -92,8 +94,12 @@ export function Badge({ badge, size, hidePermissions }) {
     if (badge.permissions) {
         if (badge.permissions.canOwnerTransfer && balance) {
             ownerPermissionsData.push({
-                title: 'Transfer',
-                description: 'Transfer this badge.',
+                title: <div style={{ color: 'white' }}>Transfer</div>,
+                description: (
+                    <div style={{ color: 'lightgrey' }}>
+                        Transfer this badge
+                    </div>
+                ),
                 icon: <SwapOutlined />,
                 visible: transferIsVisible,
                 content: (
@@ -116,20 +122,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         recipients={transferRecipients}
                                         setRecipients={setTransferRecipients}
                                     />
-                                    <Form.Item
-                                        label={<Text strong>Select Node</Text>}
-                                    >
-                                        <Select
-                                            defaultValue={'default'}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Select.Option value="default">
-                                                BitBadges Node (default node)
-                                            </Select.Option>
-                                        </Select>
-                                    </Form.Item>
+
                                     <Form.Item>
                                         <Button
                                             style={{
@@ -177,6 +170,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         {
                             <button
                                 className="link-button"
+                                style={{ color: 'white' }}
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setTransferIsVisible(!transferIsVisible)
@@ -195,8 +189,12 @@ export function Badge({ badge, size, hidePermissions }) {
         }
         if (badge.permissions.canMintMore) {
             managerPermissionsData.push({
-                title: 'Mint',
-                description: 'Mint more of this badge.',
+                title: <div style={{ color: 'white' }}>Mint</div>,
+                description: (
+                    <div style={{ color: 'lightgrey' }}>
+                        Mint more of this badge
+                    </div>
+                ),
                 icon: <PlusOutlined />,
                 visible: mintMoreIsVisible,
                 content: (
@@ -219,20 +217,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         recipients={recipients}
                                         setRecipients={setRecipients}
                                     />
-                                    <Form.Item
-                                        label={<Text strong>Select Node</Text>}
-                                    >
-                                        <Select
-                                            defaultValue={'default'}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Select.Option value="default">
-                                                BitBadges Node (default node)
-                                            </Select.Option>
-                                        </Select>
-                                    </Form.Item>
+
                                     <Form.Item>
                                         <Button
                                             style={{
@@ -279,6 +264,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         {
                             <button
                                 className="link-button"
+                                style={{ color: 'white' }}
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setMintMoreIsVisible(!mintMoreIsVisible)
@@ -296,9 +282,13 @@ export function Badge({ badge, size, hidePermissions }) {
             });
 
             managerPermissionsData.push({
-                title: 'Lock Supply',
+                title: <div style={{ color: 'white' }}>Lock Supply</div>,
                 icon: <LockOutlined />,
-                description: 'Disable minting privileges permanently.',
+                description: (
+                    <div style={{ color: 'lightgrey' }}>
+                        Disable minting privileges permanently.
+                    </div>
+                ),
                 visible: lockSupplyIsVisible,
                 content: (
                     <>
@@ -317,27 +307,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                     style={{ width: '50vw' }}
                                 >
                                     <Form.Item>
-                                        <Text>
+                                        <Text style={{ color: 'white' }}>
                                             *Warning: This action is permanent.
                                             Once you lock the supply of this
                                             badge, you will never be able to
                                             mint any more.
                                         </Text>
                                     </Form.Item>
-                                    <Form.Item
-                                        label={<Text strong>Select Node</Text>}
-                                    >
-                                        <Select
-                                            defaultValue={'default'}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Select.Option value="default">
-                                                BitBadges Node (default node)
-                                            </Select.Option>
-                                        </Select>
-                                    </Form.Item>
+
                                     <Form.Item>
                                         <Button
                                             style={{
@@ -380,6 +357,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         {
                             <button
                                 className="link-button"
+                                style={{ color: 'white' }}
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setLockSupplyIsVisible(!lockSupplyIsVisible)
@@ -398,8 +376,12 @@ export function Badge({ badge, size, hidePermissions }) {
         }
         if (badge.permissions.canRevoke) {
             managerPermissionsData.push({
-                title: 'Revoke',
-                description: 'Revoke a badge from an existing owner.',
+                title: <div style={{ color: 'white' }}>Revoke</div>,
+                description: (
+                    <div style={{ color: 'lightgrey' }}>
+                        Revoke a badge from an existing owner
+                    </div>
+                ),
                 icon: <UndoOutlined />,
                 visible: revokeIsVisible,
                 content: (
@@ -422,20 +404,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         owners={owners}
                                         setOwners={setOwners}
                                     />
-                                    <Form.Item
-                                        label={<Text strong>Select Node</Text>}
-                                    >
-                                        <Select
-                                            defaultValue={'default'}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Select.Option value="default">
-                                                BitBadges Node (default node)
-                                            </Select.Option>
-                                        </Select>
-                                    </Form.Item>
+
                                     <Form.Item>
                                         <Button
                                             style={{
@@ -482,6 +451,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         {
                             <button
                                 className="link-button"
+                                style={{ color: 'white' }}
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setRevokeIsVisible(!revokeIsVisible)
@@ -498,8 +468,16 @@ export function Badge({ badge, size, hidePermissions }) {
                 ),
             });
             managerPermissionsData.push({
-                title: 'Lock Revoke Permissions',
-                description: 'Disable revoking privileges permanently.',
+                title: (
+                    <div style={{ color: 'white' }}>
+                        Lock Revoke Permissions
+                    </div>
+                ),
+                description: (
+                    <div style={{ color: 'lightgrey' }}>
+                        Disable revoking privileges permanently.
+                    </div>
+                ),
                 icon: <LockOutlined />,
                 visible: lockRevokeIsVisible,
                 content: (
@@ -519,27 +497,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                     style={{ width: '50vw' }}
                                 >
                                     <Form.Item>
-                                        <Text>
+                                        <Text style={{ color: 'white' }}>
                                             *Warning: This action is permanent.
                                             Once you lock your revoke
                                             permission, you will never be able
                                             to revoke again.
                                         </Text>
                                     </Form.Item>
-                                    <Form.Item
-                                        label={<Text strong>Select Node</Text>}
-                                    >
-                                        <Select
-                                            defaultValue={'default'}
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                        >
-                                            <Select.Option value="default">
-                                                BitBadges Node (default node)
-                                            </Select.Option>
-                                        </Select>
-                                    </Form.Item>
+
                                     <Form.Item>
                                         <Button
                                             style={{
@@ -582,6 +547,7 @@ export function Badge({ badge, size, hidePermissions }) {
                         {
                             <button
                                 className="link-button"
+                                style={{ color: 'white' }}
                                 key="list-loadmore-edit"
                                 onClick={() =>
                                     setLockRevokeIsVisible(!lockRevokeIsVisible)
@@ -600,8 +566,12 @@ export function Badge({ badge, size, hidePermissions }) {
         }
 
         managerPermissionsData.push({
-            title: 'Transfer Manager Role',
-            description: 'Transfer manager privileges to new address.',
+            title: <div style={{ color: 'white' }}>Transfer Manager Role</div>,
+            description: (
+                <div style={{ color: 'lightgrey' }}>
+                    Transfer manager privileges to new address
+                </div>
+            ),
             icon: <SwapRightOutlined />,
             visible: transferManagerIsVisible,
             content: (
@@ -621,7 +591,11 @@ export function Badge({ badge, size, hidePermissions }) {
                                 style={{ width: '50vw' }}
                             >
                                 <Form.Item
-                                    label={<Text strong>New Manager</Text>}
+                                    label={
+                                        <Text strong style={{ color: 'white' }}>
+                                            New Manager
+                                        </Text>
+                                    }
                                 >
                                     <Input.Group compact>
                                         <Select
@@ -645,27 +619,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                     </Input.Group>
                                 </Form.Item>
                                 <Form.Item>
-                                    <Text>
+                                    <Text style={{ color: 'white' }}>
                                         *Warning: This action is permanent. Once
                                         you transfer the manager role to this
                                         new address, you will lose privileges on
                                         this address.
                                     </Text>
                                 </Form.Item>
-                                <Form.Item
-                                    label={<Text strong>Select Node</Text>}
-                                >
-                                    <Select
-                                        defaultValue={'default'}
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                    >
-                                        <Select.Option value="default">
-                                            BitBadges Node (default node)
-                                        </Select.Option>
-                                    </Select>
-                                </Form.Item>
+
                                 <Form.Item>
                                     <Button
                                         style={{
@@ -716,6 +677,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 <>
                     {
                         <button
+                            style={{ color: 'white' }}
                             className="link-button"
                             key="list-loadmore-edit"
                             onClick={() =>
@@ -748,6 +710,9 @@ export function Badge({ badge, size, hidePermissions }) {
                     width: 230,
                     margin: 8,
                     textAlign: 'center',
+                    borderRadius: '8%',
+                    backgroundColor: '#001529',
+                    color: 'white',
                 }}
                 onClick={() => setModalIsVisible(true)}
                 hoverable
@@ -757,60 +722,72 @@ export function Badge({ badge, size, hidePermissions }) {
                             display: 'flex',
                             justifyContent: 'center',
                             width: '100%',
+                            color: 'white',
                         }}
                     >
-                        <Tooltip
+                        {/* <Tooltip
                             placement="bottom"
                             title={`${badge.metadata.name}${
                                 balance ? ' (x' + balance + ')' : ''
                             }`}
-                        >
-                            {badge.metadata.image ? (
-                                <Avatar
-                                    style={{
-                                        verticalAlign: 'middle',
-                                        border: '3px solid',
-                                        borderColor: badge.metadata.color,
-                                        margin: '1rem',
-                                        cursor: 'pointer',
-                                    }}
-                                    className="badge-avatar"
-                                    src={badge.metadata.image}
-                                    size={size}
-                                    onError={(e) => {
-                                        return false;
-                                    }}
-                                />
-                            ) : (
-                                <Avatar
-                                    style={{
-                                        backgroundColor: badge.metadata.color,
-                                        verticalAlign: 'middle',
-                                        border: '3px solid black',
-                                        margin: '1rem',
-                                        cursor: 'pointer',
-                                    }}
-                                    size={size}
-                                    className="badge-avatar"
-                                    onClick={() => setModalIsVisible(true)}
-                                ></Avatar>
-                            )}
-                        </Tooltip>
+                        > */}
+                        {badge.metadata.image ? (
+                            <Avatar
+                                style={{
+                                    verticalAlign: 'middle',
+                                    border: '3px solid',
+                                    borderColor: badge.metadata.color,
+                                    margin: '1rem',
+                                    cursor: 'pointer',
+                                    backgroundColor: 'white',
+                                }}
+                                // className="badge-avatar"   //For scaling on hover
+                                src={badge.metadata.image}
+                                size={size}
+                                onError={(e) => {
+                                    return false;
+                                }}
+                            />
+                        ) : (
+                            <Avatar
+                                style={{
+                                    backgroundColor: badge.metadata.color,
+                                    verticalAlign: 'middle',
+                                    border: '3px solid black',
+                                    margin: '1rem',
+                                    cursor: 'pointer',
+                                }}
+                                size={size}
+                                // className="badge-avatar"     //For scaling on hover
+                                onClick={() => setModalIsVisible(true)}
+                            ></Avatar>
+                        )}
+                        {/* </Tooltip> */}
                     </div>
                 }
             >
                 <Meta
-                    title={badge.metadata.name}
+                    title={
+                        <div
+                            style={{
+                                fontSize: 20,
+                                color: 'white',
+                                fontWeight: 'bolder',
+                            }}
+                        >
+                            {badge.metadata.name}
+                        </div>
+                    }
                     description={
-                        <>
-                            <div style={{ fontSize: 20 }}>
+                        <div style={{ color: 'lightgrey' }}>
+                            <div style={{ fontSize: 17 }}>
                                 {badge.supply} Owned
                             </div>
-                            <br />
+                            {/* <br />
                             <div>Creator </div>
                             <Address
                                 address={badge.metadata.creator.split(':')[1]}
-                                fontColor="black"
+                                fontColor="white"
                                 fontSize={15}
                                 showTooltip
                             />
@@ -818,35 +795,49 @@ export function Badge({ badge, size, hidePermissions }) {
                             <div>Manager </div>
                             <Address
                                 address={badge.metadata.creator.split(':')[1]}
-                                fontColor="black"
+                                fontColor="white"
                                 fontSize={15}
                                 showTooltip
-                            />
-                        </>
+                            /> */}
+                        </div>
                     }
                 />
             </Card>
 
             <Drawer
                 size="large"
-                headerStyle={{ padding: '0px 12px' }}
+                headerStyle={{
+                    paddingLeft: '12px',
+                    paddingRight: '0px',
+                    paddingTop: '0px',
+                    paddingBottom: '0px',
+                    borderBottom: '0px',
+                    backgroundColor: '#001529',
+                    color: 'white',
+                }}
                 title={
                     <Tabs
                         tabInfo={[
-                            { key: 'overview', title: 'Overview' },
-                            { key: 'actions', title: 'Actions' },
-                            { key: 'activity', title: 'Activity' },
+                            { key: 'overview', content: 'Overview' },
+                            { key: 'actions', content: 'Actions' },
+                            { key: 'activity', content: 'Activity' },
                         ]}
                         setTab={setTab}
                         widthPerTab={undefined}
-                        theme="light"
+                        theme="dark"
                     />
                 }
+                closeIcon={<CloseOutlined style={{ color: 'white' }} />}
                 placement={'bottom'}
                 visible={modalIsVisible}
                 key={'bottom'}
                 onClose={() => setModalIsVisible(false)}
-                bodyStyle={{ paddingTop: 8, fontSize: 20 }}
+                bodyStyle={{
+                    paddingTop: 8,
+                    fontSize: 20,
+                    backgroundColor: '#001529',
+                    color: 'white',
+                }}
             >
                 {tab === 'overview' && (
                     <>
@@ -864,6 +855,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         border: '3px solid',
                                         borderColor: badge.metadata.color,
                                         margin: 4,
+                                        backgroundColor: 'white',
                                     }}
                                     src={badge.metadata.image}
                                     size={200}
@@ -887,7 +879,10 @@ export function Badge({ badge, size, hidePermissions }) {
                                 alignItems: 'center',
                             }}
                         >
-                            <Text strong style={{ fontSize: 30 }}>
+                            <Text
+                                strong
+                                style={{ fontSize: 30, color: 'white' }}
+                            >
                                 {badge.metadata.name}
                             </Text>
                         </div>
@@ -1004,7 +999,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 <div>
                                     <Address
                                         address={badge.manager.split(':')[1]}
-                                        fontColor="black"
+                                        fontColor="lightgrey"
                                         fontSize={18}
                                         showTooltip
                                     />
@@ -1025,7 +1020,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         address={
                                             badge.metadata.creator.split(':')[1]
                                         }
-                                        fontColor="black"
+                                        fontColor="lightgrey"
                                         fontSize={18}
                                         showTooltip
                                     />
@@ -1046,12 +1041,12 @@ export function Badge({ badge, size, hidePermissions }) {
                                     alignItems: 'center',
                                 }}
                             >
-                                <div style={{ textAlign: 'center' }}>
+                                {/* <div style={{ textAlign: 'center' }}>
                                     <b>
                                         You own {balance ? balance : 0} out of a
                                         total supply of {badge.supply}
                                     </b>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         {badge.metadata.url && (
@@ -1166,12 +1161,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                                             onClick={() => {
                                                                 item.showModal();
                                                             }}
-                                                            style={{
-                                                                backgroundColor:
-                                                                    item.visible
-                                                                        ? 'lightgrey'
-                                                                        : undefined,
-                                                            }}
+                                                            style={
+                                                                {
+                                                                    // backgroundColor:
+                                                                    //     item.visible
+                                                                    //         ? 'lightgrey'
+                                                                    //         : undefined,
+                                                                }
+                                                            }
                                                         >
                                                             <List.Item
                                                                 actions={[
@@ -1238,6 +1235,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         </>
                                     ) : (
                                         <Empty
+                                            style={{ color: 'white' }}
                                             description="There are no actions you can take. To perform an action, you must either own this badge or be the badge manager."
                                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                                         />
@@ -1246,6 +1244,7 @@ export function Badge({ badge, size, hidePermissions }) {
                             )}
                             {hidePermissions && (
                                 <Empty
+                                    style={{ color: 'white' }}
                                     description="This is just a badge preview, so there are no action you can take."
                                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                                 />
@@ -1255,6 +1254,7 @@ export function Badge({ badge, size, hidePermissions }) {
                 )}
                 {tab === 'activity' && (
                     <Empty
+                        style={{ color: 'white' }}
                         description="No Activity"
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                     />

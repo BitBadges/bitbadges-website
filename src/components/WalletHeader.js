@@ -151,29 +151,44 @@ export function WalletHeader() {
                                     theme={'light'}
                                     mode="horizontal"
                                 >
-                                    <Menu.Item
-                                        key="profile"
-                                        onClick={() => navigate('/account')}
-                                    >
-                                        Profile
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        key="disconnect"
-                                        onClick={async () => {
-                                            await web3Modal.clearCachedProvider();
-                                            if (
-                                                injectedProvider &&
-                                                injectedProvider.provider &&
-                                                typeof injectedProvider.provider
-                                                    .disconnect == 'function'
-                                            ) {
-                                                await injectedProvider.provider.disconnect();
-                                            }
-                                            window.location.reload();
-                                        }}
-                                    >
-                                        Disconnect
-                                    </Menu.Item>
+                                    {!address ? (
+                                        <Menu.Item
+                                            key="account"
+                                            onClick={() => navigate('/account')}
+                                        >
+                                            Connect
+                                        </Menu.Item>
+                                    ) : (
+                                        <>
+                                            <Menu.Item
+                                                key="account"
+                                                onClick={() =>
+                                                    navigate('/account')
+                                                }
+                                            >
+                                                Portfolio
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                key="disconnect"
+                                                onClick={async () => {
+                                                    await web3Modal.clearCachedProvider();
+                                                    if (
+                                                        injectedProvider &&
+                                                        injectedProvider.provider &&
+                                                        typeof injectedProvider
+                                                            .provider
+                                                            .disconnect ==
+                                                            'function'
+                                                    ) {
+                                                        await injectedProvider.provider.disconnect();
+                                                    }
+                                                    window.location.reload();
+                                                }}
+                                            >
+                                                Disconnect
+                                            </Menu.Item>
+                                        </>
+                                    )}
                                 </Menu>
                             ),
                             content: (
@@ -266,29 +281,44 @@ export function WalletHeader() {
                                     theme={'light'}
                                     mode="horizontal"
                                 >
-                                    <Menu.Item
-                                        key="account"
-                                        onClick={() => navigate('/account')}
-                                    >
-                                        Profile
-                                    </Menu.Item>
-                                    <Menu.Item
-                                        key="disconnect"
-                                        onClick={async () => {
-                                            await web3Modal.clearCachedProvider();
-                                            if (
-                                                injectedProvider &&
-                                                injectedProvider.provider &&
-                                                typeof injectedProvider.provider
-                                                    .disconnect == 'function'
-                                            ) {
-                                                await injectedProvider.provider.disconnect();
-                                            }
-                                            window.location.reload();
-                                        }}
-                                    >
-                                        Disconnect
-                                    </Menu.Item>
+                                    {!address ? (
+                                        <Menu.Item
+                                            key="account"
+                                            onClick={() => navigate('/account')}
+                                        >
+                                            Connect
+                                        </Menu.Item>
+                                    ) : (
+                                        <>
+                                            <Menu.Item
+                                                key="account"
+                                                onClick={() =>
+                                                    navigate('/account')
+                                                }
+                                            >
+                                                Profile
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                key="disconnect"
+                                                onClick={async () => {
+                                                    await web3Modal.clearCachedProvider();
+                                                    if (
+                                                        injectedProvider &&
+                                                        injectedProvider.provider &&
+                                                        typeof injectedProvider
+                                                            .provider
+                                                            .disconnect ==
+                                                            'function'
+                                                    ) {
+                                                        await injectedProvider.provider.disconnect();
+                                                    }
+                                                    window.location.reload();
+                                                }}
+                                            >
+                                                Disconnect
+                                            </Menu.Item>
+                                        </>
+                                    )}
                                 </Menu>
                             ),
                             content: (

@@ -1,6 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Badge } from './Badge';
 import { RecipientFormItem } from './RecipientFormItem';
-const { PlusOutlined } = require('@ant-design/icons');
+const {
+    PlusOutlined,
+    DownOutlined,
+    CalendarOutlined,
+    CaretLeftFilled,
+    CaretRightFilled,
+} = require('@ant-design/icons');
 const {
     Typography,
     Form,
@@ -23,6 +30,7 @@ const { useSelector } = require('react-redux');
 const { Option } = Select;
 export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
     const address = useSelector((state) => state.user.address);
+    const [stepNum, setStepNum] = useState(0);
 
     let savedBadgeDataStr = window.localStorage.getItem('savedBadgeData');
     if (!savedBadgeDataStr) {
@@ -35,6 +43,11 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
     const [recipients, setRecipientsArr] = useState(
         savedBadgeData.recipients ? savedBadgeData.recipients : []
     );
+
+    const [nextButtonDisabled, setNextButtonDisabled] = useState(
+        savedBadgeData.title ? true : false
+    );
+
     const [title, setTitle] = useState(
         savedBadgeData.title ? savedBadgeData.title : ''
     );
@@ -50,11 +63,6 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
         savedBadgeData.backgroundColor
             ? savedBadgeData.backgroundColor
             : 'black'
-    );
-    const [expirationDate, setExpirationDate] = useState(
-        savedBadgeData.expirationDate
-            ? savedBadgeData.expirationDate
-            : undefined
     );
     const [expirationDateValue, setExpirationDateValue] = useState(
         savedBadgeData.expirationDateValue
@@ -106,6 +114,24 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
         savedBadgeData.newImage ? savedBadgeData.newImage : ''
     );
 
+    const incrementStep = () => {
+        if (stepNum === 8) {
+            setCurrStepNumber(2);
+        } else {
+            setStepNum(stepNum + 1);
+            setNextButton(stepNum + 1);
+        }
+    };
+
+    const decrementStep = () => {
+        if (stepNum === 0) {
+            setCurrStepNumber(0);
+        } else {
+            setStepNum(stepNum - 1);
+            setNextButton(stepNum - 1);
+        }
+    };
+
     const addItem = (e) => {
         e.preventDefault();
         setItems([...items, name]);
@@ -138,13 +164,12 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
             description,
             image: imageUrl,
             creator: `ETH:${address}`,
-            validFrom:
-                expirationDate && expirationDateValue
-                    ? {
-                          start: Date.now(),
-                          end: expirationDateValue,
-                      }
-                    : { start: Date.now(), end: MAX_DATE_TIMESTAMP },
+            validFrom: expirationDateValue
+                ? {
+                      start: Date.now(),
+                      end: expirationDateValue,
+                  }
+                : { start: Date.now(), end: MAX_DATE_TIMESTAMP },
             color: backgroundColor ? backgroundColor : 'black',
             type,
             category: category ? category : 'Other',
@@ -164,7 +189,6 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
                 description,
                 imageUrl,
                 backgroundColor,
-                expirationDate,
                 expirationDateValue,
                 badgeData,
                 type,
@@ -179,46 +203,389 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
         );
     };
 
-    const showExpirationDate = () => {
-        setExpirationDate(true);
-    };
-
-    const hideExpirationDate = () => {
-        setExpirationDate(false);
-    };
-
     useEffect(() => {
         updateBadgeData();
-    });
+        setNextButton(stepNum);
+    }, [
+        title,
+        description,
+        category,
+        externalUrl,
+        backgroundColor,
+        imageUrl,
+        expirationDateValue,
+        recipients,
+    ]);
+
+    const setNextButton = (newStepNum) => {
+        if (newStepNum === 0) {
+            setNextButtonDisabled(title !== '');
+        } else if (newStepNum === 1) {
+            setNextButtonDisabled(title === '');
+        } else if (newStepNum === 2) {
+            setNextButtonDisabled(false);
+        } else if (newStepNum === 3) {
+            setNextButtonDisabled(!category);
+        } else if (newStepNum === 4) {
+            setNextButtonDisabled(!isuri.isValid(imageUrl));
+        } else if (newStepNum === 5) {
+            setNextButtonDisabled(!backgroundColor);
+        } else if (newStepNum === 6) {
+            setNextButtonDisabled(externalUrl && !isuri.isValid(externalUrl));
+        } else if (newStepNum === 7) {
+            setNextButtonDisabled(false);
+        } else if (newStepNum === 8) {
+            setNextButtonDisabled(true);
+        }
+    };
 
     return (
         <div>
             <Form.Provider>
+                <div
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <button
+                        // className="link-button"
+                        style={{
+                            // position: 'absolute',
+                            // left: 5,
+                            backgroundColor: 'inherit',
+                            color: '#ddd',
+                            fontSize: 17,
+                        }}
+                        onClick={() => decrementStep()}
+                        className="opacity link-button"
+                    >
+                        <CaretLeftFilled size={40} />
+                        Back
+                    </button>
+                    <Typography.Text
+                        strong
+                        style={{
+                            color: 'white',
+                            fontSize: 20,
+                            marginLeft: 50,
+                            marginRight: 50,
+                        }}
+                        align="center"
+                    >
+                        {stepNum} / 8
+                    </Typography.Text>
+                    {nextButtonDisabled ? (
+                        <button
+                            // className="link-button"
+                            style={{
+                                // position: 'absolute',
+                                // left: 5,
+                                backgroundColor: 'inherit',
+                                color: '#ddd',
+                                fontSize: 17,
+                                cursor: 'not-allowed',
+                            }}
+                            onClick={() => incrementStep()}
+                            className="opacity link-button"
+                            disabled={nextButtonDisabled}
+                        >
+                            Next
+                            <CaretRightFilled size={40} />
+                        </button>
+                    ) : (
+                        <button
+                            // className="link-button"
+                            style={{
+                                // position: 'absolute',
+                                // left: 5,
+                                backgroundColor: 'inherit',
+                                color: '#ddd',
+                                fontSize: 17,
+                            }}
+                            onClick={() => incrementStep()}
+                            className="opacity link-button"
+                        >
+                            Next
+                            <CaretRightFilled size={40} />
+                        </button>
+                    )}
+                </div>
+
                 <Form
                     labelCol={{ span: 6 }}
                     wrapperCol={{ span: 14 }}
                     layout="horizontal"
                 >
-                    <Form.Item label={<Text strong>Title</Text>} required>
-                        <Input
-                            value={title}
-                            onChange={(e) => {
-                                setTitle(e.target.value);
-                            }}
-                        />
-                    </Form.Item>
-                    <RecipientFormItem
-                        recipients={recipients}
-                        setRecipients={setRecipientsArr}
-                    />
-                    <Form.Item label={<Text strong>Description</Text>}>
-                        <Input.TextArea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Form.Item>
+                    {stepNum === 0 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Use Saved Data?
+                                </Typography.Text>
+                            </div>
+                            {title !== '' ? (
+                                <>
+                                    <div
+                                        style={{
+                                            justifyContent: 'center',
+                                            display: 'flex',
+                                        }}
+                                    >
+                                        <Typography.Text
+                                            style={{
+                                                color: 'white',
+                                                fontSize: 14,
+                                            }}
+                                            strong
+                                        >
+                                            Would you like to proceed with your
+                                            saved changes from last time or
+                                            start from scratch?
+                                        </Typography.Text>
+                                    </div>
 
-                    {/* <Form.Item label={<Text strong>Badge Type</Text>}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                flexWrap: 'wrap',
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            <Badge
+                                                size={100}
+                                                badge={{
+                                                    metadata: badgeData,
+                                                    supply,
+                                                    manager: `ETH:${address}`,
+                                                }}
+                                                hidePermissions
+                                            />
+                                        </div>
+                                    </div>
+                                    <div
+                                        style={{
+                                            justifyContent: 'center',
+                                            display: 'flex',
+                                            flexWrap: 'wrap ',
+                                        }}
+                                    >
+                                        <Button
+                                            style={{
+                                                width: '200px',
+                                                marginTop: 10,
+                                                backgroundColor: '#001529',
+                                                color: 'white',
+                                                marginRight: 10,
+                                                marginLeft: 10,
+                                            }}
+                                            onClick={() => {
+                                                incrementStep();
+                                            }}
+                                        >
+                                            Use Saved Data
+                                        </Button>
+                                        <Button
+                                            style={{
+                                                width: '200px',
+                                                marginTop: 10,
+                                                backgroundColor: '#001529',
+                                                color: 'white',
+
+                                                marginRight: 10,
+                                                marginLeft: 10,
+                                            }}
+                                            onClick={() => {
+                                                setRecipientsArr([]);
+                                                setTitle('');
+                                                setDescription('');
+                                                setImageUrl(
+                                                    'https://bitbadges.web.app/img/icons/logo.png'
+                                                );
+                                                setBackgroundColor('black');
+                                                // setExpirationDate(false);
+                                                setExpirationDateValue(
+                                                    undefined
+                                                );
+                                                setType(0);
+                                                setCategory('BitBadge');
+                                                setExternalUrl(undefined);
+                                                setSupply(0);
+                                                incrementStep();
+                                            }}
+                                        >
+                                            Start from Scratch
+                                        </Button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div
+                                        style={{
+                                            justifyContent: 'center',
+                                            display: 'flex',
+                                        }}
+                                    >
+                                        <Typography.Text
+                                            style={{
+                                                color: 'white',
+                                                fontSize: 14,
+                                            }}
+                                            strong
+                                        >
+                                            We have not detected any saved
+                                            changes. We will proceed by creating
+                                            the badge from scratch.
+                                        </Typography.Text>
+                                    </div>
+                                    <div
+                                        style={{
+                                            justifyContent: 'center',
+                                            display: 'flex',
+                                        }}
+                                    >
+                                        <Button
+                                            style={{
+                                                width: '50%',
+                                                marginTop: 10,
+                                                backgroundColor: '#001529',
+                                                color: 'white',
+                                                marginLeft: 10,
+                                            }}
+                                            onClick={() => {
+                                                setRecipientsArr([]);
+                                                setTitle('');
+                                                setDescription('');
+                                                setImageUrl(
+                                                    'https://bitbadges.web.app/img/icons/logo.png'
+                                                );
+                                                setBackgroundColor('black');
+                                                // setExpirationDate(false);
+                                                setExpirationDateValue(
+                                                    undefined
+                                                );
+                                                setType(0);
+                                                setCategory('BitBadge');
+                                                setExternalUrl(undefined);
+                                                setSupply(0);
+                                                incrementStep();
+                                            }}
+                                        >
+                                            Start from Scratch
+                                        </Button>
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    )}
+
+                    {stepNum === 1 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Describe your badge
+                                </Typography.Text>
+                            </div>
+                            <div>
+                                <Form.Item
+                                    label={
+                                        <Text style={{ color: 'white' }} strong>
+                                            Title
+                                        </Text>
+                                    }
+                                    required
+                                >
+                                    <Input
+                                        value={title}
+                                        onChange={(e) => {
+                                            setTitle(e.target.value);
+                                        }}
+                                        style={{
+                                            backgroundColor: '#001529',
+                                            color: 'white',
+                                        }}
+                                    />
+                                </Form.Item>
+                                <Form.Item
+                                    label={
+                                        <Text style={{ color: 'white' }} strong>
+                                            Description
+                                        </Text>
+                                    }
+                                >
+                                    <Input.TextArea
+                                        value={description}
+                                        onChange={(e) =>
+                                            setDescription(e.target.value)
+                                        }
+                                        style={{
+                                            backgroundColor: '#001529',
+                                            color: 'white',
+                                        }}
+                                    />
+                                </Form.Item>
+                            </div>
+                        </>
+                    )}
+                    {stepNum === 2 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Add Initial Recipients
+                                </Typography.Text>
+                            </div>
+                            <RecipientFormItem
+                                recipients={recipients}
+                                setRecipients={setRecipientsArr}
+                            />
+                        </>
+                    )}
+
+                    {/* <Form.Item label={<Text style={{color: 'white'}} strong>Badge Type</Text>}>
                         <Select
                             value={type}
                             defaultValue={type}
@@ -230,206 +597,536 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
                         </Select>
                     </Form.Item> */}
 
-                    <Form.Item
-                        label={<Text strong>Category</Text>}
-                        required={type === 0}
-                    >
-                        <Select
-                            value={category}
-                            placeholder="Default: Other"
-                            onChange={(e) => setCategory(e)}
-                            dropdownRender={(menu) => (
-                                <>
-                                    {menu}
-                                    <Divider style={{ margin: '8px 0' }} />
-                                    <Space
-                                        align="center"
-                                        style={{ padding: '0 8px 4px' }}
-                                    >
-                                        <Input
-                                            placeholder="Add Custom Category"
-                                            value={name}
-                                            onChange={onNameChange}
+                    {stepNum === 3 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Select a Category
+                                </Typography.Text>
+                            </div>
+                            <Form.Item
+                                label={
+                                    <Text style={{ color: 'white' }} strong>
+                                        Category
+                                    </Text>
+                                }
+                                required={type === 0}
+                            >
+                                <Select
+                                    className="selector"
+                                    value={category}
+                                    placeholder="Default: Other"
+                                    onChange={(e) => setCategory(e)}
+                                    style={{
+                                        backgroundColor: '#001529',
+                                        color: 'white',
+                                    }}
+                                    suffixIcon={
+                                        <DownOutlined
+                                            style={{ color: 'white' }}
                                         />
-                                        <Typography.Link
-                                            onClick={addItem}
-                                            style={{ whiteSpace: 'nowrap' }}
-                                        >
-                                            <PlusOutlined /> Add Category
-                                        </Typography.Link>
-                                    </Space>
-                                </>
-                            )}
-                        >
-                            {items.map((item) => (
-                                <Option key={item} value={item}>
-                                    {item}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                                    }
+                                    dropdownRender={(menu) => (
+                                        <>
+                                            {menu}
+                                            <Divider
+                                                style={{ margin: '8px 0' }}
+                                            />
+                                            <Space
+                                                align="center"
+                                                style={{ padding: '0 8px 4px' }}
+                                            >
+                                                <Input
+                                                    placeholder="Add Custom Category"
+                                                    value={name}
+                                                    onChange={onNameChange}
+                                                />
+                                                <Typography.Link
+                                                    onClick={addItem}
+                                                    style={{
+                                                        whiteSpace: 'nowrap',
+                                                    }}
+                                                >
+                                                    <PlusOutlined /> Add
+                                                    Category
+                                                </Typography.Link>
+                                            </Space>
+                                        </>
+                                    )}
+                                >
+                                    {items.map((item) => (
+                                        <Option key={item} value={item}>
+                                            {item}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </>
+                    )}
 
-                    <Form.Item
-                        label={<Text strong>Image URI</Text>}
-                        required={type === 0}
-                    >
-                        {/* <Input
+                    {stepNum === 4 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Select an Image
+                                </Typography.Text>
+                            </div>
+                            <Form.Item
+                                label={
+                                    <Text style={{ color: 'white' }} strong>
+                                        Image URI
+                                    </Text>
+                                }
+                                required={type === 0}
+                            >
+                                {/* <Input
                             value={imageUrl}
                             onChange={(e) => setImageUrl(e.target.value)}
                         /> */}
-                        <Select
-                            value={imageUrl}
-                            // placeholder="Default: Other"
-                            onChange={(e) => setImageUrl(e)}
-                            dropdownRender={(menu) => (
-                                <>
-                                    {menu}
-                                    <Divider style={{ margin: '8px 0' }} />
-                                    <Space
-                                        align="center"
-                                        style={{ padding: '0 8px 4px' }}
-                                    >
-                                        <Input
-                                            placeholder="Enter Custom Image URI"
-                                            value={newImage}
-                                            onChange={onNewImageChange}
+                                <Select
+                                    className="selector"
+                                    value={imageUrl}
+                                    // placeholder="Default: Other"
+                                    onChange={(e) => setImageUrl(e)}
+                                    style={{
+                                        backgroundColor: '#001529',
+                                        color: 'white',
+                                    }}
+                                    suffixIcon={
+                                        <DownOutlined
+                                            style={{ color: 'white' }}
                                         />
-                                        <Typography.Link
-                                            disabled={!isuri.isValid(newImage)}
-                                            onClick={addImage}
-                                            style={{ whiteSpace: 'nowrap' }}
-                                        >
-                                            <PlusOutlined /> Add Image
-                                        </Typography.Link>
-                                    </Space>
-                                </>
-                            )}
-                        >
-                            {images.map((item) => (
-                                <Option key={item.value} value={item.value}>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <img
-                                            src={item.value}
-                                            height="20px"
-                                            style={{ paddingRight: 10 }}
-                                            alt="Label"
-                                        />
-                                        <div>{item.label}</div>
-                                    </div>
-                                </Option>
-                            ))}
-                        </Select>
-                        <br />
-                        <div style={{ fontSize: 10 }}>
-                            <Text>
-                                *Please use a permanent file storage solution
-                                like IPFS, or else, you risk your image failing
-                                if the URL goes down or changes.
-                            </Text>
-                        </div>
-                    </Form.Item>
-
-                    <Form.Item label={<Text strong>Color</Text>}>
-                        <Select
-                            defaultValue={backgroundColor}
-                            onSelect={(e) => setBackgroundColor(e)}
-                        >
-                            <Select.Option value="black">
-                                <span style={{ color: 'black' }}>⬤</span> Black
-                            </Select.Option>
-                            <Select.Option value="red">
-                                <span style={{ color: 'red' }}>⬤</span> Red
-                            </Select.Option>
-                            <Select.Option value="blue">
-                                <span style={{ color: 'blue' }}>⬤</span> Blue
-                            </Select.Option>
-                            <Select.Option value="green">
-                                <span style={{ color: 'green' }}>⬤</span> Green
-                            </Select.Option>
-                            <Select.Option value="orange">
-                                <span style={{ color: 'orange' }}>⬤</span>{' '}
-                                Orange
-                            </Select.Option>
-                            <Select.Option value="yellow">
-                                <span style={{ color: 'yellow' }}>⬤</span>{' '}
-                                Yellow
-                            </Select.Option>
-                            <Select.Option value="purple">
-                                <span style={{ color: 'purple' }}>⬤</span>{' '}
-                                Purple
-                            </Select.Option>
-                            <Select.Option value="pink">
-                                <span style={{ color: 'pink' }}>⬤</span> Pink
-                            </Select.Option>
-                            <Select.Option value="brown">
-                                <span style={{ color: 'brown' }}>⬤</span> Brown
-                            </Select.Option>
-                        </Select>
-                    </Form.Item>
-
-                    <Form.Item label={<Text strong>External URL</Text>}>
-                        <Input
-                            value={externalUrl}
-                            onChange={(e) => setExternalUrl(e.target.value)}
-                        />
-                    </Form.Item>
-
-                    <Form.Item label={<Text strong>Expires?</Text>}>
-                        {
-                            <Switch
-                                defaultChecked={expirationDate}
-                                onChange={() => {
-                                    if (expirationDate) {
-                                        hideExpirationDate();
-                                    } else {
-                                        showExpirationDate();
                                     }
-                                }}
-                            />
-                        }
-                    </Form.Item>
-
-                    {expirationDate && (
-                        <Form.Item label={<Text strong>Expiration Date</Text>}>
-                            <DatePicker
-                                style={{ width: '100%' }}
-                                onChange={(date, dateString) => {
-                                    setExpirationDateValue(
-                                        new Date(dateString).valueOf()
-                                    );
-                                }}
-                            />
-                        </Form.Item>
+                                    dropdownRender={(menu) => (
+                                        <>
+                                            {menu}
+                                            <Divider
+                                                style={{ margin: '8px 0' }}
+                                            />
+                                            <Space
+                                                align="center"
+                                                style={{ padding: '0 8px 4px' }}
+                                            >
+                                                <Input
+                                                    placeholder="Enter Custom Image URI"
+                                                    value={newImage}
+                                                    onChange={onNewImageChange}
+                                                />
+                                                <Typography.Link
+                                                    disabled={
+                                                        !isuri.isValid(newImage)
+                                                    }
+                                                    onClick={addImage}
+                                                    style={{
+                                                        whiteSpace: 'nowrap',
+                                                    }}
+                                                >
+                                                    <PlusOutlined /> Add Image
+                                                </Typography.Link>
+                                            </Space>
+                                        </>
+                                    )}
+                                >
+                                    {images.map((item) => (
+                                        <Option
+                                            key={item.value}
+                                            value={item.value}
+                                        >
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <img
+                                                    src={item.value}
+                                                    height="20px"
+                                                    style={{ paddingRight: 10 }}
+                                                    alt="Label"
+                                                />
+                                                <div>{item.label}</div>
+                                            </div>
+                                        </Option>
+                                    ))}
+                                </Select>
+                                <br />
+                                <div style={{ fontSize: 12 }}>
+                                    <Text style={{ color: 'lightgray' }}>
+                                        *If you use a custom image, please use a
+                                        permanent file storage solution such as
+                                        IPFS.
+                                    </Text>
+                                </div>
+                            </Form.Item>
+                        </>
                     )}
 
-                    {badgeData && badgeData.name && (
-                        <Form.Item label={<Text strong>Badge Preview</Text>}>
+                    {stepNum === 5 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Select a Color
+                                </Typography.Text>
+                            </div>
+                            <Form.Item
+                                label={
+                                    <Text style={{ color: 'white' }} strong>
+                                        Color
+                                    </Text>
+                                }
+                                required
+                            >
+                                <Select
+                                    className="selector"
+                                    defaultValue={backgroundColor}
+                                    onSelect={(e) => setBackgroundColor(e)}
+                                    style={{
+                                        backgroundColor: '#001529',
+                                        color: 'white',
+                                    }}
+                                    suffixIcon={
+                                        <DownOutlined
+                                            style={{ color: 'white' }}
+                                        />
+                                    }
+                                >
+                                    <Select.Option value="black">
+                                        <span style={{ color: 'black' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Black
+                                    </Select.Option>
+                                    <Select.Option value="red">
+                                        <span style={{ color: 'red' }}>⬤</span>{' '}
+                                        Red
+                                    </Select.Option>
+                                    <Select.Option value="blue">
+                                        <span style={{ color: 'blue' }}>⬤</span>{' '}
+                                        Blue
+                                    </Select.Option>
+                                    <Select.Option value="green">
+                                        <span style={{ color: 'green' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Green
+                                    </Select.Option>
+                                    <Select.Option value="orange">
+                                        <span style={{ color: 'orange' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Orange
+                                    </Select.Option>
+                                    <Select.Option value="yellow">
+                                        <span style={{ color: 'yellow' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Yellow
+                                    </Select.Option>
+                                    <Select.Option value="purple">
+                                        <span style={{ color: 'purple' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Purple
+                                    </Select.Option>
+                                    <Select.Option value="pink">
+                                        <span style={{ color: 'pink' }}>⬤</span>{' '}
+                                        Pink
+                                    </Select.Option>
+                                    <Select.Option value="brown">
+                                        <span style={{ color: 'brown' }}>
+                                            ⬤
+                                        </span>{' '}
+                                        Brown
+                                    </Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </>
+                    )}
+
+                    {stepNum === 6 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Add External URL (Optional)
+                                </Typography.Text>
+                            </div>
+                            <Form.Item
+                                label={
+                                    <Text style={{ color: 'white' }} strong>
+                                        External URL
+                                    </Text>
+                                }
+                            >
+                                <Input
+                                    value={externalUrl}
+                                    onChange={(e) =>
+                                        setExternalUrl(e.target.value)
+                                    }
+                                    style={{
+                                        backgroundColor: '#001529',
+                                        color: 'white',
+                                    }}
+                                />
+                                <div style={{ fontSize: 12 }}>
+                                    <Text style={{ color: 'lightgray' }}>
+                                        *Reminder: Badge metadata is not
+                                        editable. Please use a URL that will not
+                                        change.
+                                    </Text>
+                                </div>
+                            </Form.Item>
+                        </>
+                    )}
+
+                    {stepNum === 7 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Set Expiration Date (Optional)
+                                </Typography.Text>
+                            </div>
+                            <>
+                                {/* <Form.Item
+                                    label={
+                                        <Text style={{ color: 'white' }} strong>
+                                            Expires?
+                                        </Text>
+                                    }
+                                >
+                                    {
+                                        <Switch
+                                            defaultChecked={expirationDate}
+                                            onChange={() => {
+                                                if (expirationDate) {
+                                                    hideExpirationDate();
+                                                } else {
+                                                    showExpirationDate();
+                                                }
+                                            }}
+                                        />
+                                    }
+                                </Form.Item> */}
+
+                                {
+                                    <Form.Item
+                                        label={
+                                            <Text
+                                                style={{ color: 'white' }}
+                                                strong
+                                            >
+                                                Expiration Date
+                                            </Text>
+                                        }
+                                    >
+                                        <DatePicker
+                                            style={{
+                                                width: '100%',
+                                                backgroundColor: '#001529',
+                                                color: 'white',
+                                            }}
+                                            suffixIcon={
+                                                <CalendarOutlined
+                                                    style={{ color: 'white' }}
+                                                />
+                                            }
+                                            onChange={(date, dateString) => {
+                                                setExpirationDateValue(
+                                                    new Date(
+                                                        dateString
+                                                    ).valueOf()
+                                                );
+                                            }}
+                                        />
+                                    </Form.Item>
+                                }
+                            </>
+                        </>
+                    )}
+
+                    {stepNum === 8 && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Confirm Metadata and Continue
+                                </Typography.Text>
+                            </div>
+                            <>
+                                {/* <Form.Item
+                                    label={
+                                        <Text style={{ color: 'white' }} strong>
+                                            Expires?
+                                        </Text>
+                                    }
+                                >
+                                    {
+                                        <Switch
+                                            defaultChecked={expirationDate}
+                                            onChange={() => {
+                                                if (expirationDate) {
+                                                    hideExpirationDate();
+                                                } else {
+                                                    showExpirationDate();
+                                                }
+                                            }}
+                                        />
+                                    }
+                                </Form.Item> */}
+                                <div
+                                    style={{
+                                        justifyContent: 'center',
+                                        display: 'flex',
+                                    }}
+                                >
+                                    <Typography.Text
+                                        style={{
+                                            color: 'white',
+                                            fontSize: 16,
+                                            marginBottom: 10,
+                                        }}
+                                        strong
+                                    >
+                                        Badge metadata is permanent. Please take
+                                        a moment to confirm all metadata is
+                                        correct.
+                                    </Typography.Text>
+                                </div>
+                                <div
+                                    style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <Button
+                                        disabled={!title.length}
+                                        type="primary"
+                                        style={{ width: '90%' }}
+                                        onClick={() => {
+                                            setCurrStepNumber(2);
+                                            setBadge(badgeData);
+                                        }}
+                                    >
+                                        Confirm Data and Continue
+                                    </Button>
+                                </div>
+                            </>
+                        </>
+                    )}
+
+                    {badgeData && badgeData.name && stepNum !== 0 && (
+                        <>
                             <div
                                 style={{
                                     display: 'flex',
                                     justifyContent: 'center',
-                                    flexWrap: 'wrap',
-                                    textAlign: 'center',
+                                    marginTop: 20,
                                 }}
                             >
-                                <Badge
-                                    size={100}
-                                    badge={{
-                                        metadata: badgeData,
-                                        supply,
-                                        manager: `ETH:${address}`,
-                                    }}
-                                    hidePermissions
-                                />
+                                <Text style={{ color: 'white' }} strong>
+                                    Badge Preview (Click to View More)
+                                </Text>
                             </div>
-                        </Form.Item>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        flexWrap: 'wrap',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <Badge
+                                        size={100}
+                                        badge={{
+                                            metadata: badgeData,
+                                            supply,
+                                            manager: `ETH:${address}`,
+                                        }}
+                                        hidePermissions
+                                    />
+                                </div>
+                            </div>
+                        </>
                     )}
-                    <div
+                    {/* <div
                         style={{
                             width: '100%',
                             display: 'flex',
@@ -459,29 +1156,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
                         >
                             Go Back
                         </Button>
-                    </div>
-
-                    <Button
-                        size="small"
-                        style={{ width: '100%', marginTop: 10 }}
-                        onClick={() => {
-                            setRecipientsArr([]);
-                            setTitle('');
-                            setDescription('');
-                            setImageUrl(
-                                'https://bitbadges.web.app/img/icons/logo.png'
-                            );
-                            setBackgroundColor('black');
-                            setExpirationDate(false);
-                            setExpirationDateValue(undefined);
-                            setType(0);
-                            setCategory('BitBadge');
-                            setExternalUrl(undefined);
-                            setSupply(0);
-                        }}
-                    >
-                        Reset to Defaults
-                    </Button>
+                    </div> */}
                 </Form>
             </Form.Provider>
         </div>

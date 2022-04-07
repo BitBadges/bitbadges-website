@@ -44,9 +44,9 @@ export function Account() {
             <Tabs
                 setTab={setTab}
                 tabInfo={[
-                    { key: 'received', content: 'Owned Badges' },
-                    { key: 'issued', content: 'Created Badges' },
-                    { key: 'offering', content: 'Badges Being Offered' },
+                    { key: 'received', content: 'Collected' },
+                    { key: 'issued', content: 'Created' },
+                    { key: 'offering', content: 'Offering' },
                     { key: 'activity', content: 'Activity' },
                 ]}
                 widthPerTab={'calc(100% / 4)'}
@@ -56,7 +56,8 @@ export function Account() {
                 {tab === 'received' && <BadgeDisplay badges={received} />}
                 {tab === 'offering' && <BadgeDisplay badges={[]} />}
                 {tab === 'activity' && <BadgeDisplay badges={[]} />}
-            </div>
+            </div>  
         </Content>
+        
     );
 }
