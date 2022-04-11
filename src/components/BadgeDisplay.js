@@ -3,18 +3,26 @@ const { Typography, Layout, Collapse, Select, Empty } = require('antd');
 
 const React = require('react');
 
-const { Panel } = Collapse;
 const { Text } = Typography;
 const { Content } = Layout;
 const { useSelector } = require('react-redux');
 const { useState } = require('react');
 const { Option } = Select;
 
-export function BadgeDisplay({ badges, balanceMap }) {
+export function BadgeDisplay({
+    badges,
+    balanceMap,
+    collected,
+    offering,
+    concepts,
+    managing,
+}) {
     const badgeMap = useSelector((state) => state.user.badgeMap);
     const [groupBy, setGroupBy] = useState('all');
     const [sortBy, setSortBy] = useState('date');
     // const [badgeDisplay, setBadgeDisplay] = useState('card');
+
+    console.log('HSJDFH', collected);
 
     if (!badges) return <></>;
 
@@ -33,6 +41,13 @@ export function BadgeDisplay({ badges, balanceMap }) {
             badgesByType['Other'] = badgesByType['Other']
                 ? [...badgesByType['Other'], badgeMap[badge]]
                 : [badgeMap[badge]];
+        }
+    }
+    if (concepts) {
+        for (const badge of concepts) {
+            badgesByType['__concept_badges'] = badgesByType['__concept_badges']
+                ? [...badgesByType['__concept_badges'], badge]
+                : [badge];
         }
     }
 
@@ -112,11 +127,18 @@ export function BadgeDisplay({ badges, balanceMap }) {
                             border: '0px',
                         }}
                     >
-                        {Object.keys(badgesByType)
-                            .sort()
-                            .map((type) => (
-                                <>
-                                    {/* {groupBy === 'type' && (
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                flexWrap: 'wrap',
+                            }}
+                        >
+                            {Object.keys(badgesByType)
+                                .sort()
+                                .map((type) => (
+                                    <>
+                                        {/* {groupBy === 'type' && (
                                     <Panel
                                         style={{
                                             color: 'white',
@@ -163,18 +185,22 @@ export function BadgeDisplay({ badges, balanceMap }) {
                                         </div>
                                     </Panel>
                                 )} */}
-                                    {groupBy === 'all' && (
-                                        <>
-                                            <div
-                                                style={{
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    flexWrap: 'wrap',
-                                                }}
-                                            >
+                                        {groupBy === 'all' && (
+                                            <>
                                                 {badgesByType[type].map(
                                                     (badge) => (
                                                         <Badge
+                                                            collectedBadge={
+                                                                collected
+                                                            }
+                                                            managing={managing}
+                                                            offeredBadge={
+                                                                offering
+                                                            }
+                                                            conceptBadge={
+                                                                type ===
+                                                                '__concept_badges'
+                                                            }
                                                             size={100}
                                                             badge={badge}
                                                             balance={
@@ -194,11 +220,11 @@ export function BadgeDisplay({ badges, balanceMap }) {
                                                         />
                                                     )
                                                 )}
-                                            </div>
-                                        </>
-                                    )}
-                                </>
-                            ))}
+                                            </>
+                                        )}
+                                    </>
+                                ))}
+                        </div>
                     </Collapse>
                 )}
             </Content>

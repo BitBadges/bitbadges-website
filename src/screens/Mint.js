@@ -1,6 +1,6 @@
 import { MintTimeline } from '../components/MintTimeline';
 const React = require('react');
-const { Layout, Row, Typography, Col } = require('antd');
+const { Layout, Typography } = require('antd');
 const { Content } = Layout;
 
 export function Mint() {
@@ -8,10 +8,10 @@ export function Mint() {
         <Layout>
             <Content
                 style={{
-                    background: '#001529',
+                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
                     // display: 'flex',
                     // alignItems: 'center',
-                    minHeight: '70vh',
+                    minHeight: '30vh',
                     padding: '2rem 0',
                     textAlign: 'center',
                 }}
@@ -46,12 +46,14 @@ export function Mint() {
                 </div>
                 <div
                     style={{
-                        paddingLeft: '10vw',
-                        paddingRight: '10vw',
-                        width: '100%',
-                        marginRight: 'auto',
-                        marginLeft: 'auto',
+                        marginLeft: '10vw',
+                        marginRight: '10vw',
+                        paddingLeft: '2vw',
+                        paddingRight: '2vw',
                         paddingTop: '20px',
+                        border: '5px solid black',
+                        background: '#001529',
+                        minHeight: '60vh',
                     }}
                 >
                     <MintTimeline />
@@ -59,18 +61,8 @@ export function Mint() {
             </Content>
             <Content
                 style={{
-                    background: 'linear-gradient(0deg, black 0,#001529 75%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    minHeight: '20vh',
-                    padding: '2rem 0',
-                    textAlign: 'center',
-                }}
-            ></Content>
-            {/* <Content
-                style={{
                     background: 'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-                    minHeight: '50vh',
+                    minHeight: '30vh',
                     alignItems: 'center',
                     // padding: '3rem 0',
                     textAlign: 'center',
@@ -82,14 +74,14 @@ export function Mint() {
                 style={{
                     // display: 'flex',
                     alignItems: 'center',
-                    minHeight: '5vh',
+                    minHeight: '10vh',
                     // padding: '3rem 0',
                     textAlign: 'center',
                     width: '100%',
                     padding: '1rem 5rem',
                     background: 'linear-gradient(0deg, black, #Ea1795 100%)',
                 }}
-            ></Content> */}
+            ></Content>
         </Layout>
     );
 }

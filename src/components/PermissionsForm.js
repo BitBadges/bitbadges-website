@@ -1,6 +1,6 @@
 import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 
-const { Typography, Form, Button, Switch, Checkbox } = require('antd');
+const { Typography, Form, Button, Switch } = require('antd');
 
 const React = require('react');
 const { useState } = require('react');

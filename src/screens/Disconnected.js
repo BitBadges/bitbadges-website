@@ -2,7 +2,7 @@ import { Web3ModalButtons } from '../components/Web3ModalButtons';
 import { getInjectedProviderName } from 'web3modal';
 
 const React = require('react');
-const { Layout, Typography, Alert } = require('antd');
+const { Layout, Typography } = require('antd');
 const { Content } = Layout;
 const { Text } = Typography;
 const { useSelector } = require('react-redux');

@@ -4,12 +4,13 @@ import { Pending } from '../screens/Pending';
 
 const React = require('react');
 const { useState } = require('react');
-const { Layout, Menu, Avatar, Typography, Badge, Drawer } = require('antd');
+const { Layout, Avatar, Typography, Badge, Drawer } = require('antd');
 
 const {
-    PlusOutlined,
     BellOutlined,
     SwapOutlined,
+    CloseOutlined,
+    SettingOutlined,
 } = require('@ant-design/icons');
 const { Content } = Layout;
 const { Text } = Typography;
@@ -23,7 +24,12 @@ export function WalletDisplay() {
     const [tab, setTab] = useState('incoming');
 
     const buttons = [
-        { name: 'Mint', icon: <PlusOutlined />, screen: 'mint', numPending: 0 },
+        {
+            name: 'Pending',
+            icon: <BellOutlined />,
+            screen: 'pending',
+            numPending,
+        },
         {
             name: 'Swap',
             icon: <SwapOutlined />,
@@ -31,10 +37,10 @@ export function WalletDisplay() {
             numPending: 0,
         },
         {
-            name: 'Pending',
-            icon: <BellOutlined />,
-            screen: 'pending',
-            numPending,
+            name: 'Customize',
+            icon: <SettingOutlined />,
+            screen: 'account/customize',
+            numPending: 0,
         },
     ];
 
@@ -49,7 +55,7 @@ export function WalletDisplay() {
                 alignItems: 'center',
             }}
         >
-            <Menu theme="dark" style={{ width: '100%' }}>
+            <div theme="dark" style={{ width: '100%' }}>
                 {/* <div
                     style={{
                         padding: '10',
@@ -106,7 +112,7 @@ export function WalletDisplay() {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: 12,
+                        marginTop: 8,
                         marginBottom: 30,
                         backgroundColor: 'inherit',
                         cursor: 'default',
@@ -123,7 +129,7 @@ export function WalletDisplay() {
                                     <Badge count={button.numPending}>
                                         <Avatar
                                             style={{
-                                                marginBottom: 15,
+                                                marginBottom: 1,
                                                 cursor: 'pointer',
                                                 fontSize: 20,
                                                 padding: 0,
@@ -150,7 +156,7 @@ export function WalletDisplay() {
                                         </Avatar>
                                     </Badge>
                                 </div>
-                                <div style={{ marginTop: 10 }}>
+                                <div style={{ marginTop: 3 }}>
                                     <Text style={{ color: '#ddd' }}>
                                         {button.name}
                                     </Text>
@@ -159,10 +165,8 @@ export function WalletDisplay() {
                         );
                     })}
                 </div>
-            </Menu>
+            </div>
             <Drawer
-                size="large"
-                headerStyle={{ padding: '0px 12px' }}
                 title={
                     <Tabs
                         tabInfo={[
@@ -171,14 +175,29 @@ export function WalletDisplay() {
                         ]}
                         setTab={setTab}
                         widthPerTab={undefined}
-                        theme="light"
+                        theme="dark"
                     />
                 }
-                placement={'bottom'}
+                placement={'right'}
                 visible={pendingModalVisible}
-                key={'bottom'}
+                key={'right'}
                 onClose={() => setPendingModalVisible(false)}
-                bodyStyle={{ paddingTop: 8, fontSize: 20 }}
+                headerStyle={{
+                    paddingLeft: '12px',
+                    paddingRight: '0px',
+                    paddingTop: '0px',
+                    paddingBottom: '0px',
+                    borderBottom: '0px',
+                    backgroundColor: '#001529',
+                    color: 'white',
+                }}
+                closeIcon={<CloseOutlined style={{ color: 'white' }} />}
+                bodyStyle={{
+                    paddingTop: 8,
+                    fontSize: 20,
+                    backgroundColor: '#001529',
+                    color: 'white',
+                }}
             >
                 <Pending tab={tab} />
             </Drawer>

@@ -3,6 +3,7 @@ import { BurnOwnerFormItem } from './BurnOwnerFormItem';
 import { Tabs } from './Tabs';
 import { Address } from './Address';
 import Meta from 'antd/lib/card/Meta';
+// import { useNavigate } from 'react-router-dom';
 
 const {
     Avatar,
@@ -17,13 +18,16 @@ const {
     Input,
     Empty,
     Card,
-    Menu,
+    Alert,
 } = require('antd');
 const { default: Text } = require('antd/lib/typography/Text');
 const { FontAwesomeIcon } = require('@fortawesome/react-fontawesome');
 const {
     faSnowflake,
     faUserLock,
+    faGlobe,
+    faWallet,
+    faCloud,
 } = require('@fortawesome/free-solid-svg-icons');
 const { useState } = require('react');
 const React = require('react');
@@ -44,14 +48,26 @@ const {
     RightOutlined,
     DownOutlined,
     CloseOutlined,
+    HeartOutlined,
+    HeartFilled,
 } = require('@ant-design/icons');
 const { useSelector } = require('react-redux');
-const { signAndSubmitTxn } = require('../api/api');
+const { signAndSubmitTxn, signAndSubmitPrivateApiTxn } = require('../api/api');
 const web3 = require('web3');
 
 const { Option } = Select;
 
-export function Badge({ badge, size, hidePermissions }) {
+export function Badge({
+    badge,
+    size,
+    hidePermissions,
+    collectedBadge,
+    offeredBadge,
+    conceptBadge,
+    managing,
+}) {
+    console.log(collectedBadge);
+
     const [modalIsVisible, setModalIsVisible] = useState(false);
     const [recipients, setRecipients] = useState([]);
     const [owners, setOwners] = useState([]);
@@ -68,8 +84,11 @@ export function Badge({ badge, size, hidePermissions }) {
         useState(false);
     const [transferRecipients, setTransferRecipients] = useState([]);
     const address = useSelector((state) => state.user.address);
+    // const chain = useSelector((state) => state.user.chain);
     const [tab, setTab] = useState('overview');
     const balanceMap = useSelector((state) => state.user.userBalancesMap);
+    const profileInfo = useSelector((state) => state.user.profileInfo);
+    // const navigate = useNavigate();
 
     if (!badge) return <></>;
 
@@ -714,8 +733,8 @@ export function Badge({ badge, size, hidePermissions }) {
                     backgroundColor: '#001529',
                     color: 'white',
                 }}
-                onClick={() => setModalIsVisible(true)}
                 hoverable
+                onClick={() => setModalIsVisible(true)}
                 cover={
                     <div
                         style={{
@@ -759,7 +778,6 @@ export function Badge({ badge, size, hidePermissions }) {
                                 }}
                                 size={size}
                                 // className="badge-avatar"     //For scaling on hover
-                                onClick={() => setModalIsVisible(true)}
                             ></Avatar>
                         )}
                         {/* </Tooltip> */}
@@ -779,10 +797,189 @@ export function Badge({ badge, size, hidePermissions }) {
                         </div>
                     }
                     description={
-                        <div style={{ color: 'lightgrey' }}>
-                            <div style={{ fontSize: 17 }}>
-                                {badge.supply} Owned
+                        <div
+                            style={{
+                                color: 'lightgrey',
+                                display: 'flex',
+                                alignItems: 'center',
+                                // justifyContent: 'space-between',
+                                fontSize: 17,
+                                width: '100%',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: 'calc(100% / 3)',
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {collectedBadge ? (
+                                    <Tooltip
+                                        className={`like-button-badge`}
+                                        title={`This user owns ${balance}.`}
+                                    >
+                                        <div style={{}}>
+                                            <FontAwesomeIcon icon={faWallet} />{' '}
+                                            {balance}
+                                        </div>
+                                    </Tooltip>
+                                ) : (
+                                    <Tooltip
+                                        className={`like-button-badge`}
+                                        title={`Total Supply: ${badge.supply}`}
+                                    >
+                                        <div style={{}}>
+                                            <FontAwesomeIcon
+                                                // style={{ fontSize: 30 }}
+                                                icon={faGlobe}
+                                            />{' '}
+                                            {badge.supply}
+                                        </div>
+                                    </Tooltip>
+                                )}
                             </div>
+
+                            <div style={{ width: 'calc(100% / 3)' }}>
+                                {managing && (
+                                    <>
+                                        {profileInfo.offering.includes(
+                                            badge._id
+                                        ) ? (
+                                            <>Remove</>
+                                        ) : (
+                                            <>Add</>
+                                        )}
+                                    </>
+                                )}
+                                {/* {badge.manager === `${chain}:${address}` &&
+                                    !offeredBadge &&
+                                    !conceptBadge && (
+                                        <>
+                                            {!profileInfo.offering.includes(
+                                                badge._id
+                                            ) ? (
+                                                <Tooltip
+                                                    className={`like-button-badge`}
+                                                    title={`Add to Offering Badges`}
+                                                >
+                                                    <div style={{}}>
+                                                        <AppstoreAddOutlined />
+                                                    </div>
+                                                </Tooltip>
+                                            ) : (
+                                                <Tooltip
+                                                    className={`like-button-badge`}
+                                                    title={`Remove from Offering Badges`}
+                                                >
+                                                    <div style={{}}>
+                                                        <MinusOutlined />
+                                                    </div>
+                                                </Tooltip>
+                                            )}
+                                        </>
+                                    )} */}
+                            </div>
+                            <div
+                                style={{
+                                    width: 'calc(100% / 3)',
+                                    textAlign: 'right',
+                                }}
+                            >
+                                {conceptBadge && (
+                                    <Tooltip
+                                        className={`like-button-badge`}
+                                        title={`This badge is just a concept.`}
+                                    >
+                                        <div style={{}}>
+                                            <FontAwesomeIcon icon={faCloud} />{' '}
+                                            {balance}
+                                        </div>
+                                    </Tooltip>
+                                )}
+                                {offeredBadge && !conceptBadge && (
+                                    <Tooltip
+                                        className={`like-button-badge`}
+                                        title={`This badge has already been created.`}
+                                    >
+                                        <div style={{}}>
+                                            <FontAwesomeIcon
+                                                icon={faSnowflake}
+                                            />
+                                        </div>
+                                    </Tooltip>
+                                )}
+                                {!offeredBadge && !conceptBadge && (
+                                    <>
+                                        {' '}
+                                        {profileInfo.likes.includes(
+                                            badge._id
+                                        ) ? (
+                                            <Tooltip
+                                                className={`like-button-badge`}
+                                                title="Unlike"
+                                            >
+                                                <HeartFilled
+                                                    onClick={async (event) => {
+                                                        event.stopPropagation();
+
+                                                        try {
+                                                            const data = {
+                                                                badgeId:
+                                                                    badge._id,
+                                                            };
+
+                                                            console.log(data);
+
+                                                            const error =
+                                                                await signAndSubmitPrivateApiTxn(
+                                                                    '/badges/unlike',
+                                                                    data
+                                                                );
+                                                            console.log(error);
+                                                        } catch (err) {
+                                                            // setTxnSubmitted(false);
+                                                            // setTransactionIsLoading(false);
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip
+                                                className={`like-button-badge`}
+                                                title="Like"
+                                            >
+                                                <HeartOutlined
+                                                    onClick={async (event) => {
+                                                        event.stopPropagation();
+
+                                                        try {
+                                                            const data = {
+                                                                badgeId:
+                                                                    badge._id,
+                                                            };
+
+                                                            console.log(data);
+
+                                                            const error =
+                                                                await signAndSubmitPrivateApiTxn(
+                                                                    '/badges/like',
+                                                                    data
+                                                                );
+                                                            console.log(error);
+
+                                                            // setTransactionIsLoading(false);
+                                                        } catch (err) {
+                                                            // setTxnSubmitted(false);
+                                                            // setTransactionIsLoading(false);
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+
                             {/* <br />
                             <div>Creator </div>
                             <Address
@@ -841,6 +1038,15 @@ export function Badge({ badge, size, hidePermissions }) {
             >
                 {tab === 'overview' && (
                     <>
+                        {conceptBadge && (
+                            <Alert
+                                style={{ textAlign: 'center' }}
+                                message="Warning: This badge is a concept badge and is not currently on the blockchain."
+                                description="Concept badges are created by users to showcase a badge they plan to create in the future. There may be differences between the conceptual version and the final on-chain version."
+                                type="warning"
+                                closable
+                            />
+                        )}
                         <div
                             style={{
                                 display: 'flex',
@@ -1078,6 +1284,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
+                                        textAlign: 'center',
                                     }}
                                 >
                                     {badge.metadata.description}
@@ -1147,7 +1354,7 @@ export function Badge({ badge, size, hidePermissions }) {
                                 fontSize: 20,
                             }}
                         >
-                            {!hidePermissions && (
+                            {!hidePermissions && !conceptBadge && (
                                 <>
                                     {permissionsData.length > 0 ? (
                                         <>
@@ -1242,13 +1449,14 @@ export function Badge({ badge, size, hidePermissions }) {
                                     )}
                                 </>
                             )}
-                            {hidePermissions && (
-                                <Empty
-                                    style={{ color: 'white' }}
-                                    description="This is just a badge preview, so there are no action you can take."
-                                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                />
-                            )}
+                            {hidePermissions ||
+                                (conceptBadge && (
+                                    <Empty
+                                        style={{ color: 'white' }}
+                                        description="This is just a badge preview, so there are no actions you can take."
+                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                    />
+                                ))}
                         </div>
                     </>
                 )}

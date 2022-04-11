@@ -24,6 +24,7 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
                               setTab(tab.key);
                           }
                 }
+                id={tab.key}
             >
                 {tab.content}
             </Menu.Item>

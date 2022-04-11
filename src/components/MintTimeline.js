@@ -1,5 +1,4 @@
 import { Address } from './Address';
-import { Badge } from './Badge';
 import { BadgeDataForm } from './BadgeDataForm';
 import { PermissionsForm } from './PermissionsForm';
 import Blockies from 'react-blockies';
@@ -9,11 +8,6 @@ const {
     Timeline,
     Typography,
     Button,
-    Select,
-    Row,
-    Col,
-    Statistic,
-    Form,
     Menu,
     Avatar,
 } = require('antd');
@@ -27,7 +21,6 @@ const { useState } = require('react');
 
 const { Text } = Typography;
 const { useSelector } = require('react-redux');
-const { signAndSubmitTxn } = require('../api/api');
 
 export function MintTimeline() {
     const [currStepNumber, setCurrStepNumber] = useState(0);

@@ -14,6 +14,9 @@ export function User() {
     const [tab, setTab] = useState('received');
     const [issued, setIssued] = useState([]);
     const [received, setReceived] = useState([]);
+    const bannerColorOne = undefined;
+    const bannerColorTwo = undefined;
+
     const urlParams = useParams();
 
     useEffect(() => {
@@ -37,7 +40,9 @@ export function User() {
                 padding: '0',
                 margin: 0,
                 width: '100%',
-                backgroundColor: '#001529',
+                background: `linear-gradient(0deg, ${
+                    bannerColorTwo ? bannerColorTwo : '#001529'
+                }, ${bannerColorOne ? bannerColorOne : '#3e83f8'} 75%)`,
             }}
         >
             <ShowingResultsFor address={urlParams.userId.split(':')[1]} />
@@ -47,7 +52,9 @@ export function User() {
                 tabInfo={[
                     { key: 'received', content: 'Collected' },
                     { key: 'issued', content: 'Created' },
+                    { key: 'managing', content: 'Managing' },
                     { key: 'offering', content: 'Offering' },
+                    { key: 'liked', content: 'Liked' },
                     { key: 'activity', content: 'Activity' },
                 ]}
                 widthPerTab={'calc(100% / 4)'}

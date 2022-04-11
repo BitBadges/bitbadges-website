@@ -5,7 +5,6 @@ const {
     Layout,
     Button,
     Tooltip,
-    Divider,
     Empty,
     List,
     Typography,
@@ -58,7 +57,7 @@ export function Pending({ tab }) {
                 margin: '0',
                 padding: '0',
                 width: '100%',
-                backgroundColor: 'white',
+                // backgroundColor: '#',
             }}
         >
             {/* <Tabs
@@ -69,18 +68,17 @@ export function Pending({ tab }) {
                 ]}
                 widthPerTab={'50%'}
             /> */}
-            <div style={{ width: '100%', marginTop: 24 }}></div>
+            <div style={{ width: '100%' }}></div>
             {pending && pending.length > 0 ? (
                 <>
                     {pending.map((pendingData) => (
                         <>
                             <div
                                 style={{
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
                                     alignItems: 'center',
-                                    marginLeft: 20,
-                                    marginRight: 20,
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'center',
                                 }}
                             >
                                 <Badge
@@ -88,6 +86,8 @@ export function Pending({ tab }) {
                                     size={100}
                                     balance={pendingData.amount}
                                 />
+                            </div>
+                            <div>
                                 {tab === 'incoming' && (
                                     <>
                                         <div
@@ -95,12 +95,14 @@ export function Pending({ tab }) {
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
-                                                marginLeft: 20,
-                                                marginRight: 20,
                                                 fontSize: 20,
+                                                textAlign: 'center',
                                             }}
                                         >
-                                            <Text strong>
+                                            <Text
+                                                strong
+                                                style={{ color: 'white' }}
+                                            >
                                                 {pendingData.from !==
                                                 ETH_NULL_ADDRESS ? (
                                                     <>
@@ -163,12 +165,12 @@ export function Pending({ tab }) {
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
-                                                marginLeft: 20,
-                                                marginRight: 20,
                                                 fontSize: 20,
+                                                textAlign: 'center',
                                             }}
                                         >
                                             <List
+                                                bordered={false}
                                                 size="small"
                                                 dataSource={[
                                                     badgeMap[pendingData.badge]
@@ -195,15 +197,22 @@ export function Pending({ tab }) {
                                                     <List.Item
                                                         style={{
                                                             padding: '4px 0px',
+                                                            color: 'white',
                                                         }}
                                                     >
                                                         <Typography.Text>
-                                                            <WarningOutlined
+                                                            <div
                                                                 style={{
-                                                                    color: 'orange',
+                                                                    color: 'white',
                                                                 }}
-                                                            />
-                                                            {item}
+                                                            >
+                                                                <WarningOutlined
+                                                                    style={{
+                                                                        color: 'orange',
+                                                                    }}
+                                                                />
+                                                                {item}
+                                                            </div>
                                                         </Typography.Text>{' '}
                                                     </List.Item>
                                                 )}
@@ -218,9 +227,9 @@ export function Pending({ tab }) {
                                                 display: 'flex',
                                                 justifyContent: 'center',
                                                 alignItems: 'center',
-                                                marginLeft: 20,
-                                                marginRight: 20,
                                                 fontSize: 12,
+                                                color: 'white',
+                                                textAlign: 'center',
                                             }}
                                         >
                                             <List
@@ -237,25 +246,29 @@ export function Pending({ tab }) {
                                                             padding: '4px 0px',
                                                         }}
                                                     >
-                                                        <Typography.Text>
+                                                        <div
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                        >
                                                             <WarningOutlined
                                                                 style={{
                                                                     color: 'orange',
                                                                 }}
                                                             />
                                                             {item}
-                                                        </Typography.Text>{' '}
+                                                        </div>
                                                     </List.Item>
                                                 )}
                                             />
                                         </div>
                                     </>
                                 )}
-
                                 <div
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
+                                        justifyContent: 'center',
                                     }}
                                 >
                                     {tab === 'incoming' ? (
@@ -302,11 +315,19 @@ export function Pending({ tab }) {
                                             </Tooltip>
                                         </>
                                     ) : (
-                                        <div style={{ textAlign: 'right' }}>
+                                        <div
+                                            style={{
+                                                textAlign: 'center',
+                                                color: 'white',
+                                            }}
+                                        >
                                             <div>
                                                 <Text
                                                     strong
-                                                    style={{ fontSize: 16 }}
+                                                    style={{
+                                                        fontSize: 16,
+                                                        color: 'white',
+                                                    }}
                                                 >
                                                     To:{' '}
                                                     <Tooltip
@@ -327,7 +348,10 @@ export function Pending({ tab }) {
                                             <div>
                                                 <Text
                                                     strong
-                                                    style={{ fontSize: 16 }}
+                                                    style={{
+                                                        fontSize: 16,
+                                                        color: 'white',
+                                                    }}
                                                 >
                                                     Amount: {pendingData.amount}
                                                 </Text>
@@ -336,7 +360,13 @@ export function Pending({ tab }) {
                                     )}
                                 </div>
                             </div>
-                            <Divider />
+                            <hr
+                                style={{
+                                    backgroundColor: 'white',
+                                    fontSize: '50px',
+                                    borderWidth: '4px',
+                                }}
+                            />
                         </>
                     ))}
                 </>

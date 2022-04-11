@@ -1,53 +1,198 @@
 import { Address } from './Address';
 import Blockies from 'react-blockies';
+import {
+    InstagramOutlined,
+    LinkOutlined,
+    ShareAltOutlined,
+    TwitterOutlined,
+} from '@ant-design/icons';
+import { WEBSITE_HOSTNAME } from '../constants';
 
 const React = require('react');
-const { Layout, Menu, Avatar } = require('antd');
+const { Layout, Avatar, message } = require('antd');
 
 const { Content } = Layout;
 
-export function ShowingResultsFor({ address }) {
+export function ShowingResultsFor({
+    address,
+    chain,
+    userName,
+    bio,
+    profilePic,
+    twitter,
+    instagram,
+    email,
+    website,
+    bannerColorOne,
+    bannerColorTwo,
+}) {
     return (
-        <Content
-            style={{
-                padding: '0',
-                textAlign: 'center',
-                color: 'white',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 30,
-            }}
+        <div
+            style={
+                {
+                    // background: 'linear-gradient(0deg, #001529 , #3e83f8 75%)',
+                }
+            }
         >
-            <Menu theme="dark" style={{ width: '100%' }}>
-                <div
-                    style={{
-                        padding: '0',
-                        textAlign: 'center',
-                        color: 'white',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 20,
-                    }}
-                >
-                    <Avatar
-                        size={150}
-                        src={
-                            <Blockies seed={address.toLowerCase()} size={40} />
-                        }
-                    />
+            <div style={{ position: 'absolute', right: 10, top: 74 }}>
+                {twitter && (
+                    <a href={twitter} target="_blank" rel="noreferrer">
+                        <Avatar
+                            style={{
+                                marginBottom: 1,
+                                cursor: 'pointer',
+                                fontSize: 20,
+                                padding: 0,
+                                margin: 5,
+                                alignItems: 'center',
+                            }}
+                            size="large"
+                            onClick={() => {}}
+                            className="screen-button"
+                        >
+                            <TwitterOutlined />
+                        </Avatar>
+                    </a>
+                )}
+                {instagram && (
+                    <a href={instagram} target="_blank" rel="noreferrer">
+                        <Avatar
+                            style={{
+                                marginBottom: 1,
+                                cursor: 'pointer',
+                                fontSize: 20,
+                                padding: 0,
+                                margin: 5,
+                                alignItems: 'center',
+                            }}
+                            size="large"
+                            onClick={() => {}}
+                            className="screen-button"
+                        >
+                            <InstagramOutlined />
+                        </Avatar>
+                    </a>
+                )}
+                {website && (
+                    <a href={website} target="_blank" rel="noreferrer">
+                        <Avatar
+                            style={{
+                                marginBottom: 1,
+                                cursor: 'pointer',
+                                fontSize: 20,
+                                padding: 0,
+                                margin: 5,
+                                alignItems: 'center',
+                            }}
+                            size="large"
+                            onClick={() => {}}
+                            className="screen-button"
+                        >
+                            <LinkOutlined />
+                        </Avatar>
+                    </a>
+                )}
 
-                    <div style={{ height: 20, marginTop: 4 }}>
-                        {
-                            <Address
-                                address={address}
-                                fontSize={30}
-                                showTooltip
-                            />
-                        }
+                <Avatar
+                    style={{
+                        marginBottom: 1,
+                        cursor: 'pointer',
+                        fontSize: 20,
+                        padding: 0,
+                        margin: 5,
+                        alignItems: 'center',
+                    }}
+                    size="large"
+                    onClick={() => {
+                        navigator.clipboard.writeText(
+                            `https://${WEBSITE_HOSTNAME}/user/${chain}:${address}`
+                        );
+                        message.success('Copied to clipboard!');
+                    }}
+                    className="screen-button"
+                >
+                    <ShareAltOutlined />
+                </Avatar>
+            </div>
+            <Content
+                style={{
+                    padding: '0',
+                    textAlign: 'center',
+                    color: 'white',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingBottom: 10,
+                }}
+            >
+                <div theme="dark" style={{ width: '100%' }}>
+                    <div
+                        style={{
+                            padding: '0',
+                            textAlign: 'center',
+                            color: 'white',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 20,
+                        }}
+                    >
+                        <Avatar
+                            size={150}
+                            src={
+                                profilePic ? (
+                                    profilePic
+                                ) : (
+                                    <Blockies
+                                        seed={address.toLowerCase()}
+                                        size={40}
+                                    />
+                                )
+                            }
+                        />
+                        {!userName && (
+                            <div style={{ marginTop: 4 }}>
+                                {
+                                    <Address
+                                        address={address}
+                                        fontSize={30}
+                                        showTooltip
+                                    />
+                                }
+                            </div>
+                        )}
+                        {userName && (
+                            <>
+                                <div
+                                    style={{
+                                        fontSize: 30,
+                                    }}
+                                >
+                                    {userName}
+                                </div>
+                                <div>
+                                    {
+                                        <Address
+                                            address={address}
+                                            fontSize={20}
+                                            showTooltip
+                                        />
+                                    }
+                                </div>
+                            </>
+                        )}
+                        {bio && (
+                            <div
+                                style={{
+                                    fontSize: 18,
+                                    color: 'lightgray',
+                                }}
+                            >
+                                {bio}
+                            </div>
+                        )}
                     </div>
                 </div>
-            </Menu>
-        </Content>
+            </Content>
+        </div>
     );
 }

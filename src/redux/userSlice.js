@@ -14,6 +14,26 @@ const userSlice = createSlice({
         userBalancesMap: {},
         numPending: 0,
         badgeMap: {},
+        profileInfo: {
+            username: '',
+            bio: '',
+            email: '',
+            twitter: '',
+            instagram: '',
+            website: '',
+            profilePic: '',
+            bannerColorOne: '',
+            bannerColorTwo: '',
+            activity: [],
+            likes: [],
+            pinned: [],
+            customDisplay: {},
+            hidden: [],
+            blockedUsers: [],
+            loading: true,
+            offering: [],
+            concepts: [],
+        },
     },
     reducers: {
         incrementNonce: (state) => {
@@ -51,6 +71,9 @@ const userSlice = createSlice({
                 ...state.badgeMap,
                 ...action.payload,
             };
+        },
+        setProfileInfo: (state, action) => {
+            state.profileInfo = action.payload;
         },
     },
 });

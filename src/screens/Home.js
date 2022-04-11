@@ -12,9 +12,9 @@ export function Home() {
                     style={{
                         background:
                             'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        minHeight: '40vh',
+                        // display: 'flex',
+                        // alignItems: 'center',
+                        minHeight: '20vh',
                         padding: '2rem 0',
                         textAlign: 'center',
                     }}
@@ -170,7 +170,7 @@ export function Home() {
                                     wordWrap: 'break-word',
                                 }}
                             >
-                                Demos
+                                What is a BitBadge?
                             </div>
                         </Col>
                     </Row>

@@ -15,7 +15,6 @@ const {
     Button,
     Select,
     DatePicker,
-    Switch,
     Space,
     Divider,
 } = require('antd');
@@ -28,13 +27,21 @@ const { MAX_DATE_TIMESTAMP } = require('../constants');
 const { Text } = Typography;
 const { useSelector } = require('react-redux');
 const { Option } = Select;
-export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
+export function BadgeDataForm({
+    setCurrStepNumber,
+    setBadge,
+    setRecipients,
+    isConceptForm,
+}) {
     const address = useSelector((state) => state.user.address);
     const [stepNum, setStepNum] = useState(0);
 
     let savedBadgeDataStr = window.localStorage.getItem('savedBadgeData');
     if (!savedBadgeDataStr) {
         window.localStorage.setItem('savedBadgeData', '{}');
+        savedBadgeDataStr = '{}';
+    }
+    if (isConceptForm) {
         savedBadgeDataStr = '{}';
     }
 
@@ -575,7 +582,7 @@ export function BadgeDataForm({ setCurrStepNumber, setBadge, setRecipients }) {
                                     }}
                                     strong
                                 >
-                                    Add Initial Recipients
+                                    Add Recipients (Optional)
                                 </Typography.Text>
                             </div>
                             <RecipientFormItem

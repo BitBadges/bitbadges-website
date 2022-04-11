@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { WalletFooter } from './components/WalletFooter';
 import { Account } from './screens/Account';
 import DisconnectedWrapper from './screens/Disconnected';
+import { AccountSettings } from './screens/AccountSettings';
 const React = require('react');
 const { Layout } = require('antd');
 
@@ -55,6 +56,14 @@ function App() {
                             path="account"
                             element={
                                 <DisconnectedWrapper screenNode={<Account />} />
+                            }
+                        />
+                        <Route
+                            path="account/customize"
+                            element={
+                                <DisconnectedWrapper
+                                    screenNode={<AccountSettings />}
+                                />
                             }
                         />
                     </Routes>

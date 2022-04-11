@@ -7,9 +7,10 @@ const {
     setUserBalancesMap,
     setNumPending,
     setBadgeMap,
+    setProfileInfo,
 } = require('../redux/userSlice');
 const store = require('../redux/store');
-const { NODE_URL } = require('../constants');
+const { NODE_URL, PRIVATE_API_URL } = require('../constants');
 const {
     EIP712_TXN_TYPE_IDS,
     EIP712_PENDING_TXN,
@@ -22,13 +23,14 @@ const {
 } = require('./eip712Types');
 const { message } = require('antd');
 
-async function getBadgeDataForAddress(
-    chain,
-    userAddress,
-    isSignedInUser
-) {
+async function getBadgeDataForAddress(chain, userAddress, isSignedInUser) {
     let badgesToFetch = [];
-    let userNonce, issuedBadges, receivedBadges, pendingBadges;
+    let userNonce,
+        issuedBadges,
+        receivedBadges,
+        pendingBadges,
+        likedBadges,
+        managingBadges;
     let numPendingCount = 0;
     let newUserBalancesMap = {};
 
@@ -40,6 +42,7 @@ async function getBadgeDataForAddress(
         .then((res) => {
             userNonce = res.data.nonce;
             issuedBadges = res.data.created;
+            managingBadges = res.data.managing;
 
             badgesToFetch.push(...res.data.created);
 
@@ -98,10 +101,21 @@ async function getBadgeDataForAddress(
 
             badgesToFetch.push(...received);
             badgesToFetch.push(...pending);
-
-            badgesToFetch = [...new Set(badgesToFetch)];
         });
 
+    let profileInfo = {};
+    await axios
+        .post(`${PRIVATE_API_URL}/users`, {
+            chain,
+            address: userAddress,
+        })
+        .then((res) => {
+            profileInfo = res.data;
+            likedBadges = profileInfo.likes;
+            badgesToFetch.push(...profileInfo.likes);
+        });
+
+    badgesToFetch = [...new Set(badgesToFetch)];
     if (badgesToFetch.length !== 0) {
         await axios
             .post(`${NODE_URL}/badges/getByIds`, {
@@ -122,6 +136,7 @@ async function getBadgeDataForAddress(
             });
     }
 
+    console.log('DATAAAA', profileInfo);
     if (isSignedInUser) {
         store.dispatch(setNonce(userNonce));
         store.dispatch(setUserCreatedBadges(issuedBadges));
@@ -129,12 +144,15 @@ async function getBadgeDataForAddress(
         store.dispatch(setUserPendingBadges(pendingBadges));
         store.dispatch(setUserBalancesMap(newUserBalancesMap));
         store.dispatch(setNumPending(numPendingCount));
+        store.dispatch(setProfileInfo(profileInfo));
     }
 
     return {
         issued: issuedBadges,
         received: receivedBadges,
         pending: pendingBadges,
+        liked: likedBadges,
+        managing: managingBadges
     };
 }
 
@@ -206,6 +224,7 @@ async function signAndSubmitTxn(route, data) {
         transaction,
     };
 
+    let error = false;
     await axios
         .post(`${NODE_URL}${route}`, body)
         .then(() => {
@@ -215,12 +234,64 @@ async function signAndSubmitTxn(route, data) {
             message.error(
                 `Failed to Submit Transaction: ${err.response.data.error}`
             );
+            error = true;
         });
 
-    getBadgeDataForAddress(chain, address, true);
+    if (error) {
+        return error;
+    } else {
+        getBadgeDataForAddress(chain, address, true);
+        return error;
+    }
+}
+
+async function signAndSubmitPrivateApiTxn(route, data) {
+    const currState = store.getState();
+    const chain = currState.user.chain;
+    const address = currState.user.address;
+
+    const transaction = {
+        data,
+    };
+
+    // const signature = await userSigner._signTypedData(
+    //     EIP712_BITBADGES_DOMAIN,
+    //     txnParams.eip712Types,
+    //     transaction
+    // );
+
+    const body = {
+        authentication: {
+            chain,
+            address,
+            // signature,
+        },
+        transaction,
+    };
+
+    let error = false;
+    await axios
+        .post(`${PRIVATE_API_URL}${route}`, body)
+        .then(() => {
+            message.success(`Successfully submitted transaction.`);
+        })
+        .catch((err) => {
+            message.error(
+                `Failed to Submit Transaction: ${err.response.data.error}`
+            );
+            error = true;
+        });
+
+    if (error) {
+        return error;
+    } else {
+        getBadgeDataForAddress(chain, address, true);
+        return error;
+    }
 }
 
 module.exports = {
     getBadgeDataForAddress,
     signAndSubmitTxn,
+    signAndSubmitPrivateApiTxn,
 };

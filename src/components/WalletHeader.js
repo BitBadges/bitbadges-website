@@ -169,6 +169,14 @@ export function WalletHeader() {
                                                 Portfolio
                                             </Menu.Item>
                                             <Menu.Item
+                                                key="settings"
+                                                onClick={() =>
+                                                    navigate('/account/customize')
+                                                }
+                                            >
+                                                Customize
+                                            </Menu.Item>
+                                            <Menu.Item
                                                 key="disconnect"
                                                 onClick={async () => {
                                                     await web3Modal.clearCachedProvider();

@@ -6,8 +6,6 @@ const {
     Typography,
     Form,
     Button,
-    Switch,
-    Checkbox,
     Row,
     Col,
     Statistic,
@@ -17,7 +15,6 @@ const React = require('react');
 const { useState } = require('react');
 const { signAndSubmitTxn } = require('../api/api');
 
-const { Text } = Typography;
 const { useSelector } = require('react-redux');
 
 export function TransactionDetails({
