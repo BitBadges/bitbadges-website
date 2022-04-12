@@ -28,6 +28,8 @@ const {
     faGlobe,
     faWallet,
     faCloud,
+    faSquareMinus,
+    faSquarePlus,
 } = require('@fortawesome/free-solid-svg-icons');
 const { useState } = require('react');
 const React = require('react');
@@ -844,10 +846,90 @@ export function Badge({
                                     <>
                                         {profileInfo.offering.includes(
                                             badge._id
-                                        ) ? (
-                                            <>Remove</>
+                                        ) || conceptBadge ? (
+                                            <Tooltip
+                                                className={`like-button-badge`}
+                                                title={`Remove from Offering`}
+                                            >
+                                                <FontAwesomeIcon
+                                                    // style={{ fontSize: 30 }}
+                                                    icon={faSquareMinus}
+                                                    onClick={async (event) => {
+                                                        event.stopPropagation();
+
+                                                        try {
+                                                            const data = {
+                                                                badgeId:
+                                                                    badge._id,
+                                                            };
+
+                                                            // console.log(data);
+
+                                                            if (conceptBadge) {
+                                                                console.log(
+                                                                    'DATAAAAAAA 2.0',
+                                                                    data
+                                                                );
+                                                                console.log(
+                                                                    badge
+                                                                );
+                                                                const error =
+                                                                    await signAndSubmitPrivateApiTxn(
+                                                                        '/badges/removeConcept',
+                                                                        data
+                                                                    );
+                                                                console.log(
+                                                                    error
+                                                                );
+                                                            } else {
+                                                                const error =
+                                                                    await signAndSubmitPrivateApiTxn(
+                                                                        '/badges/removeOffering',
+                                                                        data
+                                                                    );
+                                                                console.log(
+                                                                    error
+                                                                );
+                                                            }
+                                                        } catch (err) {
+                                                            // setTxnSubmitted(false);
+                                                            // setTransactionIsLoading(false);
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
                                         ) : (
-                                            <>Add</>
+                                            <Tooltip
+                                                className={`like-button-badge`}
+                                                title={`Add to Offering`}
+                                            >
+                                                <FontAwesomeIcon
+                                                    // style={{ fontSize: 30 }}
+                                                    icon={faSquarePlus}
+                                                    onClick={async (event) => {
+                                                        event.stopPropagation();
+
+                                                        try {
+                                                            const data = {
+                                                                badgeId:
+                                                                    badge._id,
+                                                            };
+
+                                                            console.log(data);
+
+                                                            const error =
+                                                                await signAndSubmitPrivateApiTxn(
+                                                                    '/badges/addOffering',
+                                                                    data
+                                                                );
+                                                            console.log(error);
+                                                        } catch (err) {
+                                                            // setTxnSubmitted(false);
+                                                            // setTransactionIsLoading(false);
+                                                        }
+                                                    }}
+                                                />
+                                            </Tooltip>
                                         )}
                                     </>
                                 )}
@@ -1017,6 +1099,7 @@ export function Badge({
                         tabInfo={[
                             { key: 'overview', content: 'Overview' },
                             { key: 'actions', content: 'Actions' },
+                            { key: 'owners', content: 'Owners' },
                             { key: 'activity', content: 'Activity' },
                         ]}
                         setTab={setTab}
@@ -1463,7 +1546,15 @@ export function Badge({
                 {tab === 'activity' && (
                     <Empty
                         style={{ color: 'white' }}
-                        description="No Activity"
+                        description="This feature is coming soon..."
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    />
+                )}
+
+                {tab === 'owners' && (
+                    <Empty
+                        style={{ color: 'white' }}
+                        description="This feature is coming soon..."
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                     />
                 )}

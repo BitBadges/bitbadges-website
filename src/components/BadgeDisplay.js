@@ -43,6 +43,7 @@ export function BadgeDisplay({
                 : [badgeMap[badge]];
         }
     }
+
     if (concepts) {
         for (const badge of concepts) {
             badgesByType['__concept_badges'] = badgesByType['__concept_badges']
@@ -108,7 +109,8 @@ export function BadgeDisplay({
                         <Option value="date">Date</Option>
                     </Select>
                 </div>
-                {!badges || !badges.length ? (
+                {(!badges || !badges.length) &&
+                (!concepts || !concepts.length) ? (
                     <>
                         <Empty
                             style={{ color: 'white' }}
@@ -228,16 +230,6 @@ export function BadgeDisplay({
                     </Collapse>
                 )}
             </Content>
-            <Content
-                style={{
-                    background: 'linear-gradient(0deg, black 0,#192c3e 75%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    minHeight: '5vh',
-                    padding: '2rem 0',
-                    textAlign: 'center',
-                }}
-            ></Content>
         </>
     );
 }

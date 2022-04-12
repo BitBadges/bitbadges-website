@@ -4,13 +4,21 @@ import { ShowingResultsFor } from '../components/ShowingResultsFor';
 import { BadgeDataForm } from '../components/BadgeDataForm';
 import { useSelector } from 'react-redux';
 import { WalletDisplay } from '../components/WalletDisplay';
+import { PermissionsForm } from '../components/PermissionsForm';
+import { Badge } from '../components/Badge';
 
 const React = require('react');
 const { useState, useEffect } = require('react');
-const { Layout, Button } = require('antd');
-
+const { Layout, Button, Form, Typography } = require('antd');
+const {
+    CaretLeftFilled,
+    CaretRightFilled,
+} = require('@ant-design/icons');
 const { Content } = Layout;
-const { getBadgeDataForAddress } = require('../api/api');
+const {
+    getBadgeDataForAddress,
+    signAndSubmitPrivateApiTxn,
+} = require('../api/api');
 
 export function Account() {
     const [tab, setTab] = useState('received');
@@ -19,6 +27,12 @@ export function Account() {
     const [liked, setLiked] = useState([]);
     const [managing, setManaging] = useState([]);
     const [conceptFormVisible, setConceptFormVisible] = useState(false);
+    const [badge, setBadge] = useState();
+    const [currStepNumber, setCurrStepNumber] = useState(0);
+    const [permissions, setPermissions] = useState();
+    const [supply, setSupply] = useState(0);
+    const [transactionIsLoading, setTransactionIsLoading] = useState(false);
+    const [txnSubmitted, setTxnSubmitted] = useState(false);
 
     const address = useSelector((state) => state.user.address);
 
@@ -98,22 +112,23 @@ export function Account() {
                     <BadgeDisplay badges={received} collected />
                 )}
                 {tab === 'offering' && (
-                    <>
+                    <div style={{ backgroundColor: '#304151' }}>
                         <div
                             style={{
-                                backgroundColor: '#192c3e',
+                                backgroundColor: '#304151',
                                 color: 'white',
                                 fontSize: 16,
+                                paddingTop: 10,
                             }}
                         >
-                            Want to edit what appears on your offering page?
+                            Want to add badges to your offering page?
                         </div>
                         <div
                             style={{
-                                backgroundColor: '#192c3e',
+                                backgroundColor: '#304151',
                                 color: 'white',
                                 // borderBottom: '1px solid white',
-                                paddingBottom: 20,
+                                paddingBottom: 10,
                             }}
                         >
                             <Button
@@ -129,7 +144,7 @@ export function Account() {
                                     document.getElementById('managing').click();
                                 }}
                             >
-                                Add / Remove Managed Badges
+                                Add Existing Badges
                             </Button>
                             <Button
                                 style={{
@@ -140,10 +155,12 @@ export function Account() {
                                     marginLeft: 10,
                                 }}
                                 onClick={() => {
-                                    setConceptFormVisible(true);
+                                    setConceptFormVisible(!conceptFormVisible);
                                 }}
                             >
-                                Create a Concept Badge
+                                {conceptFormVisible &&
+                                    'Hide Concept Badge Form'}
+                                {!conceptFormVisible && 'Add a Concept Badge'}
                             </Button>
                         </div>
                         {conceptFormVisible && (
@@ -160,20 +177,210 @@ export function Account() {
                                     minHeight: '60vh',
                                 }}
                             >
-                                <BadgeDataForm
-                                    isConceptForm
-                                    setCurrStepNumber={() => {}}
-                                    setBadge={() => {}}
-                                    setRecipients={() => {}}
-                                />
+                                {currStepNumber <= 1 && (
+                                    <BadgeDataForm
+                                        isConceptForm
+                                        setCurrStepNumber={setCurrStepNumber}
+                                        setBadge={setBadge}
+                                        setRecipients={() => {}}
+                                        saveSupply={setSupply}
+                                    />
+                                )}
+                                {currStepNumber === 2 && (
+                                    <PermissionsForm
+                                        setCurrStepNumber={setCurrStepNumber}
+                                        setPermissions={setPermissions}
+                                        recipients={[]}
+                                    />
+                                )}
+                                {currStepNumber === 3 && (
+                                    <Form.Provider>
+                                        <div
+                                            style={{
+                                                width: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <button
+                                                // className="link-button"
+                                                style={{
+                                                    // position: 'absolute',
+                                                    // left: 5,
+                                                    backgroundColor: 'inherit',
+                                                    color: '#ddd',
+                                                    fontSize: 17,
+                                                }}
+                                                onClick={() =>
+                                                    setCurrStepNumber(2)
+                                                }
+                                                className="opacity link-button"
+                                            >
+                                                <CaretLeftFilled size={40} />
+                                                Back
+                                            </button>
+                                            <Typography.Text
+                                                strong
+                                                style={{
+                                                    color: 'white',
+                                                    fontSize: 20,
+                                                    marginLeft: 50,
+                                                    marginRight: 50,
+                                                }}
+                                                align="center"
+                                            >
+                                                1 / 1
+                                            </Typography.Text>
+
+                                            <button
+                                                // className="link-button"
+                                                style={{
+                                                    // position: 'absolute',
+                                                    // left: 5,
+                                                    backgroundColor: 'inherit',
+                                                    color: '#ddd',
+                                                    fontSize: 17,
+                                                }}
+                                                // onClick={() => incrementStep()}
+                                                className="opacity link-button"
+                                                disabled
+                                            >
+                                                Next
+                                                <CaretRightFilled size={40} />
+                                            </button>
+                                        </div>
+                                        <Form layout="horizontal">
+                                            <>
+                                                <div
+                                                    style={{
+                                                        justifyContent:
+                                                            'center',
+                                                        display: 'flex',
+                                                    }}
+                                                >
+                                                    <Typography.Text
+                                                        style={{
+                                                            color: 'white',
+                                                            fontSize: 20,
+                                                            marginBottom: 10,
+                                                        }}
+                                                        strong
+                                                    >
+                                                        Finalize
+                                                    </Typography.Text>
+                                                </div>
+                                                <div style={{}}>
+                                                    <div
+                                                        // label={<Text strong>Can Mint More?</Text>}
+                                                        style={{
+                                                            width: '100%',
+                                                            display: 'flex',
+                                                            justifyContent:
+                                                                'center',
+                                                            fontSize: 100,
+                                                        }}
+                                                    >
+                                                        <Badge
+                                                            conceptBadge={true}
+                                                            badge={{
+                                                                metadata: {
+                                                                    ...badge,
+                                                                },
+                                                                recipients: [],
+                                                                permissions,
+                                                                supply,
+                                                                manager: `ETH:${address}`,
+                                                            }}
+                                                            size={100}
+                                                        />
+                                                    </div>
+                                                    <div
+                                                        style={{
+                                                            width: '100%',
+                                                            display: 'flex',
+                                                            justifyContent:
+                                                                'center',
+                                                            alignItems:
+                                                                'center',
+                                                        }}
+                                                    >
+                                                        <Button
+                                                            type="primary"
+                                                            style={{
+                                                                width: '90%',
+                                                                marginTop: 20,
+                                                            }}
+                                                            onClick={async () => {
+                                                                setTxnSubmitted(
+                                                                    true
+                                                                );
+                                                                setTransactionIsLoading(
+                                                                    true
+                                                                );
+
+                                                                try {
+                                                                    const data =
+                                                                        {
+                                                                            metadata:
+                                                                                {
+                                                                                    ...badge,
+                                                                                },
+                                                                            recipients:
+                                                                                [],
+                                                                            permissions,
+                                                                            supply,
+                                                                            manager: `ETH:${address}`,
+                                                                        };
+
+                                                                    console.log(
+                                                                        data
+                                                                    );
+
+                                                                    await signAndSubmitPrivateApiTxn(
+                                                                        '/badges/addConcept',
+                                                                        data
+                                                                    );
+
+                                                                    setTransactionIsLoading(
+                                                                        false
+                                                                    );
+
+                                                                    setConceptFormVisible(
+                                                                        false
+                                                                    );
+                                                                } catch (err) {
+                                                                    setTxnSubmitted(
+                                                                        false
+                                                                    );
+                                                                    setTransactionIsLoading(
+                                                                        false
+                                                                    );
+                                                                }
+                                                            }}
+                                                            loading={
+                                                                transactionIsLoading
+                                                            }
+                                                            disabled={
+                                                                txnSubmitted
+                                                            }
+                                                        >
+                                                            Create Badge!
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        </Form>
+                                    </Form.Provider>
+                                )}
                             </div>
                         )}
                         <BadgeDisplay
                             badges={profileInfo.offering}
                             offering
                             concepts={profileInfo.concepts}
+                            managing
                         />
-                    </>
+                    </div>
                 )}
                 {tab === 'activity' && <BadgeDisplay badges={[]} />}
                 {tab === 'liked' && <BadgeDisplay badges={liked} />}

@@ -17,6 +17,7 @@ const {
     DatePicker,
     Space,
     Divider,
+    InputNumber,
 } = require('antd');
 const isuri = require('isuri');
 
@@ -32,9 +33,10 @@ export function BadgeDataForm({
     setBadge,
     setRecipients,
     isConceptForm,
+    saveSupply,
 }) {
     const address = useSelector((state) => state.user.address);
-    const [stepNum, setStepNum] = useState(0);
+    const [stepNum, setStepNum] = useState(isConceptForm ? 1 : 0);
 
     let savedBadgeDataStr = window.localStorage.getItem('savedBadgeData');
     if (!savedBadgeDataStr) {
@@ -131,7 +133,9 @@ export function BadgeDataForm({
     };
 
     const decrementStep = () => {
-        if (stepNum === 0) {
+        if (stepNum === 0 && !isConceptForm) {
+            setCurrStepNumber(0);
+        } else if (stepNum === 1 && isConceptForm) {
             setCurrStepNumber(0);
         } else {
             setStepNum(stepNum - 1);
@@ -187,7 +191,10 @@ export function BadgeDataForm({
         for (const recipient of recipients) {
             count += recipient.amount;
         }
-        setSupply(count);
+        if (!isConceptForm) {
+            setSupply(count);
+        }
+
         window.localStorage.setItem(
             'savedBadgeData',
             JSON.stringify({
@@ -247,7 +254,7 @@ export function BadgeDataForm({
     };
 
     return (
-        <div>
+        <div style={{ textAlign: 'left' }}>
             <Form.Provider>
                 <div
                     style={{
@@ -566,7 +573,7 @@ export function BadgeDataForm({
                             </div>
                         </>
                     )}
-                    {stepNum === 2 && (
+                    {stepNum === 2 && !isConceptForm && (
                         <>
                             <div
                                 style={{
@@ -589,6 +596,51 @@ export function BadgeDataForm({
                                 recipients={recipients}
                                 setRecipients={setRecipientsArr}
                             />
+                        </>
+                    )}
+
+                    {stepNum === 2 && isConceptForm && (
+                        <>
+                            <div
+                                style={{
+                                    justifyContent: 'center',
+                                    display: 'flex',
+                                }}
+                            >
+                                <Typography.Text
+                                    style={{
+                                        color: 'white',
+                                        fontSize: 20,
+                                        marginBottom: 10,
+                                    }}
+                                    strong
+                                >
+                                    Supply
+                                </Typography.Text>
+                            </div>
+                            <div>
+                                <Form.Item
+                                    label={
+                                        <Text style={{ color: 'white' }} strong>
+                                            Total Supply
+                                        </Text>
+                                    }
+                                    required
+                                >
+                                    <InputNumber
+                                        value={supply}
+                                        onChange={(e) => {
+                                            setSupply(e);
+                                            saveSupply(e);
+                                        }}
+                                        style={{
+                                            backgroundColor: '#001529',
+                                            color: 'white',
+                                            width: '100%',
+                                        }}
+                                    />
+                                </Form.Item>
+                            </div>
                         </>
                     )}
 
@@ -1128,6 +1180,7 @@ export function BadgeDataForm({
                                             manager: `ETH:${address}`,
                                         }}
                                         hidePermissions
+                                        conceptBadge={isConceptForm}
                                     />
                                 </div>
                             </div>

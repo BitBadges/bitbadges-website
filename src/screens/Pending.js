@@ -1,14 +1,7 @@
 import { Badge } from '../components/Badge';
 
 const React = require('react');
-const {
-    Layout,
-    Button,
-    Tooltip,
-    Empty,
-    List,
-    Typography,
-} = require('antd');
+const { Layout, Button, Tooltip, Empty, List, Typography } = require('antd');
 const {
     CheckOutlined,
     CloseOutlined,
@@ -73,20 +66,6 @@ export function Pending({ tab }) {
                 <>
                     {pending.map((pendingData) => (
                         <>
-                            <div
-                                style={{
-                                    alignItems: 'center',
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Badge
-                                    badge={badgeMap[pendingData.badge]}
-                                    size={100}
-                                    balance={pendingData.amount}
-                                />
-                            </div>
                             <div>
                                 {tab === 'incoming' && (
                                     <>
@@ -160,6 +139,92 @@ export function Pending({ tab }) {
                                                 badges{' '}
                                             </Text>
                                         </div>
+                                        <br />
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 16,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            <Text style={{ color: 'white' }}>
+                                                Badge Preview:
+                                            </Text>
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <Badge
+                                                badge={
+                                                    badgeMap[pendingData.badge]
+                                                }
+                                                size={100}
+                                                balance={pendingData.amount}
+                                            />
+                                        </div>
+                                        <br />
+                                        <div
+                                            style={{
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 14,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            {[
+                                                badgeMap[pendingData.badge]
+                                                    .permissions
+                                                    .canOwnerTransfer
+                                                    ? badgeMap[
+                                                          pendingData.badge
+                                                      ].permissions.canRevoke
+                                                        ? 'This badge is transferable, but the manager can revoke it at anytime.'
+                                                        : 'This badge is transferable and can never be revoked by the manager.'
+                                                    : badgeMap[
+                                                          pendingData.badge
+                                                      ].permissions.canRevoke
+                                                    ? 'This badge is non-transferable, but the manager can revoke it.'
+                                                    : 'This badge is non-transferable and can never be revoked by the manager. Once you accept this badge, it will permanently live in your account forever.',
+                                                badgeMap[pendingData.badge]
+                                                    .permissions.canMintMore
+                                                    ? 'The supply of this badge is not locked. The badge manager can mint more of this badge.'
+                                                    : 'The supply of this badge is locked. The badge manager can not mint anymore of this badge ever.',
+                                            ].map((item) => (
+                                                <List.Item
+                                                    style={{
+                                                        padding: '4px 0px',
+                                                        color: 'white',
+                                                    }}
+                                                >
+                                                    <Typography.Text>
+                                                        <div
+                                                            style={{
+                                                                color: 'white',
+                                                            }}
+                                                        >
+                                                            <WarningOutlined
+                                                                style={{
+                                                                    color: 'orange',
+                                                                }}
+                                                            />
+                                                            {item}
+                                                        </div>
+                                                    </Typography.Text>{' '}
+                                                </List.Item>
+                                            ))}
+                                        </div>
+                                    </>
+                                )}
+                                {tab === 'outgoing' && (
+                                    <>
                                         <div
                                             style={{
                                                 display: 'flex',
@@ -169,31 +234,86 @@ export function Pending({ tab }) {
                                                 textAlign: 'center',
                                             }}
                                         >
-                                            <List
-                                                bordered={false}
-                                                size="small"
-                                                dataSource={[
+                                            <Text
+                                                strong
+                                                style={{ color: 'white' }}
+                                            >
+                                                You are sending{' '}
+                                                {pendingData.amount}{' '}
+                                                {
                                                     badgeMap[pendingData.badge]
-                                                        .permissions
-                                                        .canOwnerTransfer
-                                                        ? badgeMap[
-                                                              pendingData.badge
-                                                          ].permissions
-                                                              .canRevoke
-                                                            ? 'This badge is transferable, but the manager can revoke it at anytime.'
-                                                            : 'This badge is transferable and can never be revoked by the manager.'
-                                                        : badgeMap[
-                                                              pendingData.badge
-                                                          ].permissions
-                                                              .canRevoke
-                                                        ? 'This badge is non-transferable, but the manager can revoke it.'
-                                                        : 'This badge is non-transferable and can never be revoked by the manager. Once you accept this badge, it will permanently live in your account forever.',
+                                                        .metadata.name
+                                                }{' '}
+                                                badges to{' '}
+                                                <Tooltip title={pendingData.to}>
+                                                    {' '}
+                                                    {pendingData.to.substr(
+                                                        0,
+                                                        10
+                                                    ) +
+                                                        '...' +
+                                                        pendingData.to.substr(
+                                                            -4
+                                                        )}{' '}
+                                                </Tooltip>
+                                            </Text>
+                                        </div>
+                                        <br />
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 16,
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            <Text style={{ color: 'white' }}>
+                                                Badge Preview:
+                                            </Text>
+                                        </div>
+
+                                        <div
+                                            style={{
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <Badge
+                                                badge={
                                                     badgeMap[pendingData.badge]
-                                                        .permissions.canMintMore
-                                                        ? 'The supply of this badge is not locked. The badge manager can mint more of this badge.'
-                                                        : 'The supply of this badge is locked. The badge manager can not mint anymore of this badge ever.',
-                                                ]}
-                                                renderItem={(item) => (
+                                                }
+                                                size={100}
+                                                // balance={pendingData.amount}
+                                            />
+                                        </div>
+                                        <br />
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                fontSize: 12,
+                                                color: 'white',
+                                                textAlign: 'center',
+                                            }}
+                                        >
+                                            <div
+                                                style={{
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    fontSize: 14,
+                                                    textAlign: 'center',
+                                                }}
+                                            >
+                                                {[
+                                                    `If the recipient declines this
+                                                transfer request, the badges will be
+                                                added back to your account's
+                                                balances.`,
+                                                ].map((item) => (
                                                     <List.Item
                                                         style={{
                                                             padding: '4px 0px',
@@ -215,52 +335,8 @@ export function Pending({ tab }) {
                                                             </div>
                                                         </Typography.Text>{' '}
                                                     </List.Item>
-                                                )}
-                                            />
-                                        </div>
-                                    </>
-                                )}
-                                {tab === 'outgoing' && (
-                                    <>
-                                        <div
-                                            style={{
-                                                display: 'flex',
-                                                justifyContent: 'center',
-                                                alignItems: 'center',
-                                                fontSize: 12,
-                                                color: 'white',
-                                                textAlign: 'center',
-                                            }}
-                                        >
-                                            <List
-                                                size="small"
-                                                dataSource={[
-                                                    `If the recipient declines this
-                                                transfer request, the badges will be
-                                                added back to your account's
-                                                balances.`,
-                                                ]}
-                                                renderItem={(item) => (
-                                                    <List.Item
-                                                        style={{
-                                                            padding: '4px 0px',
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                color: 'white',
-                                                            }}
-                                                        >
-                                                            <WarningOutlined
-                                                                style={{
-                                                                    color: 'orange',
-                                                                }}
-                                                            />
-                                                            {item}
-                                                        </div>
-                                                    </List.Item>
-                                                )}
-                                            />
+                                                ))}
+                                            </div>
                                         </div>
                                     </>
                                 )}
@@ -271,7 +347,7 @@ export function Pending({ tab }) {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    {tab === 'incoming' ? (
+                                    {tab === 'incoming' && (
                                         <>
                                             <Tooltip title="Accept">
                                                 <Button
@@ -314,49 +390,6 @@ export function Pending({ tab }) {
                                                 />
                                             </Tooltip>
                                         </>
-                                    ) : (
-                                        <div
-                                            style={{
-                                                textAlign: 'center',
-                                                color: 'white',
-                                            }}
-                                        >
-                                            <div>
-                                                <Text
-                                                    strong
-                                                    style={{
-                                                        fontSize: 16,
-                                                        color: 'white',
-                                                    }}
-                                                >
-                                                    To:{' '}
-                                                    <Tooltip
-                                                        placement="bottom"
-                                                        title={`${pendingData.to}`}
-                                                    >
-                                                        {pendingData.to.substr(
-                                                            0,
-                                                            9
-                                                        ) +
-                                                            '...' +
-                                                            pendingData.to.substr(
-                                                                -4
-                                                            )}
-                                                    </Tooltip>
-                                                </Text>
-                                            </div>
-                                            <div>
-                                                <Text
-                                                    strong
-                                                    style={{
-                                                        fontSize: 16,
-                                                        color: 'white',
-                                                    }}
-                                                >
-                                                    Amount: {pendingData.amount}
-                                                </Text>
-                                            </div>
-                                        </div>
                                     )}
                                 </div>
                             </div>
@@ -364,7 +397,7 @@ export function Pending({ tab }) {
                                 style={{
                                     backgroundColor: 'white',
                                     fontSize: '50px',
-                                    borderWidth: '4px',
+                                    // borderWidth: '4px',
                                 }}
                             />
                         </>

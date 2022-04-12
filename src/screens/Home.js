@@ -7,11 +7,15 @@ const { Content } = Layout;
 export function Home() {
     return (
         <>
-            <Layout>
+            <Layout
+                style={{
+                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
+                }}
+            >
                 <Content
                     style={{
-                        background:
-                            'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
+                        // background:
+                        //     'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
                         // display: 'flex',
                         // alignItems: 'center',
                         minHeight: '20vh',
@@ -137,8 +141,8 @@ export function Home() {
                 </Content> */}
                 <Content
                     style={{
-                        background:
-                            'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
+                        // background:
+                        //     'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
 
                         alignItems: 'center',
                         // padding: '3rem 0',
@@ -158,7 +162,7 @@ export function Home() {
                         <Col span={24}>
                             <div
                                 style={{
-                                    // color: 'white',
+                                    color: 'white',
                                     fontFamily: "'Inter',sans-serif",
                                     fontSize: '3em',
                                     fontWeight: 'bolder',
@@ -207,8 +211,8 @@ export function Home() {
                         textAlign: 'center',
                         width: '100%',
                         padding: '1rem 5rem',
-                        background:
-                            'linear-gradient(0deg, black, #Ea1795 100%)',
+                        // background:
+                        //     'linear-gradient(0deg, black, #Ea1795 100%)',
                     }}
                 >
                     <Row
@@ -222,7 +226,7 @@ export function Home() {
                         <Col span={24}>
                             <div
                                 style={{
-                                    // color: 'white',
+                                    color: 'white',
                                     fontFamily: "'Inter',sans-serif",
                                     fontSize: '3em',
                                     fontWeight: 'bolder',

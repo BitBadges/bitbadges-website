@@ -22,6 +22,7 @@ export function WalletDisplay() {
     const navigate = useNavigate();
     const [pendingModalVisible, setPendingModalVisible] = useState(false);
     const [tab, setTab] = useState('incoming');
+    
 
     const buttons = [
         {

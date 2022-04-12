@@ -87,6 +87,7 @@ export function PermissionsForm({
                         }}
                         onClick={() => incrementStep()}
                         className="opacity link-button"
+                        disabled={stepNum === 4}
                     >
                         Next
                         <CaretRightFilled size={40} />

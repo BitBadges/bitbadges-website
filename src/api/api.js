@@ -152,7 +152,8 @@ async function getBadgeDataForAddress(chain, userAddress, isSignedInUser) {
         received: receivedBadges,
         pending: pendingBadges,
         liked: likedBadges,
-        managing: managingBadges
+        managing: managingBadges,
+        profileInfo,
     };
 }
 

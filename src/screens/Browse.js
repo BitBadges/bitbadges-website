@@ -32,10 +32,13 @@ export function Browse() {
     };
 
     return (
-        <Layout>
+        <Layout
+            style={{
+                background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
+            }}
+        >
             <Content
                 style={{
-                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
                     display: 'flex',
                     alignItems: 'center',
                     minHeight: '10vh',
@@ -56,7 +59,7 @@ export function Browse() {
                             strong
                             level={3}
                             style={{
-                                color: '#dedede',
+                                color: 'white',
                                 fontFamily: "'Inter',sans-serif",
                                 fontSize: '2rem',
                                 fontStyle: 'normal',
@@ -74,7 +77,7 @@ export function Browse() {
 
             <Content
                 style={{
-                    background: 'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
+                    // background: 'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
 
                     // alignItems: 'center',
                     // padding: '3rem 0',
@@ -95,7 +98,7 @@ export function Browse() {
                     <Col span={24}>
                         <div
                             style={{
-                                // color: 'white',
+                                color: '#dedede',
                                 fontFamily: "'Inter',sans-serif",
                                 fontSize: '3em',
                                 fontWeight: 'bolder',
@@ -135,7 +138,7 @@ export function Browse() {
                     <Col span={24}>
                         <div
                             style={{
-                                // color: 'white',
+                                color: '#dedede',
                                 fontFamily: "'Inter',sans-serif",
                                 fontSize: '3em',
                                 fontWeight: 'bolder',
@@ -175,7 +178,7 @@ export function Browse() {
                     <Col span={24}>
                         <div
                             style={{
-                                // color: 'white',
+                                color: '#dedede',
                                 fontFamily: "'Inter',sans-serif",
                                 fontSize: '3em',
                                 fontWeight: 'bolder',
@@ -205,19 +208,6 @@ export function Browse() {
                     {/* </Col> */}
                 </Row>
             </Content>
-
-            <Content
-                style={{
-                    // display: 'flex',
-                    alignItems: 'center',
-                    minHeight: '10vh',
-                    // padding: '3rem 0',
-                    textAlign: 'center',
-                    width: '100%',
-                    padding: '1rem 5rem',
-                    background: 'linear-gradient(0deg, black, #Ea1795 100%)',
-                }}
-            ></Content>
         </Layout>
     );
 }

@@ -59,29 +59,6 @@ export function Mint() {
                     <MintTimeline />
                 </div>
             </Content>
-            <Content
-                style={{
-                    background: 'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-                    minHeight: '30vh',
-                    alignItems: 'center',
-                    // padding: '3rem 0',
-                    textAlign: 'center',
-                    width: '100%',
-                    padding: '1rem 5rem',
-                }}
-            ></Content>
-            <Content
-                style={{
-                    // display: 'flex',
-                    alignItems: 'center',
-                    minHeight: '10vh',
-                    // padding: '3rem 0',
-                    textAlign: 'center',
-                    width: '100%',
-                    padding: '1rem 5rem',
-                    background: 'linear-gradient(0deg, black, #Ea1795 100%)',
-                }}
-            ></Content>
         </Layout>
     );
 }

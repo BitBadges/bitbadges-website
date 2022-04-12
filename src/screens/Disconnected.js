@@ -69,7 +69,7 @@ function DisconnectedWrapper({ screenNode }) {
                                     {web3Modal &&
                                     web3Modal.cachedProvider &&
                                     !address
-                                        ? `Please sign in to ${getInjectedProviderName()} or connect a new wallet to continue.`
+                                        ? `You are connected to ${getInjectedProviderName()}. Please sign in or connect a new wallet to continue.`
                                         : 'Please connect a wallet to continue.'}
                                 </Text>
                             </div>
