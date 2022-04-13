@@ -9,7 +9,7 @@ import {
 import { WEBSITE_HOSTNAME } from '../constants';
 
 const React = require('react');
-const { Layout, Avatar, message } = require('antd');
+const { Layout, Avatar, message, Tooltip } = require('antd');
 
 const { Content } = Layout;
 
@@ -37,82 +37,89 @@ export function ShowingResultsFor({
             <div style={{ position: 'absolute', right: 10, top: 74 }}>
                 {twitter && (
                     <a href={twitter} target="_blank" rel="noreferrer">
-                        <Avatar
-                            style={{
-                                marginBottom: 1,
-                                cursor: 'pointer',
-                                fontSize: 20,
-                                padding: 0,
-                                margin: 5,
-                                alignItems: 'center',
-                            }}
-                            size="large"
-                            onClick={() => {}}
-                            className="screen-button"
-                        >
-                            <TwitterOutlined />
-                        </Avatar>
+                        <Tooltip title="Twitter" placement="bottom">
+                            <Avatar
+                                style={{
+                                    marginBottom: 1,
+                                    cursor: 'pointer',
+                                    fontSize: 20,
+                                    padding: 0,
+                                    margin: 5,
+                                    alignItems: 'center',
+                                }}
+                                size="large"
+                                onClick={() => {}}
+                                className="screen-button"
+                            >
+                                <TwitterOutlined />
+                            </Avatar>
+                        </Tooltip>
                     </a>
                 )}
                 {instagram && (
                     <a href={instagram} target="_blank" rel="noreferrer">
-                        <Avatar
-                            style={{
-                                marginBottom: 1,
-                                cursor: 'pointer',
-                                fontSize: 20,
-                                padding: 0,
-                                margin: 5,
-                                alignItems: 'center',
-                            }}
-                            size="large"
-                            onClick={() => {}}
-                            className="screen-button"
-                        >
-                            <InstagramOutlined />
-                        </Avatar>
+                        <Tooltip title="Instagram" placement="bottom">
+                            <Avatar
+                                style={{
+                                    marginBottom: 1,
+                                    cursor: 'pointer',
+                                    fontSize: 20,
+                                    padding: 0,
+                                    margin: 5,
+                                    alignItems: 'center',
+                                }}
+                                size="large"
+                                onClick={() => {}}
+                                className="screen-button"
+                            >
+                                <InstagramOutlined />
+                            </Avatar>
+                        </Tooltip>
                     </a>
                 )}
                 {website && (
                     <a href={website} target="_blank" rel="noreferrer">
-                        <Avatar
-                            style={{
-                                marginBottom: 1,
-                                cursor: 'pointer',
-                                fontSize: 20,
-                                padding: 0,
-                                margin: 5,
-                                alignItems: 'center',
-                            }}
-                            size="large"
-                            onClick={() => {}}
-                            className="screen-button"
-                        >
-                            <LinkOutlined />
-                        </Avatar>
+                        <Tooltip title="Website" placement="bottom">
+                            <Avatar
+                                style={{
+                                    marginBottom: 1,
+                                    cursor: 'pointer',
+                                    fontSize: 20,
+                                    padding: 0,
+                                    margin: 5,
+                                    alignItems: 'center',
+                                }}
+                                size="large"
+                                onClick={() => {}}
+                                className="screen-button"
+                            >
+                                <LinkOutlined />
+                            </Avatar>
+                        </Tooltip>
                     </a>
                 )}
-
-                <Avatar
-                    style={{
-                        marginBottom: 1,
-                        cursor: 'pointer',
-                        fontSize: 20,
-                        padding: 0,
-                        margin: 5,
-                        alignItems: 'center',
-                    }}
-                    size="large"
-                    onClick={() => {
-                        navigator.clipboard.writeText(
-                            `https://${WEBSITE_HOSTNAME}/user/${chain}:${address}`
-                        );
-                        message.success('Copied to clipboard!');
-                    }}
-                    className="screen-button"
-                >
-                    <ShareAltOutlined />
-                </Avatar>
+                <Tooltip title="Share (Copy Link)" placement="bottom">
+                    <Avatar
+                        style={{
+                            marginBottom: 1,
+                            cursor: 'pointer',
+                            fontSize: 20,
+                            padding: 0,
+                            margin: 5,
+                            alignItems: 'center',
+                        }}
+                        size="large"
+                        onClick={() => {
+                            navigator.clipboard.writeText(
+                                `https://${WEBSITE_HOSTNAME}/user/${chain}:${address}`
+                            );
+                            message.success('Copied to clipboard!');
+                        }}
+                        className="screen-button"
+                    >
+                        <ShareAltOutlined />
+                    </Avatar>
+                </Tooltip>
             </div>
             <Content
                 style={{

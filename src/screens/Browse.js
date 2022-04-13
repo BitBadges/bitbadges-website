@@ -150,7 +150,7 @@ export function Browse() {
                                 wordWrap: 'break-word',
                             }}
                         >
-                            Trending
+                            Trending / Most Viewed
                         </div>
                     </Col>
                     {/* <Col span={24}> */}

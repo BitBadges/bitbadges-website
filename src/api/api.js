@@ -1,3 +1,4 @@
+const { testSiwe, signAndVerifySiwe } = require('./siwe');
 const { default: axios } = require('axios');
 const {
     setNonce,
@@ -260,6 +261,10 @@ async function signAndSubmitPrivateApiTxn(route, data) {
     //     txnParams.eip712Types,
     //     transaction
     // );
+    const { signedIn, resAddress } = await testSiwe(address);
+    if (!signedIn || address !== resAddress) {
+        await signAndVerifySiwe();
+    }
 
     const body = {
         authentication: {
@@ -272,7 +277,7 @@ async function signAndSubmitPrivateApiTxn(route, data) {
 
     let error = false;
     await axios
-        .post(`${PRIVATE_API_URL}${route}`, body)
+        .post(`${PRIVATE_API_URL}${route}`, body, { withCredentials: true })
         .then(() => {
             message.success(`Successfully submitted transaction.`);
         })

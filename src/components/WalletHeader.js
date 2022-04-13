@@ -11,6 +11,7 @@ import {
     SearchOutlined,
     UserOutlined,
 } from '@ant-design/icons';
+import { logoutOfSiwe } from '../api/siwe';
 
 const { Typography, Layout, Select, message, Avatar, Menu } = require('antd');
 const React = require('react');
@@ -152,12 +153,16 @@ export function WalletHeader() {
                                     mode="horizontal"
                                 >
                                     {!address ? (
-                                        <Menu.Item
-                                            key="account"
-                                            onClick={() => navigate('/account')}
-                                        >
-                                            Connect
-                                        </Menu.Item>
+                                        <>
+                                            <Menu.Item
+                                                key="account"
+                                                onClick={() =>
+                                                    navigate('/account')
+                                                }
+                                            >
+                                                Connect
+                                            </Menu.Item>
+                                        </>
                                     ) : (
                                         <>
                                             <Menu.Item
@@ -171,15 +176,47 @@ export function WalletHeader() {
                                             <Menu.Item
                                                 key="settings"
                                                 onClick={() =>
-                                                    navigate('/account/customize')
+                                                    navigate(
+                                                        '/account/customize'
+                                                    )
                                                 }
                                             >
                                                 Customize
                                             </Menu.Item>
+                                            {/* <Menu.Item
+                                                key="siwe"
+                                                onClick={async () => {
+                                                    try {
+                                                        await signAndVerifySiwe();
+                                                    } catch (e) {}
+                                                }}
+                                            >
+                                                Sign In with Ethereum
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                key="test"
+                                                onClick={async () => {
+                                                    try {
+                                                        const {
+                                                            signedIn,
+                                                            resAddress,
+                                                        } = await testSiwe();
+
+                                                        message.info(
+                                                            `Signed In: ${signedIn}, Address: ${resAddress}`
+                                                        );
+                                                    } catch (e) {}
+                                                }}
+                                            >
+                                                Test SIWE
+                                            </Menu.Item> */}
                                             <Menu.Item
                                                 key="disconnect"
                                                 onClick={async () => {
                                                     await web3Modal.clearCachedProvider();
+
+                                                    await logoutOfSiwe();
+
                                                     if (
                                                         injectedProvider &&
                                                         injectedProvider.provider &&
@@ -305,6 +342,16 @@ export function WalletHeader() {
                                                 }
                                             >
                                                 Profile
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                key="settings"
+                                                onClick={() =>
+                                                    navigate(
+                                                        '/account/customize'
+                                                    )
+                                                }
+                                            >
+                                                Customize
                                             </Menu.Item>
                                             <Menu.Item
                                                 key="disconnect"
