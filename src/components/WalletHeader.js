@@ -11,8 +11,8 @@ import {
     SearchOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { logoutOfSiwe } from '../api/siwe';
 
+const { logoutOfSiwe } = require('../api/siwe');
 const { Typography, Layout, Select, message, Avatar, Menu } = require('antd');
 const React = require('react');
 const { Header } = Layout;
