@@ -1,9 +1,7 @@
-const { SiweMessage } = require('siwe');
-
-const { default: axios } = require('axios');
-
-const store = require('../redux/store');
-const { PRIVATE_API_URL } = require('../constants');
+import { SiweMessage } from 'siwe';
+import axios from 'axios';
+import store from '../redux/store';
+import { PRIVATE_API_URL } from '../constants';
 
 const domain = window.location.host;
 const origin = window.location.origin;

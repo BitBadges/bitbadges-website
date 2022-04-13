@@ -1,9 +1,11 @@
-const { testSiwe, signAndVerifySiwe } = require('./siwe');
-const { default: axios } = require('axios');
-const { userActions } = require('../redux/userSlice');
-const store = require('../redux/store');
-const { NODE_URL, PRIVATE_API_URL } = require('../constants');
-const {
+import store from '../redux/store';
+
+import { testSiwe, signAndVerifySiwe } from './siwe';
+import axios from 'axios';
+import { userActions } from '../redux/userSlice';
+
+import { NODE_URL, PRIVATE_API_URL } from '../constants';
+import {
     EIP712_TXN_TYPE_IDS,
     EIP712_PENDING_TXN,
     EIP712_BITBADGES_DOMAIN,
@@ -12,8 +14,8 @@ const {
     EIP712_MINT_TXN,
     EIP712_REVOKE_TXN,
     EIP712_TRANSFERMANAGER_TXN,
-} = require('./eip712Types');
-const { message } = require('antd');
+} from './eip712Types';
+import { message } from 'antd';
 
 export async function getBadgeDataForAddress(
     chain,
