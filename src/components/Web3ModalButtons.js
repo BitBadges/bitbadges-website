@@ -4,9 +4,8 @@ const { Button } = require('antd');
 const { ethers } = require('ethers');
 const React = require('react');
 const { useSelector, useDispatch } = require('react-redux');
-const { setInjectedProvider, setUserSigner } = require('../redux/userSlice');
 const { useCallback, useEffect } = require('react');
-const { setAddress } = require('../redux/userSlice');
+const { userActions } = require('../redux/userSlice');
 const { getBadgeDataForAddress } = require('../api/api');
 
 export function Web3ModalButtons() {
@@ -23,7 +22,7 @@ export function Web3ModalButtons() {
         async function getAddress() {
             if (userSigner) {
                 const newAddress = await userSigner.getAddress();
-                dispatch(setAddress(newAddress));
+                dispatch(userActions.setAddress(newAddress));
                 getBadgeDataForAddress('ETH', newAddress, true);
             }
         }
@@ -47,19 +46,19 @@ export function Web3ModalButtons() {
             });
         }
 
-        dispatch(setInjectedProvider(ethersProvider));
-        dispatch(setUserSigner(ethersProvider.getSigner()));
+        dispatch(userActions.setInjectedProvider(ethersProvider));
+        dispatch(userActions.setUserSigner(ethersProvider.getSigner()));
 
         provider.on('chainChanged', (chainId) => {
             console.log(`chain changed to ${chainId}! updating providers`);
-            dispatch(setInjectedProvider(ethersProvider));
-            dispatch(setUserSigner(ethersProvider.getSigner()));
+            dispatch(userActions.setInjectedProvider(ethersProvider));
+            dispatch(userActions.setUserSigner(ethersProvider.getSigner()));
         });
 
         provider.on('accountsChanged', () => {
             console.log(`account changed!`);
-            dispatch(setInjectedProvider(ethersProvider));
-            dispatch(setUserSigner(ethersProvider.getSigner()));
+            dispatch(userActions.setInjectedProvider(ethersProvider));
+            dispatch(userActions.setUserSigner(ethersProvider.getSigner()));
         });
 
         // Subscribe to session disconnection

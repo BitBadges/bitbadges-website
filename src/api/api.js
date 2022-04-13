@@ -1,15 +1,6 @@
 const { testSiwe, signAndVerifySiwe } = require('./siwe');
 const { default: axios } = require('axios');
-const {
-    setNonce,
-    setUserCreatedBadges,
-    setUserReceivedBadges,
-    setUserPendingBadges,
-    setUserBalancesMap,
-    setNumPending,
-    setBadgeMap,
-    setProfileInfo,
-} = require('../redux/userSlice');
+const { userActions } = require('../redux/userSlice');
 const store = require('../redux/store');
 const { NODE_URL, PRIVATE_API_URL } = require('../constants');
 const {
@@ -24,7 +15,11 @@ const {
 } = require('./eip712Types');
 const { message } = require('antd');
 
-async function getBadgeDataForAddress(chain, userAddress, isSignedInUser) {
+export async function getBadgeDataForAddress(
+    chain,
+    userAddress,
+    isSignedInUser
+) {
     let badgesToFetch = [];
     let userNonce,
         issuedBadges,
@@ -133,19 +128,19 @@ async function getBadgeDataForAddress(chain, userAddress, isSignedInUser) {
                         _id: badge._id,
                     };
                 }
-                store.dispatch(setBadgeMap(newBadgeMap));
+                store.dispatch(userActions.setBadgeMap(newBadgeMap));
             });
     }
 
     console.log('DATAAAA', profileInfo);
     if (isSignedInUser) {
-        store.dispatch(setNonce(userNonce));
-        store.dispatch(setUserCreatedBadges(issuedBadges));
-        store.dispatch(setUserReceivedBadges(receivedBadges));
-        store.dispatch(setUserPendingBadges(pendingBadges));
-        store.dispatch(setUserBalancesMap(newUserBalancesMap));
-        store.dispatch(setNumPending(numPendingCount));
-        store.dispatch(setProfileInfo(profileInfo));
+        store.dispatch(userActions.setNonce(userNonce));
+        store.dispatch(userActions.setUserCreatedBadges(issuedBadges));
+        store.dispatch(userActions.setUserReceivedBadges(receivedBadges));
+        store.dispatch(userActions.setUserPendingBadges(pendingBadges));
+        store.dispatch(userActions.setUserBalancesMap(newUserBalancesMap));
+        store.dispatch(userActions.setNumPending(numPendingCount));
+        store.dispatch(userActions.setProfileInfo(profileInfo));
     }
 
     return {
@@ -197,7 +192,7 @@ const txnParamsMap = {
     },
 };
 
-async function signAndSubmitTxn(route, data) {
+export async function signAndSubmitTxn(route, data) {
     const currState = store.getState();
     const nonce = currState.user.nonce;
     const userSigner = currState.user.userSigner;
@@ -247,7 +242,7 @@ async function signAndSubmitTxn(route, data) {
     }
 }
 
-async function signAndSubmitPrivateApiTxn(route, data) {
+export async function signAndSubmitPrivateApiTxn(route, data) {
     const currState = store.getState();
     const chain = currState.user.chain;
     const address = currState.user.address;
@@ -295,9 +290,3 @@ async function signAndSubmitPrivateApiTxn(route, data) {
         return error;
     }
 }
-
-module.exports = {
-    getBadgeDataForAddress,
-    signAndSubmitTxn,
-    signAndSubmitPrivateApiTxn,
-};

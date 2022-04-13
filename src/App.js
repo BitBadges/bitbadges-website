@@ -16,13 +16,13 @@ const { Layout } = require('antd');
 
 const { useDispatch } = require('react-redux');
 const { createWeb3Modal } = require('./utils/Web3Modal');
-const { setWeb3Modal } = require('./redux/web3ModalSlice');
+const { web3ModalActions } = require('./redux/web3ModalSlice');
 
 const createdWeb3Modal = createWeb3Modal();
 
 function App() {
     const dispatch = useDispatch();
-    dispatch(setWeb3Modal(createdWeb3Modal));
+    dispatch(web3ModalActions.setWeb3Modal(createdWeb3Modal));
 
     return (
         <BrowserRouter>

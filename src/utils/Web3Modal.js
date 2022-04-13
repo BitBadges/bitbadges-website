@@ -22,17 +22,15 @@ const providerOptions = {
     },
 };
 
-module.exports = {
-    /*
-        IMPORTANT: Make sure injectMetamaskProvider() is called before this, or else it will just load
-        with the providerOptions above and not Metamask
-    */
-    createWeb3Modal: function () {
-        return new Web3Modal({
-            network: 'mainnet', // optional
-            cacheProvider: true, // optional
-            disableInjectedProvider: false,
-            providerOptions,
-        });
-    },
+/*
+    IMPORTANT: Make sure injectMetamaskProvider() is called before this, or else it will just load
+    with the providerOptions above and not Metamask
+*/
+export const createWeb3Modal = function () {
+    return new Web3Modal({
+        network: 'mainnet', // optional
+        cacheProvider: true, // optional
+        disableInjectedProvider: false,
+        providerOptions,
+    });
 };

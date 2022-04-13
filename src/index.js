@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import store from './redux/store';
+import { Provider } from 'react-redux';
 
-const { Provider } = require('react-redux');
-const store = require('./redux/store');
 require('./index.css');
 
 ReactDOM.render(

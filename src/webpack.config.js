@@ -1,3 +1,1 @@
-module.exports = function (webpackEnv) {
-    
-};
+export default function (webpackEnv) {}

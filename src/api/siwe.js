@@ -8,7 +8,7 @@ const { PRIVATE_API_URL } = require('../constants');
 const domain = window.location.host;
 const origin = window.location.origin;
 
-async function signAndVerifySiwe() {
+export async function signAndVerifySiwe() {
     const currState = store.getState();
     const userSigner = currState.user.userSigner;
 
@@ -45,7 +45,7 @@ async function signAndVerifySiwe() {
     );
 }
 
-async function testSiwe() {
+export async function testSiwe() {
     let signedIn = false;
     let resAddress = '';
     await axios
@@ -69,7 +69,7 @@ async function testSiwe() {
     return { signedIn, resAddress };
 }
 
-async function logoutOfSiwe() {
+export async function logoutOfSiwe() {
     await axios.post(
         `${PRIVATE_API_URL}/auth/logout`,
         {},
@@ -78,9 +78,3 @@ async function logoutOfSiwe() {
         }
     );
 }
-
-module.exports = {
-    signAndVerifySiwe,
-    testSiwe,
-    logoutOfSiwe,
-};

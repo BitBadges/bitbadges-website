@@ -1,6 +1,6 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
-const web3ModalSlice = createSlice({
+export const web3ModalSlice = createSlice({
     name: 'web3Modal',
     initialState: {
         web3Modal: undefined,
@@ -12,8 +12,6 @@ const web3ModalSlice = createSlice({
     },
 });
 
-module.exports = {
-    web3ModalReducer: web3ModalSlice.reducer,
-    web3ModalSlice: web3ModalSlice,
-    ...web3ModalSlice.actions,
-};
+export const web3ModalReducer = web3ModalSlice.reducer;
+
+export const web3ModalActions = web3ModalSlice.actions;
