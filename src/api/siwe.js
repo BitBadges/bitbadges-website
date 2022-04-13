@@ -10,8 +10,8 @@ export async function signAndVerifySiwe() {
     const currState = store.getState();
     const userSigner = currState.user.userSigner;
 
-    const nonceResponse = await axios.get(`${PRIVATE_API_URL}/auth/nonce`, {
-        withCredentials: 'include',
+    const nonceResponse = await fetch(`${PRIVATE_API_URL}/auth/nonce`, {
+        credentials: 'include',
     });
 
     console.log(nonceResponse);
