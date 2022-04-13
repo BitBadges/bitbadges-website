@@ -14,8 +14,6 @@ export async function signAndVerifySiwe() {
         withCredentials: 'include',
     });
 
-    console.log(nonceResponse);
-
     const message = new SiweMessage({
         domain,
         address: await userSigner.getAddress(),
@@ -27,12 +25,7 @@ export async function signAndVerifySiwe() {
         nonce: nonceResponse.data,
     });
 
-    console.log(message);
-    console.log(userSigner);
-
     const signature = await userSigner.signMessage(message.prepareMessage());
-
-    console.log(signature);
 
     await axios.post(
         `${PRIVATE_API_URL}/auth/login`,
@@ -55,7 +48,6 @@ export async function testSiwe() {
             }
         )
         .then((res) => {
-            console.log(res);
             signedIn = res.data.authenticated;
             resAddress = res.data.address;
         })

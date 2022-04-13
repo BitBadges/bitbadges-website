@@ -29,8 +29,6 @@ export function TransactionDetails({
     const address = useSelector((state) => state.user.address);
     const navigate = useNavigate();
 
-    console.log(permissions);
-
     const incrementStep = () => {
         if (stepNum === 1) {
             // setCurrStepNumber(4);

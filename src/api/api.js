@@ -134,7 +134,6 @@ export async function getBadgeDataForAddress(
             });
     }
 
-    console.log('DATAAAA', profileInfo);
     if (isSignedInUser) {
         store.dispatch(userActions.setNonce(userNonce));
         store.dispatch(userActions.setUserCreatedBadges(issuedBadges));

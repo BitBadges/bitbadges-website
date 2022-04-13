@@ -50,7 +50,6 @@ export function AccountSettings() {
     useEffect(() => {
         setUsername(profileInfo.username);
         setBio(profileInfo.bio);
-        // console.log('TWITTER', profileInfo.twitter.split('/')[3]);
         setTwitter(profileInfo.twitter.split('/')[3]);
         setInstagram(profileInfo.instagram.split('/')[3]);
         setWebsite(profileInfo.website);

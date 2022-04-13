@@ -68,7 +68,6 @@ export function Badge({
     conceptBadge,
     managing,
 }) {
-    console.log(collectedBadge);
 
     const [modalIsVisible, setModalIsVisible] = useState(false);
     const [recipients, setRecipients] = useState([]);
@@ -100,8 +99,6 @@ export function Badge({
         balanceMap && balanceMap[badge._id] && balanceMap[badge._id].received
             ? balanceMap[badge._id].received
             : undefined;
-    console.log(balance);
-    console.log(balanceMap);
 
     // let displayAddress =
     //     badge.metadata.creator.substr(0, 10) +
@@ -866,13 +863,6 @@ export function Badge({
                                                             // console.log(data);
 
                                                             if (conceptBadge) {
-                                                                console.log(
-                                                                    'DATAAAAAAA 2.0',
-                                                                    data
-                                                                );
-                                                                console.log(
-                                                                    badge
-                                                                );
                                                                 const error =
                                                                     await signAndSubmitPrivateApiTxn(
                                                                         '/badges/removeConcept',
@@ -914,8 +904,6 @@ export function Badge({
                                                                 badgeId:
                                                                     badge._id,
                                                             };
-
-                                                            console.log(data);
 
                                                             const error =
                                                                 await signAndSubmitPrivateApiTxn(
@@ -1010,8 +998,6 @@ export function Badge({
                                                                     badge._id,
                                                             };
 
-                                                            console.log(data);
-
                                                             const error =
                                                                 await signAndSubmitPrivateApiTxn(
                                                                     '/badges/unlike',
@@ -1039,8 +1025,6 @@ export function Badge({
                                                                 badgeId:
                                                                     badge._id,
                                                             };
-
-                                                            console.log(data);
 
                                                             const error =
                                                                 await signAndSubmitPrivateApiTxn(

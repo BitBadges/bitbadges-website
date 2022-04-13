@@ -140,7 +140,6 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                                     ...recipients,
                                                 ];
                                                 recipientsClone.splice(idx, 1);
-                                                console.log(recipientsClone);
                                                 setRecipients(recipientsClone);
                                             }}
                                         />

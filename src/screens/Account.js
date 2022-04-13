@@ -43,7 +43,6 @@ export function Account() {
         async function updateValues(value) {
             const { issued, received, liked, managing } =
                 await getBadgeDataForAddress('ETH', value, false);
-            console.log(issued, received);
             setIssued(issued);
             setReceived(received);
             setLiked(liked);

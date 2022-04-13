@@ -7,7 +7,6 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
     const navigate = useNavigate();
 
     const tabs = tabInfo.map((tab) => {
-        console.log(tab);
         const menuItem = (
             <Menu.Item
                 disabled={tab.disabled}
@@ -35,7 +34,6 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
                     placement="bottom"
                     overlay={tab.subMenuOverlay ? tab.subMenuOverlay : <></>}
                     onClick={({ item, key, keyPath, domEvent }) => {
-                        console.log(key);
                         navigate(tab.key);
                     }}
                     trigger={tab.subMenuTrigger}

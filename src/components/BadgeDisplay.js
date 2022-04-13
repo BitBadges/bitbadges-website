@@ -22,7 +22,6 @@ export function BadgeDisplay({
     const [sortBy, setSortBy] = useState('date');
     // const [badgeDisplay, setBadgeDisplay] = useState('card');
 
-    console.log('HSJDFH', collected);
 
     if (!badges) return <></>;
 

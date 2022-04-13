@@ -124,7 +124,6 @@ export function MintTimeline() {
             content: (
                 <PermissionsForm
                     setPermissions={(newPermissions) => {
-                        console.log('SETTING NEW PERMISSIONS', newPermissions);
                         setPermissions(newPermissions);
                     }}
                     setCurrStepNumber={setCurrStepNumber}

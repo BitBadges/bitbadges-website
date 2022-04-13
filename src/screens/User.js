@@ -45,7 +45,6 @@ export function User() {
             // setInputAddress(value);
             const { issued, received, profileInfo, liked, managing } =
                 await getBadgeDataForAddress('ETH', value, false);
-            console.log(issued, received);
             setIssued(issued);
             setReceived(received);
             setLiked(liked);
