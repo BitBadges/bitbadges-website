@@ -404,7 +404,10 @@ export function Pending({ tab }) {
                     ))}
                 </>
             ) : (
-                <div className="site-layout-content">
+                <div
+                    className="site-layout-content"
+                    style={{ color: 'white', backgroundColor: '#001529' }}
+                >
                     <Empty
                         description={`No Badges Found`}
                         image={Empty.PRESENTED_IMAGE_SIMPLE}

@@ -227,3 +227,7 @@ code {
   .ant-switch-checked {
       background-color: #1890ff;
   }
+
+  .scale:hover {
+    transform: scale(1.01);
+  }

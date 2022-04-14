@@ -57,11 +57,10 @@ export function Browse() {
                     <div style={{ marginBottom: '1rem' }}>
                         <Typography.Text
                             strong
-                            level={3}
                             style={{
                                 color: 'white',
                                 fontFamily: "'Inter',sans-serif",
-                                fontSize: '2rem',
+                                fontSize: '3rem',
                                 fontStyle: 'normal',
                                 lineHeight: '1.2',
                                 width: '100%',
@@ -92,7 +91,7 @@ export function Browse() {
                     style={{
                         width: '100%',
                         // marginTop: '5rem',
-                        marginBottom: '1rem',
+                        marginBottom: '3rem',
                     }}
                 >
                     <Col span={24}>
@@ -110,7 +109,7 @@ export function Browse() {
                                 wordWrap: 'break-word',
                             }}
                         >
-                            Featured via NFT Ads
+                            Featured (via NFT Ads)
                         </div>
                     </Col>
                     {/* <Col span={24}> */}
@@ -132,7 +131,7 @@ export function Browse() {
                     style={{
                         width: '100%',
                         // marginTop: '5rem',
-                        marginBottom: '1rem',
+                        marginBottom: '3rem',
                     }}
                 >
                     <Col span={24}>
@@ -172,7 +171,7 @@ export function Browse() {
                     style={{
                         width: '100%',
                         // marginTop: '5rem',
-                        marginBottom: '1rem',
+                        marginBottom: '3rem',
                     }}
                 >
                     <Col span={24}>
@@ -190,7 +189,7 @@ export function Browse() {
                                 wordWrap: 'break-word',
                             }}
                         >
-                            Picked For You / Feed
+                            Recent Activity / Feed
                         </div>
                     </Col>
                     {/* <Col span={24}> */}
@@ -205,6 +204,29 @@ export function Browse() {
                             return <Badge badge={sampleBadge} size={100} />;
                         })}
                     </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
+                        }}
+                    >
+                        {[0, 0, 0, 0, 0].map((elem) => {
+                            return <Badge badge={sampleBadge} size={100} />;
+                        })}
+                    </div>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            flexWrap: 'wrap',
+                        }}
+                    >
+                        {[0, 0, 0, 0, 0].map((elem) => {
+                            return <Badge badge={sampleBadge} size={100} />;
+                        })}
+                    </div>
+
                     {/* </Col> */}
                 </Row>
             </Content>
