@@ -1,24 +1,19 @@
-import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from './Badge';
+import { Typography, Form, Button, Row, Col, Statistic } from 'antd';
+import React from 'react';
+import { useState } from 'react';
+import { signAndSubmitTxn } from '../api/api';
+import { useSelector } from 'react-redux';
+import { LINK_COLOR, PRIMARY_TEXT, SECONDARY_TEXT } from '../constants';
+import { FormNavigationHeader } from './FormNavigationHeader';
 
-const {
-    Typography,
-    Form,
-    Button,
-    Row,
-    Col,
-    Statistic,
-} = require('antd');
-
-const React = require('react');
-const { useState } = require('react');
-const { signAndSubmitTxn } = require('../api/api');
-
-const { useSelector } = require('react-redux');
+const FINAL_STEP_NUM = 1;
+const FIRST_STEP_NUM = 1;
+const CURR_TIMELINE_STEP_NUM = 3;
 
 export function TransactionDetails({
-    setCurrStepNumber,
+    setTimelineStepNumber,
     badge,
     recipients,
     permissions,
@@ -30,76 +25,48 @@ export function TransactionDetails({
     const navigate = useNavigate();
 
     const incrementStep = () => {
-        if (stepNum === 1) {
-            // setCurrStepNumber(4);
+        if (stepNum === FINAL_STEP_NUM) {
+            // setTimelineStepNumber(CURR_TIMELINE_STEP_NUM + 1);
         } else {
             setStepNum(stepNum + 1);
         }
     };
 
     const decrementStep = () => {
-        if (stepNum === 1) {
-            setCurrStepNumber(2);
+        if (stepNum === FIRST_STEP_NUM) {
+            setTimelineStepNumber(CURR_TIMELINE_STEP_NUM - 1);
         } else {
             setStepNum(stepNum - 1);
         }
     };
 
+    const getStatisticElem = (title, value, suffix, precision) => {
+        return (
+            <Statistic
+                title={<div style={{ color: PRIMARY_TEXT }}>{title}</div>}
+                valueStyle={{
+                    color: SECONDARY_TEXT,
+                }}
+                value={value}
+                suffix={suffix}
+                precision={precision}
+                style={{
+                    textAlign: 'center',
+                }}
+            />
+        );
+    };
+
     return (
         <div>
             <Form.Provider>
-                <div
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <button
-                        // className="link-button"
-                        style={{
-                            // position: 'absolute',
-                            // left: 5,
-                            backgroundColor: 'inherit',
-                            color: '#ddd',
-                            fontSize: 17,
-                        }}
-                        onClick={() => decrementStep()}
-                        className="opacity link-button"
-                        disabled={txnSubmitted && !transactionIsLoading}
-                    >
-                        <CaretLeftFilled size={40} />
-                        Back
-                    </button>
-                    <Typography.Text
-                        strong
-                        style={{
-                            color: 'white',
-                            fontSize: 20,
-                            marginLeft: 50,
-                            marginRight: 50,
-                        }}
-                        align="center"
-                    >
-                        {stepNum} / 1
-                    </Typography.Text>
-
-                    <button
-                        // className="link-button"
-                        style={{
-                            // position: 'absolute',
-                            // left: 5,
-                            backgroundColor: 'inherit',
-                            color: '#ddd',
-                            fontSize: 17,
-                        }}
-                        onClick={() => incrementStep()}
-                        className="opacity link-button"
-                    >
-                        Next
-                        <CaretRightFilled size={40} />
-                    </button>
-                </div>
+                <FormNavigationHeader
+                    incrementStep={incrementStep}
+                    decrementStep={decrementStep}
+                    stepNum={stepNum}
+                    backButtonDisabled={txnSubmitted && !transactionIsLoading}
+                    finalStepNumber={1}
+                />
                 <div style={{ paddingLeft: 5 }}>
                     <div
                         style={{
@@ -109,7 +76,7 @@ export function TransactionDetails({
                     >
                         <Typography.Text
                             style={{
-                                color: 'white',
+                                color: PRIMARY_TEXT,
                                 fontSize: 20,
                                 marginBottom: 10,
                             }}
@@ -134,27 +101,14 @@ export function TransactionDetails({
                                     marginBottom: 15,
                                 }}
                             >
-                                <Statistic
-                                    title={
-                                        <div style={{ color: 'white' }}>
-                                            Metadata Size
-                                        </div>
-                                    }
-                                    valueStyle={{
-                                        color: 'lightgrey',
-                                    }}
-                                    value={
-                                        badge
-                                            ? JSON.stringify(badge).length /
-                                              1000
-                                            : 0
-                                    } //TODO: get actual bytes, not just string length
-                                    suffix={'KB'}
-                                    precision={3}
-                                    style={{
-                                        textAlign: 'center',
-                                    }}
-                                />
+                                {getStatisticElem(
+                                    'Metadata Size',
+                                    badge
+                                        ? JSON.stringify(badge).length / 1000
+                                        : 0,
+                                    'KB',
+                                    3
+                                )}
                             </Col>
                             <Col
                                 span={12}
@@ -164,20 +118,7 @@ export function TransactionDetails({
                                     marginBottom: 15,
                                 }}
                             >
-                                <Statistic
-                                    title={
-                                        <div style={{ color: 'white' }}>
-                                            Cost per KB
-                                        </div>
-                                    }
-                                    valueStyle={{
-                                        color: 'lightgrey',
-                                    }}
-                                    style={{
-                                        textAlign: 'center',
-                                    }}
-                                    value={'N/A'}
-                                />
+                                {getStatisticElem('Cost per KB', 'N/A')}
                             </Col>
                             <Col
                                 span={12}
@@ -186,20 +127,7 @@ export function TransactionDetails({
                                     justifyContent: 'center',
                                 }}
                             >
-                                <Statistic
-                                    title={
-                                        <div style={{ color: 'white' }}>
-                                            Gas Fee
-                                        </div>
-                                    }
-                                    valueStyle={{
-                                        color: 'lightgrey',
-                                    }}
-                                    style={{
-                                        textAlign: 'center',
-                                    }}
-                                    value={'N/A'}
-                                />
+                                {getStatisticElem('Gas Fee', 'N/A')}
                             </Col>
                             <Col
                                 span={12}
@@ -208,20 +136,7 @@ export function TransactionDetails({
                                     justifyContent: 'center',
                                 }}
                             >
-                                <Statistic
-                                    title={
-                                        <div style={{ color: 'white' }}>
-                                            Total Fee
-                                        </div>
-                                    }
-                                    valueStyle={{
-                                        color: 'lightgrey',
-                                    }}
-                                    style={{
-                                        textAlign: 'center',
-                                    }}
-                                    value={'N/A'}
-                                />
+                                {getStatisticElem('Total Fee', 'N/A')}
                             </Col>
                         </Row>
                     </span>
@@ -282,7 +197,7 @@ export function TransactionDetails({
                             >
                                 <Typography.Text
                                     style={{
-                                        color: 'white',
+                                        color: PRIMARY_TEXT,
                                         fontSize: 20,
                                         marginBottom: 10,
                                         marginTop: 25,
@@ -300,7 +215,7 @@ export function TransactionDetails({
                             >
                                 <Typography.Text
                                     style={{
-                                        color: 'lightgrey',
+                                        color: SECONDARY_TEXT,
                                         fontSize: 15,
                                         marginBottom: 10,
                                     }}
@@ -309,7 +224,7 @@ export function TransactionDetails({
                                     You can view it in{' '}
                                     <button
                                         className="link-button-nav"
-                                        style={{ color: '#0000EE' }}
+                                        style={{ color: LINK_COLOR }}
                                         onClick={() => navigate('/account')}
                                     >
                                         your portfolio

@@ -1,5 +1,8 @@
-const { Typography, Tooltip } = require('antd');
-const React = require('react');
+import { getAbbreviatedAddress } from '../utils/AddressUtils';
+
+import { Typography, Tooltip } from 'antd';
+import React from 'react';
+import { SECONDARY_TEXT } from '../constants';
 const { Text } = Typography;
 
 // const blockExplorerLink = (address, blockExplorer) =>
@@ -17,12 +20,9 @@ export function Address({
     let displayAddress = '';
 
     if (address) {
-        displayAddress =
-            'ETH: ' + address?.substr(0, 5) + '...' + address?.substr(-4);
+        displayAddress = getAbbreviatedAddress('ETH: ' + address);
 
-        if (size === 'short') {
-            displayAddress += '...' + address.substr(-4);
-        } else if (size === 'long') {
+        if (size === 'long') {
             displayAddress = address;
         }
     } else {
@@ -59,7 +59,7 @@ export function Address({
                     <Text
                         copyable={{ text: address }}
                         style={{
-                            color: fontColor ? fontColor : '#ddd',
+                            color: fontColor ? fontColor : SECONDARY_TEXT,
                         }}
                     >
                         {innerContent}
@@ -68,12 +68,10 @@ export function Address({
                     <Text
                         copyable={true}
                         style={{
-                            color: fontColor ? fontColor : '#ddd',
+                            color: fontColor ? fontColor : SECONDARY_TEXT,
                         }}
                     >
-                        {/* <Tooltip placement="bottom" title={`ETH:${address}`}> */}
                         {innerContent}
-                        {/* </Tooltip> */}
                     </Text>
                 )}
             </span>

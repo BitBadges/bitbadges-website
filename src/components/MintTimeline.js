@@ -2,25 +2,16 @@ import { Address } from './Address';
 import { BadgeDataForm } from './BadgeDataForm';
 import { PermissionsForm } from './PermissionsForm';
 import Blockies from 'react-blockies';
-import { TransactionDetails } from './TransactionDetails';
-
-const {
-    Timeline,
-    Typography,
-    Button,
-    Menu,
-    Avatar,
-} = require('antd');
-
-const React = require('react');
-const {
-    ClockCircleOutlined,
-    CheckCircleOutlined,
-} = require('@ant-design/icons');
-const { useState } = require('react');
+import { TransactionDetails } from './CreateBadgeTxnDetails';
+import { Timeline, Typography, Button, Menu, Avatar } from 'antd';
+import React from 'react';
+import { ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getAbbreviatedAddress } from '../utils/AddressUtils';
+import { PRIMARY_BLUE, PRIMARY_TEXT } from '../constants';
 
 const { Text } = Typography;
-const { useSelector } = require('react-redux');
 
 export function MintTimeline() {
     const [currStepNumber, setCurrStepNumber] = useState(0);
@@ -32,9 +23,9 @@ export function MintTimeline() {
 
     const steps = [
         {
-            idx: 0,
+            stepNumber: 0,
             title: (
-                <Text style={{ color: 'white' }}>
+                <Text style={{ color: PRIMARY_TEXT }}>
                     Confirm Wallet to Issue From
                 </Text>
             ),
@@ -45,7 +36,7 @@ export function MintTimeline() {
                             style={{
                                 padding: '0',
                                 textAlign: 'center',
-                                color: 'white',
+                                color: PRIMARY_TEXT,
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 marginTop: 20,
@@ -62,13 +53,11 @@ export function MintTimeline() {
                             />
 
                             <div style={{ marginBottom: 10, marginTop: 4 }}>
-                                {
-                                    <Address
-                                        address={address}
-                                        fontSize={'2em'}
-                                        showTooltip
-                                    />
-                                }
+                                <Address
+                                    address={address}
+                                    fontSize={'2em'}
+                                    showTooltip
+                                />
                             </div>
                         </div>
                     </Menu>
@@ -82,10 +71,8 @@ export function MintTimeline() {
                     >
                         {address ? (
                             <>
-                                {'Use ETH: ' +
-                                    address?.substr(0, 5) +
-                                    '...' +
-                                    address?.substr(-4)}
+                                {'Use ' +
+                                    getAbbreviatedAddress('ETH: ' + address)}
                             </>
                         ) : (
                             'Please connect wallet.'
@@ -99,8 +86,10 @@ export function MintTimeline() {
             ),
         },
         {
-            idx: 1,
-            title: <Text style={{ color: 'white' }}>Set Badge Metadata</Text>,
+            stepNumber: 1,
+            title: (
+                <Text style={{ color: PRIMARY_TEXT }}>Set Badge Metadata</Text>
+            ),
             content: (
                 <BadgeDataForm
                     setPermissions={(permissions) => {
@@ -117,29 +106,33 @@ export function MintTimeline() {
             ),
         },
         {
-            idx: 2,
+            stepNumber: 2,
             title: (
-                <Text style={{ color: 'white' }}>Set Badge Permissions</Text>
+                <Text style={{ color: PRIMARY_TEXT }}>
+                    Set Badge Permissions
+                </Text>
             ),
             content: (
                 <PermissionsForm
                     setPermissions={(newPermissions) => {
                         setPermissions(newPermissions);
                     }}
-                    setCurrStepNumber={setCurrStepNumber}
+                    setTimelineStepNum={setCurrStepNumber}
                     recipients={recipients}
                 />
             ),
         },
         {
-            idx: 3,
+            stepNumber: 3,
             title: (
-                <Text style={{ color: 'white' }}>Confirm Transaction Data</Text>
+                <Text style={{ color: PRIMARY_TEXT }}>
+                    Confirm Transaction Data
+                </Text>
             ),
             content: (
                 <TransactionDetails
                     badge={badge}
-                    setCurrStepNumber={setCurrStepNumber}
+                    setTimelineStepNumber={setCurrStepNumber}
                     recipients={recipients}
                     permissions={permissions}
                 />
@@ -152,15 +145,17 @@ export function MintTimeline() {
             {steps.map((step) => {
                 return (
                     <Timeline.Item
-                        key={step.idx}
-                        color={step.idx < currStepNumber ? 'green' : 'blue'}
+                        key={step.stepNumber}
+                        color={
+                            step.stepNumber < currStepNumber ? 'green' : 'blue'
+                        }
                         dot={
-                            step.idx >= currStepNumber ? (
+                            step.stepNumber >= currStepNumber ? (
                                 <ClockCircleOutlined
                                     style={{
                                         verticalAlign: 'middle',
                                         fontSize: '30px',
-                                        backgroundColor: '#001529',
+                                        backgroundColor: PRIMARY_BLUE,
                                         padding: 0,
                                         margin: 0,
                                     }}
@@ -170,7 +165,7 @@ export function MintTimeline() {
                                     style={{
                                         verticalAlign: 'middle',
                                         fontSize: '30px',
-                                        backgroundColor: '#001529',
+                                        backgroundColor: PRIMARY_BLUE,
                                         padding: 0,
                                         margin: 0,
                                     }}
@@ -187,7 +182,7 @@ export function MintTimeline() {
                                 paddingLeft: 5,
                                 fontSize: 20,
                                 fontWeight: 'bold',
-                                color: 'white',
+                                color: PRIMARY_TEXT,
                             }}
                         >
                             {step.title}
@@ -199,7 +194,7 @@ export function MintTimeline() {
                                 fontSize: 12,
                             }}
                         >
-                            {step.idx === currStepNumber && step.content}
+                            {step.stepNumber === currStepNumber && step.content}
                         </span>
                     </Timeline.Item>
                 );

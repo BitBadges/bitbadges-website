@@ -1,6 +1,6 @@
-const Fortmatic = require('fortmatic');
-const Portis = require('@portis/web3');
-const Web3Modal = require('web3modal').default;
+import Fortmatic from 'fortmatic';
+import Portis from '@portis/web3';
+import Web3Modal from 'web3modal';
 
 const providerOptions = {
     fortmatic: {

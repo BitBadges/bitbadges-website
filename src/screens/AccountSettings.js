@@ -1,23 +1,22 @@
 import { Tabs } from '../components/Tabs';
-import { ShowingResultsFor } from '../components/ShowingResultsFor';
+import { AccountDisplay } from '../components/AccountDisplay';
 import { useSelector } from 'react-redux';
-import { WalletDisplay } from '../components/WalletDisplay';
+import { WalletDisplay } from '../components/AccountDisplayButtons';
 import Text from 'antd/lib/typography/Text';
 import { useNavigate } from 'react-router-dom';
 import isuri from 'isuri';
-const React = require('react');
-const { useState, useEffect } = require('react');
-const { Layout, Typography, Form, Input, Button } = require('antd');
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Layout, Form, Input, Button } from 'antd';
+import { signAndSubmitPrivateApiTxn } from '../api/api';
+import { PRIMARY_BLUE, PRIMARY_TEXT, SECONDARY_TEXT } from '../constants';
 
 const { Content } = Layout;
-const { signAndSubmitPrivateApiTxn } = require('../api/api');
-
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 export function AccountSettings() {
     const address = useSelector((state) => state.user.address);
     const profileInfo = useSelector((state) => state.user.profileInfo);
-
     const [username, setUsername] = useState(
         profileInfo.username ? profileInfo.username : ''
     );
@@ -43,7 +42,6 @@ export function AccountSettings() {
     const [bannerColorTwo, setBannerColorTwo] = useState(
         profileInfo.bannerColorTwo ? profileInfo.bannerColorTwo : ''
     );
-    const [defaultNode, setDefaultNode] = useState('');
 
     const navigate = useNavigate();
 
@@ -61,28 +59,17 @@ export function AccountSettings() {
 
     return (
         <Content
-            style={{
-                padding: '0',
-                margin: 0,
-                width: '100%',
-                backgroundColor: '#001529',
-            }}
+            className="full-area"
+            style={{ backgroundColor: PRIMARY_BLUE }}
         >
             <div
                 style={{
-                    padding: '0',
-                    margin: 0,
-                    width: '100%',
-                    // #Ea1795
-                    // #3e83f8
                     background: `linear-gradient(0deg, ${
                         bannerColorTwo ? bannerColorTwo : '#001529'
                     }, ${bannerColorOne ? bannerColorOne : '#3e83f8'} 75%)`,
-                    // paddingBottom: 20,
                 }}
             >
-                <div style={{ color: 'white' }}></div>
-                <ShowingResultsFor
+                <AccountDisplay
                     address={address ? address : ''}
                     userName={username}
                     bio={bio}
@@ -97,56 +84,29 @@ export function AccountSettings() {
                 <WalletDisplay />
             </div>
             <Tabs
-                // setTab={setTab}
                 tabInfo={[
-                    { key: 'received', content: 'Preview Tab 1' },
-                    { key: 'issued', content: 'Preview Tab 2' },
-                    { key: 'managing', content: 'Preview Tab 3' },
-                    { key: 'managing', content: 'Preview Tab 4' },
+                    { key: 'received', content: 'Collected' },
+                    { key: 'offering', content: 'Offering' },
+                    { key: 'managing', content: 'Managing' },
+                    { key: 'issued', content: 'Created' },
+                    { key: 'liked', content: 'Liked' },
+                    { key: 'activity', content: 'Activity' },
                 ]}
-                widthPerTab={'calc(100% / 4)'}
+                fullWidth
             />
             <hr
                 color="black"
                 style={{ borderWidth: '3px', marginTop: 0, paddingTop: 0 }}
             />
-            <div>
-                <Typography.Text
-                    strong
-                    level={3}
-                    style={{
-                        color: 'white',
-                        fontFamily: "'Inter',sans-serif",
-                        fontSize: 25,
-                        // paddingBottom: '1rem',
-                        fontStyle: 'normal',
-                        lineHeight: '1.2',
-                        width: '100%',
-                        wordBreak: 'break-word',
-                        wordWrap: 'break-word',
-                    }}
-                >
-                    Account Customization
-                </Typography.Text>
+            <div className="primary-text" style={{ fontSize: 25 }}>
+                Account Customization
             </div>
-            <div>
-                <Typography.Text
-                    strong
-                    style={{
-                        color: 'lightgrey',
-                        fontFamily: "'Inter',sans-serif",
-                        fontSize: 16,
-                        // paddingBottom: '1rem',
-                        fontStyle: 'normal',
-                        lineHeight: '1.2',
-                        width: '100%',
-                        wordBreak: 'break-word',
-                        wordWrap: 'break-word',
-                    }}
-                >
-                    *The top of this page is just a preview. To save changes,
-                    you must click submit.
-                </Typography.Text>
+            <div
+                className="primary-text"
+                style={{ fontSize: 16, color: SECONDARY_TEXT, marginBottom: 4 }}
+            >
+                *The top of this page is just a preview. To save changes, you
+                must click submit.
             </div>
             <Form
                 labelCol={{ span: 6 }}
@@ -156,7 +116,7 @@ export function AccountSettings() {
                 <div style={{ marginBottom: 20 }}>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Username
                             </Text>
                         }
@@ -167,15 +127,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setUsername(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Bio
                             </Text>
                         }
@@ -184,15 +141,12 @@ export function AccountSettings() {
                             defaultValue={profileInfo.bio}
                             value={bio}
                             onChange={(e) => setBio(e.target.value)}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Email
                             </Text>
                         }
@@ -203,15 +157,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setEmail(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Twitter Username
                             </Text>
                         }
@@ -222,15 +173,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setTwitter(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Instagram Username
                             </Text>
                         }
@@ -241,15 +189,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setInstagram(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Website
                             </Text>
                         }
@@ -260,15 +205,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setWebsite(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Profile Pic
                             </Text>
                         }
@@ -279,21 +221,16 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setProfilePic(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
-                        <div style={{ fontSize: 12, textAlign: 'left' }}>
-                            <Text style={{ color: 'lightgray' }}>
-                                *We currently only support image URIs.
-                            </Text>
+                        <div className="form-input-helper-text">
+                            *We currently only support image URIs.
                         </div>
                     </Form.Item>
 
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Banner Color 1
                             </Text>
                         }
@@ -304,15 +241,12 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setBannerColorOne(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
                     </Form.Item>
                     <Form.Item
                         label={
-                            <Text style={{ color: 'white' }} strong>
+                            <Text style={{ color: PRIMARY_TEXT }} strong>
                                 Banner Color 2
                             </Text>
                         }
@@ -323,47 +257,24 @@ export function AccountSettings() {
                             onChange={(e) => {
                                 setBannerColorTwo(e.target.value);
                             }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            className="form-input"
                         />
-                        <div style={{ fontSize: 12, textAlign: 'left' }}>
-                            <Text style={{ color: 'lightgray' }}>
-                                *Colors must be valid HTML color names. For more
-                                details, click{' '}
-                                <a
-                                    href="https://htmlcolorcodes.com/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    here
-                                </a>
-                                . The shades of blue used for this site are
-                                #001529 (dark) and #3e83f8 (light).
-                            </Text>
+                        <div className="form-input-helper-text">
+                            *Colors must be valid HTML color names. For more
+                            details, click{' '}
+                            <a
+                                href="https://htmlcolorcodes.com/"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="link-button-nav"
+                            >
+                                here
+                            </a>
+                            . The shades of blue used for this site are #001529
+                            (dark) and #3e83f8 (light).
                         </div>
                     </Form.Item>
 
-                    <Form.Item
-                        label={
-                            <Text style={{ color: 'white' }} strong>
-                                Default Node
-                            </Text>
-                        }
-                    >
-                        <Input
-                            value={defaultNode}
-                            onChange={(e) => {
-                                setDefaultNode(e.target.value);
-                            }}
-                            style={{
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
-                            disabled
-                        />
-                    </Form.Item>
                     <Button
                         type="primary"
                         style={{ width: '70%' }}
@@ -391,14 +302,10 @@ export function AccountSettings() {
                                 if (!error) {
                                     navigate('/account');
                                 }
-
-                                // setTransactionIsLoading(false);
                             } catch (err) {
-                                // setTxnSubmitted(false);
-                                // setTransactionIsLoading(false);
+                                console.log(err);
                             }
                         }}
-                        // loading={transactionIsLoading}
                         disabled={
                             (twitter &&
                                 !isuri.isValid(

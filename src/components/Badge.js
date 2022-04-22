@@ -1,63 +1,21 @@
-import { RecipientFormItem } from './RecipientFormItem';
-import { BurnOwnerFormItem } from './BurnOwnerFormItem';
-import { Tabs } from './Tabs';
-import { Address } from './Address';
 import Meta from 'antd/lib/card/Meta';
-// import { useNavigate } from 'react-router-dom';
-
-const {
-    Avatar,
-    Tooltip,
-    Drawer,
-    Button,
-    Form,
-    Select,
-    List,
-    Skeleton,
-    Divider,
-    Input,
-    Empty,
-    Card,
-    Alert,
-} = require('antd');
-const { default: Text } = require('antd/lib/typography/Text');
-const { FontAwesomeIcon } = require('@fortawesome/react-fontawesome');
-const {
+import { Avatar, Tooltip, Card } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
     faSnowflake,
-    faUserLock,
     faGlobe,
     faWallet,
     faCloud,
     faSquareMinus,
     faSquarePlus,
-} = require('@fortawesome/free-solid-svg-icons');
-const { useState } = require('react');
-const React = require('react');
-
-const { MAX_DATE_TIMESTAMP } = require('../constants');
-
-const {
-    LockOutlined,
-    PlusOutlined,
-    UndoOutlined,
-    SwapOutlined,
-    SwapRightOutlined,
-    CheckCircleFilled,
-    WarningFilled,
-    LockFilled,
-    UnlockFilled,
-    RollbackOutlined,
-    RightOutlined,
-    DownOutlined,
-    CloseOutlined,
-    HeartOutlined,
-    HeartFilled,
-} = require('@ant-design/icons');
-const { useSelector } = require('react-redux');
-const { signAndSubmitTxn, signAndSubmitPrivateApiTxn } = require('../api/api');
-const web3 = require('web3');
-
-const { Option } = Select;
+} from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import React from 'react';
+import { HeartOutlined, HeartFilled } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
+import { signAndSubmitPrivateApiTxn } from '../api/api';
+import { BadgeModal } from './BadgeModal';
+import { PRIMARY_BLUE, PRIMARY_TEXT, SECONDARY_TEXT } from '../constants';
 
 export function Badge({
     badge,
@@ -67,26 +25,9 @@ export function Badge({
     offeredBadge,
     conceptBadge,
     managing,
+    hideModal,
 }) {
-
     const [modalIsVisible, setModalIsVisible] = useState(false);
-    const [recipients, setRecipients] = useState([]);
-    const [owners, setOwners] = useState([]);
-    const [transactionIsLoading, setTransactionIsLoading] = useState(false);
-    const [txnSubmitted, setTxnSubmitted] = useState(false);
-    const [lockSupplyIsVisible, setLockSupplyIsVisible] = useState(false);
-    const [mintMoreIsVisible, setMintMoreIsVisible] = useState(false);
-    const [lockRevokeIsVisible, setLockRevokeIsVisible] = useState(false);
-    const [revokeIsVisible, setRevokeIsVisible] = useState(false);
-    const [transferIsVisible, setTransferIsVisible] = useState(false);
-    const [newManagerChain, setnewManagerChain] = useState('ETH');
-    const [newManagerAddress, setnewManagerAddress] = useState('');
-    const [transferManagerIsVisible, setTransferManagerIsVisible] =
-        useState(false);
-    const [transferRecipients, setTransferRecipients] = useState([]);
-    const address = useSelector((state) => state.user.address);
-    // const chain = useSelector((state) => state.user.chain);
-    const [tab, setTab] = useState('overview');
     const balanceMap = useSelector((state) => state.user.userBalancesMap);
     const profileInfo = useSelector((state) => state.user.profileInfo);
     // const navigate = useNavigate();
@@ -100,626 +41,188 @@ export function Badge({
             ? balanceMap[badge._id].received
             : undefined;
 
-    // let displayAddress =
-    //     badge.metadata.creator.substr(0, 10) +
-    //     '...' +
-    //     badge.metadata.creator.substr(-4);
-
-    const managerPermissionsData = [];
-    const ownerPermissionsData = [];
-    const permissionsData = [];
-
-    if (badge.permissions) {
-        if (badge.permissions.canOwnerTransfer && balance) {
-            ownerPermissionsData.push({
-                title: <div style={{ color: 'white' }}>Transfer</div>,
-                description: (
-                    <div style={{ color: 'lightgrey' }}>
-                        Transfer this badge
+    const supplyIcon = (
+        <>
+            {collectedBadge ? (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`This user owns ${balance}.`}
+                >
+                    <div style={{}}>
+                        <FontAwesomeIcon icon={faWallet} /> {balance}
                     </div>
-                ),
-                icon: <SwapOutlined />,
-                visible: transferIsVisible,
-                content: (
-                    <>
-                        {transferIsVisible && (
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Form
-                                    // labelCol={{ span: 4 }}
-                                    // wrapperCol={{ span: 14 }}
-                                    layout="horizontal"
-                                    style={{ width: '50vw' }}
-                                >
-                                    <RecipientFormItem
-                                        recipients={transferRecipients}
-                                        setRecipients={setTransferRecipients}
-                                    />
+                </Tooltip>
+            ) : (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`Total Supply: ${badge.supply}`}
+                >
+                    <div style={{}}>
+                        <FontAwesomeIcon
+                            // style={{ fontSize: 30 }}
+                            icon={faGlobe}
+                        />{' '}
+                        {badge.supply}
+                    </div>
+                </Tooltip>
+            )}
+        </>
+    );
 
-                                    <Form.Item>
-                                        <Button
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            type="primary"
-                                            onClick={async () => {
-                                                setTxnSubmitted(true);
-                                                setTransactionIsLoading(true);
+    const addRemoveIcon = (
+        <>
+            {profileInfo.offering.includes(badge._id) || conceptBadge ? (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`Remove from Offering`}
+                >
+                    <FontAwesomeIcon
+                        // style={{ fontSize: 30 }}
+                        icon={faSquareMinus}
+                        onClick={async (event) => {
+                            event.stopPropagation();
 
-                                                const data = {
-                                                    recipients:
-                                                        transferRecipients,
-                                                    badgeId: badge._id,
-                                                };
+                            try {
+                                const data = {
+                                    badgeId: badge._id,
+                                };
 
-                                                await signAndSubmitTxn(
-                                                    '/badges/transfer',
-                                                    data
-                                                );
+                                // console.log(data);
 
-                                                setTransactionIsLoading(false);
-                                                //once completed, display links to block explorer, where they can view it, etc
-                                            }}
-                                            loading={transactionIsLoading}
-                                            disabled={
-                                                txnSubmitted ||
-                                                transferRecipients.length === 0
-                                            }
-                                        >
-                                            Sign and Submit
-                                        </Button>
-                                    </Form.Item>
-                                    <Divider />
-                                </Form>
-                            </div>
-                        )}
-                    </>
-                ),
-                showModal: () => {
-                    setTransferIsVisible(!transferIsVisible);
-                },
-                popover: (
-                    <>
-                        {
-                            <button
-                                className="link-button"
-                                style={{ color: 'white' }}
-                                key="list-loadmore-edit"
-                                onClick={() =>
-                                    setTransferIsVisible(!transferIsVisible)
+                                if (conceptBadge) {
+                                    const error =
+                                        await signAndSubmitPrivateApiTxn(
+                                            '/badges/removeConcept',
+                                            data
+                                        );
+                                    console.log(error);
+                                } else {
+                                    const error =
+                                        await signAndSubmitPrivateApiTxn(
+                                            '/badges/removeOffering',
+                                            data
+                                        );
+                                    console.log(error);
                                 }
-                            >
-                                {transferIsVisible ? (
-                                    <DownOutlined />
-                                ) : (
-                                    <RightOutlined />
-                                )}
-                            </button>
-                        }
-                    </>
-                ),
-            });
-        }
-        if (badge.permissions.canMintMore) {
-            managerPermissionsData.push({
-                title: <div style={{ color: 'white' }}>Mint</div>,
-                description: (
-                    <div style={{ color: 'lightgrey' }}>
-                        Mint more of this badge
+                            } catch (err) {
+                                // setTxnSubmitted(false);
+                                // setTransactionIsLoading(false);
+                            }
+                        }}
+                    />
+                </Tooltip>
+            ) : (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`Add to Offering`}
+                >
+                    <FontAwesomeIcon
+                        // style={{ fontSize: 30 }}
+                        icon={faSquarePlus}
+                        onClick={async (event) => {
+                            event.stopPropagation();
+
+                            try {
+                                const data = {
+                                    badgeId: badge._id,
+                                };
+
+                                const error = await signAndSubmitPrivateApiTxn(
+                                    '/badges/addOffering',
+                                    data
+                                );
+                                console.log(error);
+                            } catch (err) {
+                                // setTxnSubmitted(false);
+                                // setTransactionIsLoading(false);
+                            }
+                        }}
+                    />
+                </Tooltip>
+            )}
+        </>
+    );
+
+    const rightMostIcon = (
+        <>
+            {conceptBadge && (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`This badge is just a concept.`}
+                >
+                    <div style={{}}>
+                        <FontAwesomeIcon icon={faCloud} /> {balance}
                     </div>
-                ),
-                icon: <PlusOutlined />,
-                visible: mintMoreIsVisible,
-                content: (
-                    <>
-                        {mintMoreIsVisible && (
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Form
-                                    // labelCol={{ span: 4 }}
-                                    // wrapperCol={{ span: 14 }}
-                                    layout="horizontal"
-                                    style={{ width: '50vw' }}
-                                >
-                                    <RecipientFormItem
-                                        recipients={recipients}
-                                        setRecipients={setRecipients}
-                                    />
-
-                                    <Form.Item>
-                                        <Button
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            type="primary"
-                                            onClick={async () => {
-                                                setTxnSubmitted(true);
-                                                setTransactionIsLoading(true);
-
-                                                const data = {
-                                                    recipients,
-                                                    badgeId: badge._id,
-                                                };
-
-                                                await signAndSubmitTxn(
-                                                    '/badges/mint',
-                                                    data
-                                                );
-
-                                                setTransactionIsLoading(false);
-                                                //once completed, display links to block explorer, where they can view it, etc
-                                            }}
-                                            loading={transactionIsLoading}
-                                            disabled={
-                                                txnSubmitted ||
-                                                recipients.length === 0
-                                            }
-                                        >
-                                            Sign and Submit
-                                        </Button>
-                                    </Form.Item>
-                                    <Divider />
-                                </Form>
-                            </div>
-                        )}
-                    </>
-                ),
-                showModal: () => {
-                    setMintMoreIsVisible(!mintMoreIsVisible);
-                },
-                popover: (
-                    <>
-                        {
-                            <button
-                                className="link-button"
-                                style={{ color: 'white' }}
-                                key="list-loadmore-edit"
-                                onClick={() =>
-                                    setMintMoreIsVisible(!mintMoreIsVisible)
-                                }
-                            >
-                                {mintMoreIsVisible ? (
-                                    <DownOutlined />
-                                ) : (
-                                    <RightOutlined />
-                                )}
-                            </button>
-                        }
-                    </>
-                ),
-            });
-
-            managerPermissionsData.push({
-                title: <div style={{ color: 'white' }}>Lock Supply</div>,
-                icon: <LockOutlined />,
-                description: (
-                    <div style={{ color: 'lightgrey' }}>
-                        Disable minting privileges permanently.
+                </Tooltip>
+            )}
+            {offeredBadge && !conceptBadge && (
+                <Tooltip
+                    className={`like-button-badge`}
+                    title={`This badge has already been created.`}
+                >
+                    <div style={{}}>
+                        <FontAwesomeIcon icon={faSnowflake} />
                     </div>
-                ),
-                visible: lockSupplyIsVisible,
-                content: (
-                    <>
-                        {lockSupplyIsVisible && (
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Form
-                                    // labelCol={{ span: 4 }}
-                                    // wrapperCol={{ span: 14 }}
-                                    layout="horizontal"
-                                    style={{ width: '50vw' }}
-                                >
-                                    <Form.Item>
-                                        <Text style={{ color: 'white' }}>
-                                            *Warning: This action is permanent.
-                                            Once you lock the supply of this
-                                            badge, you will never be able to
-                                            mint any more.
-                                        </Text>
-                                    </Form.Item>
-
-                                    <Form.Item>
-                                        <Button
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            type="primary"
-                                            onClick={async () => {
-                                                setTxnSubmitted(true);
-                                                setTransactionIsLoading(true);
-
-                                                const data = {
-                                                    badgeId: badge._id,
-                                                };
-
-                                                await signAndSubmitTxn(
-                                                    '/badges/lockSupply',
-                                                    data
-                                                );
-
-                                                setTransactionIsLoading(false);
-                                                //once completed, display links to block explorer, where they can view it, etc
-                                            }}
-                                            loading={transactionIsLoading}
-                                            disabled={txnSubmitted}
-                                        >
-                                            Sign and Submit
-                                        </Button>
-                                    </Form.Item>
-                                    <Divider />
-                                </Form>
-                            </div>
-                        )}
-                    </>
-                ),
-                showModal: () => {
-                    setLockSupplyIsVisible(!lockSupplyIsVisible);
-                },
-                popover: (
-                    <>
-                        {
-                            <button
-                                className="link-button"
-                                style={{ color: 'white' }}
-                                key="list-loadmore-edit"
-                                onClick={() =>
-                                    setLockSupplyIsVisible(!lockSupplyIsVisible)
-                                }
-                            >
-                                {lockSupplyIsVisible ? (
-                                    <DownOutlined />
-                                ) : (
-                                    <RightOutlined />
-                                )}
-                            </button>
-                        }
-                    </>
-                ),
-            });
-        }
-        if (badge.permissions.canRevoke) {
-            managerPermissionsData.push({
-                title: <div style={{ color: 'white' }}>Revoke</div>,
-                description: (
-                    <div style={{ color: 'lightgrey' }}>
-                        Revoke a badge from an existing owner
-                    </div>
-                ),
-                icon: <UndoOutlined />,
-                visible: revokeIsVisible,
-                content: (
-                    <>
-                        {revokeIsVisible && (
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Form
-                                    // labelCol={{ span: 4 }}
-                                    // wrapperCol={{ span: 14 }}
-                                    layout="horizontal"
-                                    style={{ width: '50vw' }}
-                                >
-                                    <BurnOwnerFormItem
-                                        owners={owners}
-                                        setOwners={setOwners}
-                                    />
-
-                                    <Form.Item>
-                                        <Button
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            type="primary"
-                                            onClick={async () => {
-                                                setTxnSubmitted(true);
-                                                setTransactionIsLoading(true);
-
-                                                const data = {
-                                                    owners,
-                                                    badgeId: badge._id,
-                                                };
-
-                                                await signAndSubmitTxn(
-                                                    '/badges/burn',
-                                                    data
-                                                );
-
-                                                setTransactionIsLoading(false);
-                                                //once completed, display links to block explorer, where they can view it, etc
-                                            }}
-                                            loading={transactionIsLoading}
-                                            disabled={
-                                                txnSubmitted ||
-                                                owners.length === 0
-                                            }
-                                        >
-                                            Sign and Submit
-                                        </Button>
-                                    </Form.Item>
-                                    <Divider />
-                                </Form>
-                            </div>
-                        )}
-                    </>
-                ),
-                showModal: () => {
-                    setRevokeIsVisible(!revokeIsVisible);
-                },
-                popover: (
-                    <>
-                        {
-                            <button
-                                className="link-button"
-                                style={{ color: 'white' }}
-                                key="list-loadmore-edit"
-                                onClick={() =>
-                                    setRevokeIsVisible(!revokeIsVisible)
-                                }
-                            >
-                                {revokeIsVisible ? (
-                                    <DownOutlined />
-                                ) : (
-                                    <RightOutlined />
-                                )}
-                            </button>
-                        }
-                    </>
-                ),
-            });
-            managerPermissionsData.push({
-                title: (
-                    <div style={{ color: 'white' }}>
-                        Lock Revoke Permissions
-                    </div>
-                ),
-                description: (
-                    <div style={{ color: 'lightgrey' }}>
-                        Disable revoking privileges permanently.
-                    </div>
-                ),
-                icon: <LockOutlined />,
-                visible: lockRevokeIsVisible,
-                content: (
-                    <>
-                        {lockRevokeIsVisible && (
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                }}
-                            >
-                                <Form
-                                    // labelCol={{ span: 4 }}
-                                    // wrapperCol={{ span: 14 }}
-                                    layout="horizontal"
-                                    style={{ width: '50vw' }}
-                                >
-                                    <Form.Item>
-                                        <Text style={{ color: 'white' }}>
-                                            *Warning: This action is permanent.
-                                            Once you lock your revoke
-                                            permission, you will never be able
-                                            to revoke again.
-                                        </Text>
-                                    </Form.Item>
-
-                                    <Form.Item>
-                                        <Button
-                                            style={{
-                                                width: '100%',
-                                            }}
-                                            type="primary"
-                                            onClick={async () => {
-                                                setTxnSubmitted(true);
-                                                setTransactionIsLoading(true);
-
-                                                const data = {
-                                                    badgeId: badge._id,
-                                                };
-
-                                                await signAndSubmitTxn(
-                                                    '/badges/lockRevoke',
-                                                    data
-                                                );
-
-                                                setTransactionIsLoading(false);
-                                                //once completed, display links to block explorer, where they can view it, etc
-                                            }}
-                                            loading={transactionIsLoading}
-                                            disabled={txnSubmitted}
-                                        >
-                                            Sign and Submit
-                                        </Button>
-                                    </Form.Item>
-                                    <Divider />
-                                </Form>
-                            </div>
-                        )}
-                    </>
-                ),
-                showModal: () => {
-                    setLockRevokeIsVisible(!lockRevokeIsVisible);
-                },
-                popover: (
-                    <>
-                        {
-                            <button
-                                className="link-button"
-                                style={{ color: 'white' }}
-                                key="list-loadmore-edit"
-                                onClick={() =>
-                                    setLockRevokeIsVisible(!lockRevokeIsVisible)
-                                }
-                            >
-                                {lockRevokeIsVisible ? (
-                                    <DownOutlined />
-                                ) : (
-                                    <RightOutlined />
-                                )}
-                            </button>
-                        }
-                    </>
-                ),
-            });
-        }
-
-        managerPermissionsData.push({
-            title: <div style={{ color: 'white' }}>Transfer Manager Role</div>,
-            description: (
-                <div style={{ color: 'lightgrey' }}>
-                    Transfer manager privileges to new address
-                </div>
-            ),
-            icon: <SwapRightOutlined />,
-            visible: transferManagerIsVisible,
-            content: (
+                </Tooltip>
+            )}
+            {!offeredBadge && !conceptBadge && (
                 <>
-                    {transferManagerIsVisible && (
-                        <div
-                            style={{
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <Form
-                                // labelCol={{ span: 4 }}
-                                // wrapperCol={{ span: 14 }}
-                                layout="horizontal"
-                                style={{ width: '50vw' }}
-                            >
-                                <Form.Item
-                                    label={
-                                        <Text strong style={{ color: 'white' }}>
-                                            New Manager
-                                        </Text>
-                                    }
-                                >
-                                    <Input.Group compact>
-                                        <Select
-                                            value={newManagerChain}
-                                            onSelect={(e) =>
-                                                setnewManagerChain(e)
-                                            }
-                                            defaultValue="ETH"
-                                        >
-                                            <Option value="ETH">ETH</Option>
-                                        </Select>
-                                        <Input
-                                            style={{ width: '75%' }}
-                                            value={newManagerAddress}
-                                            onChange={(e) =>
-                                                setnewManagerAddress(
-                                                    e.target.value
-                                                )
-                                            }
-                                        />
-                                    </Input.Group>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Text style={{ color: 'white' }}>
-                                        *Warning: This action is permanent. Once
-                                        you transfer the manager role to this
-                                        new address, you will lose privileges on
-                                        this address.
-                                    </Text>
-                                </Form.Item>
+                    {' '}
+                    {profileInfo.likes.includes(badge._id) ? (
+                        <Tooltip className={`like-button-badge`} title="Unlike">
+                            <HeartFilled
+                                onClick={async (event) => {
+                                    event.stopPropagation();
 
-                                <Form.Item>
-                                    <Button
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                        type="primary"
-                                        onClick={async () => {
-                                            setTxnSubmitted(true);
-                                            setTransactionIsLoading(true);
+                                    try {
+                                        const data = {
+                                            badgeId: badge._id,
+                                        };
 
-                                            const data = {
-                                                badgeId: badge._id,
-                                                newManager: `${newManagerChain}:${newManagerAddress}`,
-                                            };
-
-                                            await signAndSubmitTxn(
-                                                '/badges/transferManager',
+                                        const error =
+                                            await signAndSubmitPrivateApiTxn(
+                                                '/badges/unlike',
                                                 data
                                             );
+                                        console.log(error);
+                                    } catch (err) {
+                                        // setTxnSubmitted(false);
+                                        // setTransactionIsLoading(false);
+                                    }
+                                }}
+                            />
+                        </Tooltip>
+                    ) : (
+                        <Tooltip className={`like-button-badge`} title="Like">
+                            <HeartOutlined
+                                onClick={async (event) => {
+                                    event.stopPropagation();
 
-                                            setTransactionIsLoading(false);
-                                            //once completed, display links to block explorer, where they can view it, etc
-                                        }}
-                                        loading={transactionIsLoading}
-                                        disabled={
-                                            txnSubmitted ||
-                                            !web3.utils.isAddress(
-                                                newManagerAddress
-                                            )
-                                        }
-                                    >
-                                        Sign and Submit
-                                    </Button>
-                                </Form.Item>
-                                {!web3.utils.isAddress(newManagerAddress) && (
-                                    <Text>*Invalid address specified</Text>
-                                )}
-                                <Divider />
-                            </Form>
-                        </div>
+                                    try {
+                                        const data = {
+                                            badgeId: badge._id,
+                                        };
+
+                                        const error =
+                                            await signAndSubmitPrivateApiTxn(
+                                                '/badges/like',
+                                                data
+                                            );
+                                        console.log(error);
+
+                                        // setTransactionIsLoading(false);
+                                    } catch (err) {
+                                        // setTxnSubmitted(false);
+                                        // setTransactionIsLoading(false);
+                                    }
+                                }}
+                            />
+                        </Tooltip>
                     )}
                 </>
-            ),
-            showModal: () => {
-                setTransferManagerIsVisible(!transferManagerIsVisible);
-            },
-            popover: (
-                <>
-                    {
-                        <button
-                            style={{ color: 'white' }}
-                            className="link-button"
-                            key="list-loadmore-edit"
-                            onClick={() =>
-                                setTransferManagerIsVisible(
-                                    !transferManagerIsVisible
-                                )
-                            }
-                        >
-                            {transferManagerIsVisible ? (
-                                <DownOutlined />
-                            ) : (
-                                <RightOutlined />
-                            )}
-                        </button>
-                    }
-                </>
-            ),
-        });
-
-        permissionsData.push(...ownerPermissionsData);
-        if (address === badge.manager.split(':')[1]) {
-            permissionsData.push(...managerPermissionsData);
-        }
-    }
+            )}
+        </>
+    );
 
     return (
         <>
@@ -729,8 +232,8 @@ export function Badge({
                     margin: 8,
                     textAlign: 'center',
                     borderRadius: '8%',
-                    backgroundColor: '#001529',
-                    color: 'white',
+                    backgroundColor: PRIMARY_BLUE,
+                    color: PRIMARY_TEXT,
                 }}
                 hoverable
                 onClick={() => setModalIsVisible(true)}
@@ -740,46 +243,33 @@ export function Badge({
                             display: 'flex',
                             justifyContent: 'center',
                             width: '100%',
-                            color: 'white',
+                            color: PRIMARY_TEXT,
                         }}
                     >
-                        {/* <Tooltip
-                            placement="bottom"
-                            title={`${badge.metadata.name}${
-                                balance ? ' (x' + balance + ')' : ''
-                            }`}
-                        > */}
-                        {badge.metadata.image ? (
-                            <Avatar
-                                style={{
-                                    verticalAlign: 'middle',
-                                    border: '3px solid',
-                                    borderColor: badge.metadata.color,
-                                    margin: '1rem',
-                                    cursor: 'pointer',
-                                    backgroundColor: 'white',
-                                }}
-                                // className="badge-avatar"   //For scaling on hover
-                                src={badge.metadata.image}
-                                size={size}
-                                onError={(e) => {
-                                    return false;
-                                }}
-                            />
-                        ) : (
-                            <Avatar
-                                style={{
-                                    backgroundColor: badge.metadata.color,
-                                    verticalAlign: 'middle',
-                                    border: '3px solid black',
-                                    margin: '1rem',
-                                    cursor: 'pointer',
-                                }}
-                                size={size}
-                                // className="badge-avatar"     //For scaling on hover
-                            ></Avatar>
-                        )}
-                        {/* </Tooltip> */}
+                        <Avatar
+                            style={{
+                                verticalAlign: 'middle',
+                                border: '3px solid',
+                                borderColor: badge.metadata.color
+                                    ? badge.metadata.color
+                                    : 'black',
+                                margin: '1rem',
+                                cursor: 'pointer',
+                                backgroundColor: badge.metadata.image
+                                    ? PRIMARY_TEXT
+                                    : badge.metadata.color,
+                            }}
+                            // className="badge-avatar"   //For scaling on hover
+                            src={
+                                badge.metadata.image
+                                    ? badge.metadata.image
+                                    : undefined
+                            }
+                            size={size}
+                            onError={(e) => {
+                                return false;
+                            }}
+                        />
                     </div>
                 }
             >
@@ -788,7 +278,7 @@ export function Badge({
                         <div
                             style={{
                                 fontSize: 20,
-                                color: 'white',
+                                color: PRIMARY_TEXT,
                                 fontWeight: 'bolder',
                             }}
                         >
@@ -798,10 +288,9 @@ export function Badge({
                     description={
                         <div
                             style={{
-                                color: 'lightgrey',
+                                color: SECONDARY_TEXT,
                                 display: 'flex',
                                 alignItems: 'center',
-                                // justifyContent: 'space-between',
                                 fontSize: 17,
                                 width: '100%',
                             }}
@@ -812,142 +301,11 @@ export function Badge({
                                     textAlign: 'left',
                                 }}
                             >
-                                {collectedBadge ? (
-                                    <Tooltip
-                                        className={`like-button-badge`}
-                                        title={`This user owns ${balance}.`}
-                                    >
-                                        <div style={{}}>
-                                            <FontAwesomeIcon icon={faWallet} />{' '}
-                                            {balance}
-                                        </div>
-                                    </Tooltip>
-                                ) : (
-                                    <Tooltip
-                                        className={`like-button-badge`}
-                                        title={`Total Supply: ${badge.supply}`}
-                                    >
-                                        <div style={{}}>
-                                            <FontAwesomeIcon
-                                                // style={{ fontSize: 30 }}
-                                                icon={faGlobe}
-                                            />{' '}
-                                            {badge.supply}
-                                        </div>
-                                    </Tooltip>
-                                )}
+                                {supplyIcon}
                             </div>
 
                             <div style={{ width: 'calc(100% / 3)' }}>
-                                {managing && (
-                                    <>
-                                        {profileInfo.offering.includes(
-                                            badge._id
-                                        ) || conceptBadge ? (
-                                            <Tooltip
-                                                className={`like-button-badge`}
-                                                title={`Remove from Offering`}
-                                            >
-                                                <FontAwesomeIcon
-                                                    // style={{ fontSize: 30 }}
-                                                    icon={faSquareMinus}
-                                                    onClick={async (event) => {
-                                                        event.stopPropagation();
-
-                                                        try {
-                                                            const data = {
-                                                                badgeId:
-                                                                    badge._id,
-                                                            };
-
-                                                            // console.log(data);
-
-                                                            if (conceptBadge) {
-                                                                const error =
-                                                                    await signAndSubmitPrivateApiTxn(
-                                                                        '/badges/removeConcept',
-                                                                        data
-                                                                    );
-                                                                console.log(
-                                                                    error
-                                                                );
-                                                            } else {
-                                                                const error =
-                                                                    await signAndSubmitPrivateApiTxn(
-                                                                        '/badges/removeOffering',
-                                                                        data
-                                                                    );
-                                                                console.log(
-                                                                    error
-                                                                );
-                                                            }
-                                                        } catch (err) {
-                                                            // setTxnSubmitted(false);
-                                                            // setTransactionIsLoading(false);
-                                                        }
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        ) : (
-                                            <Tooltip
-                                                className={`like-button-badge`}
-                                                title={`Add to Offering`}
-                                            >
-                                                <FontAwesomeIcon
-                                                    // style={{ fontSize: 30 }}
-                                                    icon={faSquarePlus}
-                                                    onClick={async (event) => {
-                                                        event.stopPropagation();
-
-                                                        try {
-                                                            const data = {
-                                                                badgeId:
-                                                                    badge._id,
-                                                            };
-
-                                                            const error =
-                                                                await signAndSubmitPrivateApiTxn(
-                                                                    '/badges/addOffering',
-                                                                    data
-                                                                );
-                                                            console.log(error);
-                                                        } catch (err) {
-                                                            // setTxnSubmitted(false);
-                                                            // setTransactionIsLoading(false);
-                                                        }
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        )}
-                                    </>
-                                )}
-                                {/* {badge.manager === `${chain}:${address}` &&
-                                    !offeredBadge &&
-                                    !conceptBadge && (
-                                        <>
-                                            {!profileInfo.offering.includes(
-                                                badge._id
-                                            ) ? (
-                                                <Tooltip
-                                                    className={`like-button-badge`}
-                                                    title={`Add to Offering Badges`}
-                                                >
-                                                    <div style={{}}>
-                                                        <AppstoreAddOutlined />
-                                                    </div>
-                                                </Tooltip>
-                                            ) : (
-                                                <Tooltip
-                                                    className={`like-button-badge`}
-                                                    title={`Remove from Offering Badges`}
-                                                >
-                                                    <div style={{}}>
-                                                        <MinusOutlined />
-                                                    </div>
-                                                </Tooltip>
-                                            )}
-                                        </>
-                                    )} */}
+                                {managing && addRemoveIcon}
                             </div>
                             <div
                                 style={{
@@ -955,594 +313,22 @@ export function Badge({
                                     textAlign: 'right',
                                 }}
                             >
-                                {conceptBadge && (
-                                    <Tooltip
-                                        className={`like-button-badge`}
-                                        title={`This badge is just a concept.`}
-                                    >
-                                        <div style={{}}>
-                                            <FontAwesomeIcon icon={faCloud} />{' '}
-                                            {balance}
-                                        </div>
-                                    </Tooltip>
-                                )}
-                                {offeredBadge && !conceptBadge && (
-                                    <Tooltip
-                                        className={`like-button-badge`}
-                                        title={`This badge has already been created.`}
-                                    >
-                                        <div style={{}}>
-                                            <FontAwesomeIcon
-                                                icon={faSnowflake}
-                                            />
-                                        </div>
-                                    </Tooltip>
-                                )}
-                                {!offeredBadge && !conceptBadge && (
-                                    <>
-                                        {' '}
-                                        {profileInfo.likes.includes(
-                                            badge._id
-                                        ) ? (
-                                            <Tooltip
-                                                className={`like-button-badge`}
-                                                title="Unlike"
-                                            >
-                                                <HeartFilled
-                                                    onClick={async (event) => {
-                                                        event.stopPropagation();
-
-                                                        try {
-                                                            const data = {
-                                                                badgeId:
-                                                                    badge._id,
-                                                            };
-
-                                                            const error =
-                                                                await signAndSubmitPrivateApiTxn(
-                                                                    '/badges/unlike',
-                                                                    data
-                                                                );
-                                                            console.log(error);
-                                                        } catch (err) {
-                                                            // setTxnSubmitted(false);
-                                                            // setTransactionIsLoading(false);
-                                                        }
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        ) : (
-                                            <Tooltip
-                                                className={`like-button-badge`}
-                                                title="Like"
-                                            >
-                                                <HeartOutlined
-                                                    onClick={async (event) => {
-                                                        event.stopPropagation();
-
-                                                        try {
-                                                            const data = {
-                                                                badgeId:
-                                                                    badge._id,
-                                                            };
-
-                                                            const error =
-                                                                await signAndSubmitPrivateApiTxn(
-                                                                    '/badges/like',
-                                                                    data
-                                                                );
-                                                            console.log(error);
-
-                                                            // setTransactionIsLoading(false);
-                                                        } catch (err) {
-                                                            // setTxnSubmitted(false);
-                                                            // setTransactionIsLoading(false);
-                                                        }
-                                                    }}
-                                                />
-                                            </Tooltip>
-                                        )}
-                                    </>
-                                )}
+                                {rightMostIcon}
                             </div>
-
-                            {/* <br />
-                            <div>Creator </div>
-                            <Address
-                                address={badge.metadata.creator.split(':')[1]}
-                                fontColor="white"
-                                fontSize={15}
-                                showTooltip
-                            />
-                            <br />
-                            <div>Manager </div>
-                            <Address
-                                address={badge.metadata.creator.split(':')[1]}
-                                fontColor="white"
-                                fontSize={15}
-                                showTooltip
-                            /> */}
                         </div>
                     }
                 />
             </Card>
 
-            <Drawer
-                size="large"
-                headerStyle={{
-                    paddingLeft: '12px',
-                    paddingRight: '0px',
-                    paddingTop: '0px',
-                    paddingBottom: '0px',
-                    borderBottom: '0px',
-                    backgroundColor: '#001529',
-                    color: 'white',
-                }}
-                title={
-                    <Tabs
-                        tabInfo={[
-                            { key: 'overview', content: 'Overview' },
-                            { key: 'actions', content: 'Actions' },
-                            { key: 'owners', content: 'Owners' },
-                            { key: 'activity', content: 'Activity' },
-                        ]}
-                        setTab={setTab}
-                        widthPerTab={undefined}
-                        theme="dark"
-                    />
-                }
-                closeIcon={<CloseOutlined style={{ color: 'white' }} />}
-                placement={'bottom'}
-                visible={modalIsVisible}
-                key={'bottom'}
-                onClose={() => setModalIsVisible(false)}
-                bodyStyle={{
-                    paddingTop: 8,
-                    fontSize: 20,
-                    backgroundColor: '#001529',
-                    color: 'white',
-                }}
-            >
-                {tab === 'overview' && (
-                    <>
-                        {conceptBadge && (
-                            <Alert
-                                style={{ textAlign: 'center' }}
-                                message="Warning: This badge is a concept badge and is not currently on the blockchain."
-                                description="Concept badges are created by users to showcase a badge they plan to create in the future. There may be differences between the conceptual version and the final on-chain version."
-                                type="warning"
-                                closable
-                            />
-                        )}
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            {badge.metadata.image ? (
-                                <Avatar
-                                    style={{
-                                        verticalAlign: 'middle',
-                                        border: '3px solid',
-                                        borderColor: badge.metadata.color,
-                                        margin: 4,
-                                        backgroundColor: 'white',
-                                    }}
-                                    src={badge.metadata.image}
-                                    size={200}
-                                />
-                            ) : (
-                                <Avatar
-                                    style={{
-                                        backgroundColor: badge.metadata.color,
-                                        verticalAlign: 'middle',
-                                        border: '3px solid black',
-                                        margin: 4,
-                                    }}
-                                    size={200}
-                                ></Avatar>
-                            )}
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <Text
-                                strong
-                                style={{ fontSize: 30, color: 'white' }}
-                            >
-                                {badge.metadata.name}
-                            </Text>
-                        </div>
-                        {!hidePermissions && (
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    paddingTop: 8,
-                                }}
-                            >
-                                <Tooltip
-                                    title={`Valid ${
-                                        badge.metadata.validFrom.end !==
-                                        MAX_DATE_TIMESTAMP
-                                            ? 'Until ' +
-                                              new Date(
-                                                  badge.metadata.validFrom.end
-                                              ).toLocaleDateString()
-                                            : 'Forever'
-                                    }`}
-                                >
-                                    {Date.now() <=
-                                    badge.metadata.validFrom.end ? (
-                                        <CheckCircleFilled
-                                            style={{
-                                                fontSize: 30,
-                                                color: 'green',
-                                            }}
-                                        />
-                                    ) : (
-                                        <WarningFilled
-                                            style={{
-                                                fontSize: 30,
-                                                color: 'red',
-                                            }}
-                                        />
-                                    )}
-                                </Tooltip>
-                                <Divider type="vertical" />
-                                <Tooltip
-                                    title={`${
-                                        badge.permissions.canMintMore
-                                            ? `Supply (${badge.supply}) is Not Locked`
-                                            : `Supply (${badge.supply}) is Locked`
-                                    }`}
-                                >
-                                    {badge.permissions.canMintMore ? (
-                                        <UnlockFilled
-                                            style={{ fontSize: 30 }}
-                                        />
-                                    ) : (
-                                        <LockFilled style={{ fontSize: 30 }} />
-                                    )}
-                                </Tooltip>
-                                <Divider type="vertical" />
-                                <Tooltip
-                                    title={`${
-                                        badge.permissions.canOwnerTransfer
-                                            ? 'Transferable'
-                                            : 'Non-Transferable'
-                                    }`}
-                                >
-                                    {badge.permissions.canOwnerTransfer ? (
-                                        <SwapOutlined
-                                            style={{ fontSize: 30 }}
-                                        />
-                                    ) : (
-                                        <FontAwesomeIcon
-                                            style={{ fontSize: 30 }}
-                                            icon={faSnowflake}
-                                        />
-                                    )}
-                                </Tooltip>
-                                <Divider type="vertical" />
-                                <Tooltip
-                                    title={`${
-                                        badge.permissions.canRevoke
-                                            ? 'Revocable by Manager'
-                                            : 'Non-Revocable'
-                                    }`}
-                                >
-                                    {badge.permissions.canRevoke ? (
-                                        <RollbackOutlined
-                                            style={{ fontSize: 30 }}
-                                        />
-                                    ) : (
-                                        <FontAwesomeIcon
-                                            style={{ fontSize: 30 }}
-                                            icon={faUserLock}
-                                        />
-                                    )}
-                                </Tooltip>
-                            </div>
-                        )}
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                paddingTop: 4,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div style={{ textAlign: 'center' }}>
-                                    <b>Manager</b>
-                                </div>
-                                <div>
-                                    <Address
-                                        address={badge.manager.split(':')[1]}
-                                        fontColor="lightgrey"
-                                        fontSize={18}
-                                        showTooltip
-                                    />
-                                </div>
-                            </div>
-                            <Divider type="vertical" />
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                <div style={{ textAlign: 'center' }}>
-                                    <b>Creator</b>
-                                </div>
-                                <div>
-                                    <Address
-                                        address={
-                                            badge.metadata.creator.split(':')[1]
-                                        }
-                                        fontColor="lightgrey"
-                                        fontSize={18}
-                                        showTooltip
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                paddingTop: 4,
-                            }}
-                        >
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}
-                            >
-                                {/* <div style={{ textAlign: 'center' }}>
-                                    <b>
-                                        You own {balance ? balance : 0} out of a
-                                        total supply of {badge.supply}
-                                    </b>
-                                </div> */}
-                            </div>
-                        </div>
-                        {badge.metadata.url && (
-                            <>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        marginTop: 8,
-                                    }}
-                                >
-                                    <a
-                                        href={badge.metadata.url}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {badge.metadata.url}
-                                    </a>
-                                    <br />
-                                </div>
-                            </>
-                        )}
-                        {badge.metadata.description && (
-                            <>
-                                <Divider style={{ margin: '4px 0px' }} />
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {badge.metadata.description}
-                                    <br />
-                                </div>
-                            </>
-                        )}
-                        {/* {balance != undefined && (
-                    <>  
-                        <b>Amount: </b>
-                        {balance}
-                        <br />
-                    </>
-                )} */}
-                        {/* <b>Expires: </b>
-                {badge.metadata.validFrom.end != MAX_DATE_TIMESTAMP
-                    ? new Date(
-                          badge.metadata.validFrom.end
-                      ).toLocaleDateString()
-                    : 'Never'}
-                <br /> */}
-                        {/* {badge.metadata.type != undefined && (
-                    <>
-                        <b>Type: </b>
-                        {badge.metadata.type == 0
-                            ? 'Public Badge'
-                            : 'Update his when more types are added'}
-                        <br />
-                    </>
-                )} */}
-                        {/* {badge.metadata.category && (
-                    <>
-                        <b>Category: </b>
-                        {badge.metadata.category}
-                        <br />
-                    </>
-                )} */}
-                        {/* {badge.metadata.url && <></>} */}
-                        {/* <b>Editable:</b> No
-                <br />
-                {!hidePermissions && (
-                    <>
-                        <b>Revocable:</b>{' '}
-                        {badge.permissions.canRevoke
-                            ? 'Yes, owner can revoke.'
-                            : 'No, this badge is permanently in your account.'}
-                        <br />
-                        <b>Mintable:</b>{' '}
-                        {badge.permissions.canMintMore
-                            ? 'Yes, owner can still mint more.'
-                            : 'No, this badge has a locked supply forever.'}
-                        <br />
-                        <b>Transferable:</b>{' '}
-                        {badge.permissions.canOwnerTransfer
-                            ? 'Yes, this badge can be transferred.'
-                            : 'No, this badge cannot be transferred.'}
-                        <br />
-                    </>
-                )} */}
-                    </>
-                )}
-                {tab === 'actions' && (
-                    <>
-                        <div
-                            style={{
-                                width: '100%',
-                                fontSize: 20,
-                            }}
-                        >
-                            {!hidePermissions && !conceptBadge && (
-                                <>
-                                    {permissionsData.length > 0 ? (
-                                        <>
-                                            <List
-                                                itemLayout="horizontal"
-                                                dataSource={permissionsData}
-                                                renderItem={(item) => (
-                                                    <>
-                                                        <div
-                                                            className="action-item"
-                                                            onClick={() => {
-                                                                item.showModal();
-                                                            }}
-                                                            style={
-                                                                {
-                                                                    // backgroundColor:
-                                                                    //     item.visible
-                                                                    //         ? 'lightgrey'
-                                                                    //         : undefined,
-                                                                }
-                                                            }
-                                                        >
-                                                            <List.Item
-                                                                actions={[
-                                                                    <button
-                                                                        className="link-button"
-                                                                        key="list-loadmore-edit"
-                                                                    >
-                                                                        {
-                                                                            item.popover
-                                                                        }
-                                                                    </button>,
-                                                                ]}
-                                                                style={{
-                                                                    paddingLeft: 8,
-                                                                }}
-                                                            >
-                                                                <Skeleton
-                                                                    avatar
-                                                                    title={
-                                                                        false
-                                                                    }
-                                                                    loading={
-                                                                        item.loading
-                                                                    }
-                                                                    active
-                                                                >
-                                                                    <List.Item.Meta
-                                                                        avatar={
-                                                                            <Avatar
-                                                                                style={{
-                                                                                    backgroundColor:
-                                                                                        'black',
-                                                                                }}
-                                                                                icon={
-                                                                                    item.icon
-                                                                                }
-                                                                            />
-                                                                        }
-                                                                        title={
-                                                                            item.title
-                                                                        }
-                                                                        description={
-                                                                            item.description
-                                                                        }
-                                                                    />
-                                                                </Skeleton>
-                                                            </List.Item>
-                                                        </div>
-
-                                                        <div>
-                                                            {item.content}
-                                                        </div>
-                                                        <Divider
-                                                            style={{
-                                                                color: 'black',
-                                                                backgroundColor:
-                                                                    'black',
-                                                                margin: 0,
-                                                            }}
-                                                        />
-                                                    </>
-                                                )}
-                                            />
-                                        </>
-                                    ) : (
-                                        <Empty
-                                            style={{ color: 'white' }}
-                                            description="There are no actions you can take. To perform an action, you must either own this badge or be the badge manager."
-                                            image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                        />
-                                    )}
-                                </>
-                            )}
-                            {hidePermissions ||
-                                (conceptBadge && (
-                                    <Empty
-                                        style={{ color: 'white' }}
-                                        description="This is just a badge preview, so there are no actions you can take."
-                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    />
-                                ))}
-                        </div>
-                    </>
-                )}
-                {tab === 'activity' && (
-                    <Empty
-                        style={{ color: 'white' }}
-                        description="This feature is coming soon..."
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                )}
-
-                {tab === 'owners' && (
-                    <Empty
-                        style={{ color: 'white' }}
-                        description="This feature is coming soon..."
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                )}
-            </Drawer>
+            {!hideModal && (
+                <BadgeModal
+                    modalIsVisible={modalIsVisible}
+                    setModalIsVisible={setModalIsVisible}
+                    conceptBadge={conceptBadge}
+                    badge={badge}
+                    hidePermissions={hidePermissions}
+                />
+            )}
         </>
     );
 }

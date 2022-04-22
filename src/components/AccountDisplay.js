@@ -6,14 +6,13 @@ import {
     ShareAltOutlined,
     TwitterOutlined,
 } from '@ant-design/icons';
-import { WEBSITE_HOSTNAME } from '../constants';
-
-const React = require('react');
-const { Layout, Avatar, message, Tooltip } = require('antd');
+import { SECONDARY_TEXT, WEBSITE_HOSTNAME } from '../constants';
+import React from 'react';
+import { Layout, Avatar, message, Tooltip } from 'antd';
 
 const { Content } = Layout;
 
-export function ShowingResultsFor({
+export function AccountDisplay({
     address,
     chain,
     userName,
@@ -26,30 +25,22 @@ export function ShowingResultsFor({
     bannerColorOne,
     bannerColorTwo,
 }) {
+    const profilePicSrc = profilePic ? (
+        profilePic
+    ) : (
+        <Blockies seed={address.toLowerCase()} size={40} />
+    );
+
     return (
-        <div
-            style={
-                {
-                    // background: 'linear-gradient(0deg, #001529 , #3e83f8 75%)',
-                }
-            }
-        >
+        <div>
             <div style={{ position: 'absolute', right: 10, top: 74 }}>
                 {twitter && (
                     <a href={twitter} target="_blank" rel="noreferrer">
                         <Tooltip title="Twitter" placement="bottom">
                             <Avatar
-                                style={{
-                                    marginBottom: 1,
-                                    cursor: 'pointer',
-                                    fontSize: 20,
-                                    padding: 0,
-                                    margin: 5,
-                                    alignItems: 'center',
-                                }}
                                 size="large"
                                 onClick={() => {}}
-                                className="screen-button"
+                                className="screen-button account-socials-button"
                             >
                                 <TwitterOutlined />
                             </Avatar>
@@ -60,17 +51,9 @@ export function ShowingResultsFor({
                     <a href={instagram} target="_blank" rel="noreferrer">
                         <Tooltip title="Instagram" placement="bottom">
                             <Avatar
-                                style={{
-                                    marginBottom: 1,
-                                    cursor: 'pointer',
-                                    fontSize: 20,
-                                    padding: 0,
-                                    margin: 5,
-                                    alignItems: 'center',
-                                }}
                                 size="large"
                                 onClick={() => {}}
-                                className="screen-button"
+                                className="screen-button account-socials-button"
                             >
                                 <InstagramOutlined />
                             </Avatar>
@@ -81,17 +64,9 @@ export function ShowingResultsFor({
                     <a href={website} target="_blank" rel="noreferrer">
                         <Tooltip title="Website" placement="bottom">
                             <Avatar
-                                style={{
-                                    marginBottom: 1,
-                                    cursor: 'pointer',
-                                    fontSize: 20,
-                                    padding: 0,
-                                    margin: 5,
-                                    alignItems: 'center',
-                                }}
                                 size="large"
                                 onClick={() => {}}
-                                className="screen-button"
+                                className="screen-button account-socials-button"
                             >
                                 <LinkOutlined />
                             </Avatar>
@@ -100,14 +75,6 @@ export function ShowingResultsFor({
                 )}
                 <Tooltip title="Share (Copy Link)" placement="bottom">
                     <Avatar
-                        style={{
-                            marginBottom: 1,
-                            cursor: 'pointer',
-                            fontSize: 20,
-                            padding: 0,
-                            margin: 5,
-                            alignItems: 'center',
-                        }}
                         size="large"
                         onClick={() => {
                             navigator.clipboard.writeText(
@@ -115,7 +82,7 @@ export function ShowingResultsFor({
                             );
                             message.success('Copied to clipboard!');
                         }}
-                        className="screen-button"
+                        className="screen-button account-socials-button"
                     >
                         <ShareAltOutlined />
                     </Avatar>
@@ -143,47 +110,24 @@ export function ShowingResultsFor({
                             marginTop: 20,
                         }}
                     >
-                        <Avatar
-                            size={150}
-                            src={
-                                profilePic ? (
-                                    profilePic
-                                ) : (
-                                    <Blockies
-                                        seed={address.toLowerCase()}
-                                        size={40}
-                                    />
-                                )
-                            }
-                        />
+                        <Avatar size={150} src={profilePicSrc} />
                         {!userName && (
-                            <div style={{ marginTop: 4 }}>
-                                {
-                                    <Address
-                                        address={address}
-                                        fontSize={30}
-                                        showTooltip
-                                    />
-                                }
-                            </div>
+                            <Address
+                                style={{ marginTop: 4 }}
+                                address={address}
+                                fontSize={30}
+                                showTooltip
+                            />
                         )}
                         {userName && (
                             <>
-                                <div
-                                    style={{
-                                        fontSize: 30,
-                                    }}
-                                >
-                                    {userName}
-                                </div>
+                                <div style={{ fontSize: 30 }}>{userName}</div>
                                 <div>
-                                    {
-                                        <Address
-                                            address={address}
-                                            fontSize={20}
-                                            showTooltip
-                                        />
-                                    }
+                                    <Address
+                                        address={address}
+                                        fontSize={20}
+                                        showTooltip
+                                    />
                                 </div>
                             </>
                         )}
@@ -191,7 +135,7 @@ export function ShowingResultsFor({
                             <div
                                 style={{
                                     fontSize: 18,
-                                    color: 'lightgray',
+                                    color: SECONDARY_TEXT,
                                 }}
                             >
                                 {bio}

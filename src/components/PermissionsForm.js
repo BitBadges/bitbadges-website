@@ -1,36 +1,61 @@
-import { CaretLeftFilled, CaretRightFilled } from '@ant-design/icons';
-
-const { Typography, Form, Button, Switch } = require('antd');
-
-const React = require('react');
-const { useState } = require('react');
+import { Typography, Form, Button, Switch } from 'antd';
+import React from 'react';
+import { useState } from 'react';
+import { PRIMARY_TEXT } from '../constants';
+import { FormNavigationHeader } from './FormNavigationHeader';
 
 const { Text } = Typography;
 
+const FINAL_STEP_NUM = 4;
+const FIRST_STEP_NUM = 1;
+const CURR_TIMELINE_STEP_NUM = 2;
+
 export function PermissionsForm({
-    setCurrStepNumber,
+    setTimelineStepNum,
     setPermissions,
     recipients,
 }) {
     const [canMintMore, setCanMintMore] = useState(true);
     const [canRevoke, setCanRevoke] = useState(true);
     const [canOwnerTransfer, setCanOwnerTransfer] = useState(true);
-    const [stepNum, setStepNum] = useState(1);
+    const [permissionsStepNum, setPermissionsStepNum] = useState(1);
 
     const incrementStep = () => {
-        if (stepNum === 4) {
-            setCurrStepNumber(3);
+        if (permissionsStepNum === FINAL_STEP_NUM) {
+            setTimelineStepNum(CURR_TIMELINE_STEP_NUM + 1);
         } else {
-            setStepNum(stepNum + 1);
+            setPermissionsStepNum(permissionsStepNum + 1);
         }
     };
 
     const decrementStep = () => {
-        if (stepNum === 1) {
-            setCurrStepNumber(1);
+        if (permissionsStepNum === FIRST_STEP_NUM) {
+            setTimelineStepNum(CURR_TIMELINE_STEP_NUM - 1);
         } else {
-            setStepNum(stepNum - 1);
+            setPermissionsStepNum(permissionsStepNum - 1);
         }
+    };
+
+    const getTitleElement = (title) => {
+        return (
+            <div
+                style={{
+                    justifyContent: 'center',
+                    display: 'flex',
+                }}
+            >
+                <Typography.Text
+                    style={{
+                        color: PRIMARY_TEXT,
+                        fontSize: 20,
+                        marginBottom: 10,
+                    }}
+                    strong
+                >
+                    {title}
+                </Typography.Text>
+            </div>
+        );
     };
 
     let supply = 0;
@@ -41,265 +66,122 @@ export function PermissionsForm({
     return (
         <div>
             <Form.Provider>
-                <div
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <button
-                        // className="link-button"
-                        style={{
-                            // position: 'absolute',
-                            // left: 5,
-                            backgroundColor: 'inherit',
-                            color: '#ddd',
-                            fontSize: 17,
-                        }}
-                        onClick={() => decrementStep()}
-                        className="opacity link-button"
-                    >
-                        <CaretLeftFilled size={40} />
-                        Back
-                    </button>
-                    <Typography.Text
-                        strong
-                        style={{
-                            color: 'white',
-                            fontSize: 20,
-                            marginLeft: 50,
-                            marginRight: 50,
-                        }}
-                        align="center"
-                    >
-                        {stepNum} / 4
-                    </Typography.Text>
-
-                    <button
-                        // className="link-button"
-                        style={{
-                            // position: 'absolute',
-                            // left: 5,
-                            backgroundColor: 'inherit',
-                            color: '#ddd',
-                            fontSize: 17,
-                        }}
-                        onClick={() => incrementStep()}
-                        className="opacity link-button"
-                        disabled={stepNum === 4}
-                    >
-                        Next
-                        <CaretRightFilled size={40} />
-                    </button>
-                </div>
+                <FormNavigationHeader
+                    incrementStep={incrementStep}
+                    decrementStep={decrementStep}
+                    stepNum={permissionsStepNum}
+                    nextButtonDisabled={permissionsStepNum === FINAL_STEP_NUM}
+                    finalStepNumber={4}
+                />
                 <Form layout="horizontal">
-                    {stepNum === 1 && (
+                    {permissionsStepNum === 1 && (
                         <>
+                            {getTitleElement('Can Mint More?')}
                             <div
                                 style={{
-                                    justifyContent: 'center',
+                                    width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
+                                    fontSize: 100,
                                 }}
                             >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
+                                <Switch
+                                    checked={canMintMore}
+                                    onChange={() => {
+                                        setCanMintMore(!canMintMore);
                                     }}
-                                    strong
-                                >
-                                    Can Mint More?
-                                </Typography.Text>
+                                />
                             </div>
-                            <div style={{}}>
-                                <div
-                                    // label={<Text strong>Can Mint More?</Text>}
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        fontSize: 100,
-                                    }}
-                                >
-                                    {
-                                        <Switch
-                                            checked={canMintMore}
-                                            onChange={() => {
-                                                setCanMintMore(!canMintMore);
-                                            }}
-                                        />
-                                    }
-                                </div>
-                                <div
-                                    style={{
-                                        marginTop: 10,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <Text style={{ color: 'white' }}>
-                                        {canMintMore &&
-                                            'Yes: You will be able to mint more of this badge in the future. You can lock the supply at anytime.'}
-                                        {!canMintMore &&
-                                            `No: This badge's supply will be locked forever at ${supply} after the initial ${supply} mints to ${recipients.length} recipients specified in the metadata section.`}
-                                    </Text>
-                                </div>
+                            <div
+                                style={{
+                                    marginTop: 10,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Text style={{ color: 'white' }}>
+                                    {canMintMore &&
+                                        'Yes: You will be able to mint more of this badge in the future. You can lock the supply at anytime.'}
+                                    {!canMintMore &&
+                                        `No: This badge's supply will be locked forever at ${supply} after the initial ${supply} mints to ${recipients.length} recipients specified in the metadata section.`}
+                                </Text>
                             </div>
                         </>
                     )}
 
-                    {stepNum === 2 && (
+                    {permissionsStepNum === 2 && (
                         <>
+                            {getTitleElement('Can Revoke?')}
                             <div
+                                // label={<Text strong>Can Mint More?</Text>}
                                 style={{
-                                    justifyContent: 'center',
+                                    width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
+                                    fontSize: 100,
                                 }}
                             >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
+                                <Switch
+                                    checked={canRevoke}
+                                    onChange={() => {
+                                        setCanRevoke(!canRevoke);
                                     }}
-                                    strong
-                                >
-                                    Can Revoke?
-                                </Typography.Text>
+                                />
                             </div>
-                            <div style={{}}>
-                                <div
-                                    // label={<Text strong>Can Mint More?</Text>}
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        fontSize: 100,
-                                    }}
-                                >
-                                    {
-                                        <Switch
-                                            checked={canRevoke}
-                                            onChange={() => {
-                                                setCanRevoke(!canRevoke);
-                                            }}
-                                        />
-                                    }
-                                </div>
-                                <div
-                                    style={{
-                                        marginTop: 10,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <Text style={{ color: 'white' }}>
-                                        {canRevoke &&
-                                            'Yes: You will be able to revoke this badge from another user at anytime.'}
-                                        {!canRevoke &&
-                                            `No: You will not be able to revoke this badge. Once it is issued and accepted, it will live forever in their account.`}
-                                    </Text>
-                                </div>
+                            <div
+                                style={{
+                                    marginTop: 10,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Text style={{ color: 'white' }}>
+                                    {canRevoke &&
+                                        'Yes: You will be able to revoke this badge from another user at anytime.'}
+                                    {!canRevoke &&
+                                        `No: You will not be able to revoke this badge. Once it is issued and accepted, it will live forever in their account.`}
+                                </Text>
                             </div>
                         </>
                     )}
 
-                    {stepNum === 3 && (
+                    {permissionsStepNum === 3 && (
                         <>
+                            {getTitleElement('Transferable?')}
                             <div
                                 style={{
-                                    justifyContent: 'center',
+                                    width: '100%',
                                     display: 'flex',
+                                    justifyContent: 'center',
+                                    fontSize: 100,
                                 }}
                             >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
+                                <Switch
+                                    checked={canOwnerTransfer}
+                                    onChange={() => {
+                                        setCanOwnerTransfer(!canOwnerTransfer);
                                     }}
-                                    strong
-                                >
-                                    Transferable?
-                                </Typography.Text>
+                                />
                             </div>
-                            <div style={{}}>
-                                <div
-                                    // label={<Text strong>Can Mint More?</Text>}
-                                    style={{
-                                        width: '100%',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        fontSize: 100,
-                                    }}
-                                >
-                                    {
-                                        <Switch
-                                            checked={canOwnerTransfer}
-                                            onChange={() => {
-                                                setCanOwnerTransfer(
-                                                    !canOwnerTransfer
-                                                );
-                                            }}
-                                        />
-                                    }
-                                </div>
-                                <div
-                                    style={{
-                                        marginTop: 10,
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <Text style={{ color: 'white' }}>
-                                        {canOwnerTransfer &&
-                                            'Yes: Badge owners will be able to transfer this asset at anytime, including burning.'}
-                                        {!canOwnerTransfer &&
-                                            `No: Badge owners will not have transfer or burn permissions.`}{' '}
-                                    </Text>
-                                </div>
+                            <div
+                                style={{
+                                    marginTop: 10,
+                                    textAlign: 'center',
+                                }}
+                            >
+                                <Text style={{ color: 'white' }}>
+                                    {canOwnerTransfer &&
+                                        'Yes: Badge owners will be able to transfer this asset at anytime, including burning.'}
+                                    {!canOwnerTransfer &&
+                                        `No: Badge owners will not have transfer or burn permissions.`}{' '}
+                                </Text>
                             </div>
                         </>
                     )}
-                    {stepNum === 4 && (
+                    {permissionsStepNum === 4 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Confirm Permissions and Continue
-                                </Typography.Text>
-                            </div>
+                            {getTitleElement(
+                                'Confirm Permissions and Continue'
+                            )}
                             <>
-                                {/* <Form.Item
-                                    label={
-                                        <Text style={{ color: 'white' }} strong>
-                                            Expires?
-                                        </Text>
-                                    }
-                                >
-                                    {
-                                        <Switch
-                                            defaultChecked={expirationDate}
-                                            onChange={() => {
-                                                if (expirationDate) {
-                                                    hideExpirationDate();
-                                                } else {
-                                                    showExpirationDate();
-                                                }
-                                            }}
-                                        />
-                                    }
-                                </Form.Item> */}
                                 <div
                                     style={{
                                         justifyContent: 'center',
@@ -388,7 +270,7 @@ export function PermissionsForm({
                                         type="primary"
                                         style={{ width: '90%' }}
                                         onClick={() => {
-                                            setCurrStepNumber(3);
+                                            setTimelineStepNum(3);
                                             setPermissions({
                                                 canMintMore,
                                                 canRevoke,
@@ -402,38 +284,6 @@ export function PermissionsForm({
                             </>
                         </>
                     )}
-
-                    {/* <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Button
-                            type="primary"
-                            style={{ width: '48%' }}
-                            onClick={() => {
-                                setCurrStepNumber(3);
-                                setPermissions({
-                                    canMintMore,
-                                    canRevoke,
-                                    canOwnerTransfer,
-                                });
-                            }}
-                        >
-                            Confirm Data
-                        </Button>
-                        <Button
-                            style={{ width: '48%' }}
-                            onClick={async () => {
-                                setCurrStepNumber(1);
-                            }}
-                        >
-                            Go Back
-                        </Button>
-                    </div> */}
                 </Form>
             </Form.Provider>
         </div>

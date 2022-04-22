@@ -1,6 +1,8 @@
 import { MintTimeline } from '../components/MintTimeline';
-const React = require('react');
-const { Layout, Typography } = require('antd');
+import React from 'react';
+import { Layout } from 'antd';
+import { PRIMARY_BLUE, SECONDARY_BLUE } from '../constants';
+
 const { Content } = Layout;
 
 export function Mint() {
@@ -8,42 +10,12 @@ export function Mint() {
         <Layout>
             <Content
                 style={{
-                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
-                    // display: 'flex',
-                    // alignItems: 'center',
-                    minHeight: '30vh',
-                    padding: '2rem 0',
+                    background: `linear-gradient(0deg, ${SECONDARY_BLUE} 0,${PRIMARY_BLUE} 75%)`,
                     textAlign: 'center',
+                    minHeight: '100vh',
                 }}
             >
-                <div
-                    style={{
-                        padding: '20 1rem',
-                        width: '100%',
-                        marginRight: 'auto',
-                        marginLeft: 'auto',
-                    }}
-                >
-                    <div>
-                        <Typography.Text
-                            strong
-                            level={3}
-                            style={{
-                                color: 'white',
-                                fontFamily: "'Inter',sans-serif",
-                                fontSize: 50,
-                                // paddingBottom: '1rem',
-                                fontStyle: 'normal',
-                                lineHeight: '1.2',
-                                width: '100%',
-                                wordBreak: 'break-word',
-                                wordWrap: 'break-word',
-                            }}
-                        >
-                            Mint a Badge
-                        </Typography.Text>
-                    </div>
-                </div>
+                <div className="primary-text">Mint a Badge</div>
                 <div
                     style={{
                         marginLeft: '10vw',
@@ -52,7 +24,7 @@ export function Mint() {
                         paddingRight: '2vw',
                         paddingTop: '20px',
                         border: '5px solid black',
-                        background: '#001529',
+                        background: PRIMARY_BLUE,
                         minHeight: '60vh',
                     }}
                 >

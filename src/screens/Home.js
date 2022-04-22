@@ -1,517 +1,315 @@
 import React from 'react';
-import { Layout, Typography, Row, Col } from 'antd';
+import { Layout, Row, Col } from 'antd';
 import YoutubeEmbed from '../components/YouTubeEmbed';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '../components/Badge';
+import {
+    LINK_COLOR,
+    PRIMARY_BLUE,
+    PRIMARY_TEXT,
+    SAMPLE_BADGE,
+    SECONDARY_BLUE,
+    SECONDARY_TEXT,
+} from '../constants';
 
 const { Content } = Layout;
 
 export function Home() {
     const navigate = useNavigate();
-    const sampleBadge = {
-        metadata: {
-            name: 'Sample',
-            description: '',
-            image: 'https://bitbadges.web.app/img/icons/logo.png',
-            creator: 'ETH:0xe00dD9D317573f7B4868D8f2578C65544B153A27',
-            validFrom: {
-                start: 1649341503574,
-                end: 8640000000000000,
-            },
-            color: 'black',
-            type: 0,
-            category: 'BitBadge',
-            url: '',
-        },
-        permissions: {
-            canMintMore: true,
-            canRevoke: true,
-            canOwnerTransfer: true,
-        },
-        supply: 0,
-        manager: 'ETH:0xe00dD9D317573f7B4868D8f2578C65544B153A27',
-        _id: 'f729504ee514b7c2e9c5dbfae92da5493007cb558d44e236dd19aa934dc0254a',
-    };
 
     return (
         <>
             <Layout
                 style={{
-                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
+                    background: `linear-gradient(0deg, ${SECONDARY_BLUE} 0,${PRIMARY_BLUE} 75%)`,
+                    textAlign: 'center',
                 }}
             >
-                <Content
-                    style={{
-                        padding: '2rem 0',
-                        textAlign: 'center',
-                    }}
-                >
+                <Content>
                     <div
+                        className="primary-text"
                         style={{
-                            padding: '20 1rem',
-                            width: '100%',
-                            marginRight: 'auto',
-                            marginLeft: 'auto',
+                            fontSize: '4rem',
                         }}
                     >
-                        <div>
-                            <Typography.Text
-                                strong
-                                level={3}
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '4rem',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                BitBadges
-                            </Typography.Text>
-                        </div>
-                        <div style={{ marginBottom: '1rem' }}>
-                            <Typography.Text
-                                strong
-                                level={3}
-                                style={{
-                                    color: '#dedede',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '2rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                Issue Cross-Chain NFT Badges to Other Users!
-                            </Typography.Text>
-                        </div>
-                        <div>
-                            <img src="bitbadgeslogo.png" alt="BitBadges logo" />
-                        </div>
+                        BitBadges
+                    </div>
+                    <div
+                        className="primary-text"
+                        style={{
+                            marginBottom: '1rem',
+                            fontSize: '2rem',
+                            color: SECONDARY_TEXT,
+                        }}
+                    >
+                        Issue Cross-Chain NFT Badges to Other Users!
+                    </div>
+                    <div>
+                        <img src="bitbadgeslogo.png" alt="BitBadges logo" />
                     </div>
                 </Content>
                 <Content
                     style={{
-                        // background:
-                        //     'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-
-                        alignItems: 'center',
-                        // padding: '3rem 0',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
-                        justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                What is an NFT Badge?
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
-                        <Col xs={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '1.3em',
-                                    fontWeight: 'bold',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    // width: '100%',
-                                    marginLeft: '10%',
-                                    marginRight: '10%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                    marginBottom: '2rem',
-                                }}
-                            >
-                                An NFT (non-fungible token) is a digital token
-                                stored on the blockchain which can be provably
-                                owned by someone. An NFT badge is an NFT given
-                                to someone for doing something such as attending
-                                a concert, running a marathon, or graduating
-                                college! Check out some example badges below or
-                                an{' '}
-                                <button
-                                    className="link-button-nav"
-                                    style={{ color: '#0000EE' }}
-                                    onClick={() =>
-                                        navigate(
-                                            '/user/ETH:0xe00dD9D317573f7B4868D8f2578C65544B153A27'
-                                        )
-                                    }
-                                >
-                                    example portfolio here
-                                </button>
-                                .
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row
-                        justify="space-around"
-                        style={{
-                            width: '100%',
-                            marginBottom: '3rem',
-                        }}
-                    >
-                        {/* <Col span={24}> */}
                         <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            What is an NFT Badge?
+                        </div>
+                    </Row>
+                    <Row>
+                        <div
+                            className="primary-text"
                             style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                flexWrap: 'wrap',
+                                fontSize: '1.3em',
+                                marginLeft: '10%',
+                                marginRight: '10%',
                             }}
                         >
-                            {[0, 0, 0, 0, 0].map((elem) => {
-                                return <Badge badge={sampleBadge} size={100} />;
+                            An NFT (non-fungible token) is a digital token
+                            stored on the blockchain which can be provably owned
+                            by someone. An NFT badge is an NFT given to someone
+                            for doing something such as attending a concert,
+                            running a marathon, or graduating college! Check out
+                            some example badges below or an{' '}
+                            <button
+                                className="link-button-nav"
+                                style={{ color: LINK_COLOR }}
+                                onClick={() =>
+                                    navigate(
+                                        '/user/ETH:0xe00dD9D317573f7B4868D8f2578C65544B153A27'
+                                    )
+                                }
+                            >
+                                example portfolio here
+                            </button>
+                            .
+                        </div>
+                    </Row>
+                    <Row
+                        style={{
+                            marginBottom: '3rem',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <div className="badge-flex-display">
+                            {[0, 0, 0, 0, 0].map(() => {
+                                return (
+                                    <Badge badge={SAMPLE_BADGE} size={100} />
+                                );
                             })}
                         </div>
                     </Row>
                 </Content>
                 <Content
                     style={{
-                        // background:
-                        //     'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-
-                        alignItems: 'center',
-                        // padding: '3rem 0',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
-                        justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                What is BitBadges?
-                            </div>
-                        </Col>
+                        <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            What is BitBadges?
+                        </div>
                     </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
-                        <Col xs={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '1.3em',
-                                    fontWeight: 'bold',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    // width: '100%',
-                                    marginLeft: '10%',
-                                    marginRight: '10%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                    marginBottom: '2rem',
-                                }}
-                            >
-                                BitBadges runs on its own blockchain that was
-                                custom built to support NFT badges. We created
-                                this blockchain because we believed that a)
-                                existing blockchains aren't fully suited for
-                                badges to go mainstream, and b) we feel that
-                                badges should be considered separate from
-                                collectibles. Even though BitBadges is its own
-                                blockchain, it is <u>identity-preserving</u>.
-                                You can directly use your address from any
-                                supported chain with <u>no bridges</u>!
-                            </div>
-                        </Col>
+                    <Row>
+                        <div
+                            className="primary-text"
+                            style={{
+                                fontSize: '1.3em',
+                                marginLeft: '10%',
+                                marginRight: '10%',
+                                marginBottom: '2rem',
+                            }}
+                        >
+                            BitBadges runs on its own blockchain that was custom
+                            built to support NFT badges. We created this
+                            blockchain because we believed that a) existing
+                            blockchains aren't fully suited for badges to go
+                            mainstream, and b) we feel that badges should be
+                            considered separate from collectibles. Even though
+                            BitBadges is its own blockchain, it is{' '}
+                            <u>identity-preserving</u>. You can directly use
+                            your address from any supported chain with{' '}
+                            <u>no bridges</u>!
+                        </div>
                     </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
+                    <Row justify="space-around">
                         <Col xs={24} xl={7}>
-                            <div
-                                style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
-                                    <Col span={24}>
+                            <div className="home-page-info">
+                                <Row>
+                                    <div
+                                        style={{
+                                            padding: '0 0.3rem',
+                                            fontWeight: 'bolder',
+                                            fontSize: '1rem',
+                                            textAlign: 'left',
+                                        }}
+                                    >
                                         <div
                                             style={{
-                                                padding: '0 0.3rem',
+                                                fontSize: '1.8rem',
                                                 textAlign: 'center',
-                                                fontWeight: 'bolder',
                                             }}
                                         >
-                                            <div style={{ fontSize: '1.8rem' }}>
-                                                Blockchain
-                                            </div>
-                                            <div style={{ fontSize: '1rem' }}>
-                                                The BitBadges blockchain was
-                                                custom built with features that
-                                                existing Layer-1 NFT chains
-                                                don't support natively.
-                                                <br />
-                                                <br />
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    1) Scalability - We offer
-                                                    lightweight and hybrid
-                                                    options to create NFTs in
-                                                    addition to full smart
-                                                    contracts.
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    2) Cross-Chain - BitBadges
-                                                    offers the capability for an
-                                                    Ethereum user to issue a
-                                                    badge to a Bitcoin user, for
-                                                    example.
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    3) Hidden - These hidden
-                                                    badges are stored on the
-                                                    blockchain for lookup
-                                                    purposes only.
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    4) Privacy Preserving - Many
-                                                    use cases of BitBadges such
-                                                    as transcripts and diplomas
-                                                    contain sensitive
-                                                    information. BitBadges
-                                                    offers the option to fully
-                                                    encrypt the contents of a
-                                                    badge or use zero-knowledge
-                                                    proofs.
-                                                </div>
-                                            </div>
+                                            Blockchain
                                         </div>
-                                    </Col>
+                                        <div style={{ textAlign: 'center' }}>
+                                            The BitBadges blockchain was custom
+                                            built with features that existing
+                                            Layer-1 NFT chains don't support
+                                            natively.
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <div>
+                                            1) Scalability - We offer
+                                            lightweight and hybrid options to
+                                            create NFTs in addition to full
+                                            smart contracts.
+                                        </div>
+                                        <div>
+                                            2) Cross-Chain - BitBadges offers
+                                            the capability for an Ethereum user
+                                            to issue a badge to a Bitcoin user,
+                                            for example.
+                                        </div>
+                                        <div>
+                                            3) Hidden - These hidden badges are
+                                            stored on the blockchain for lookup
+                                            purposes only.
+                                        </div>
+                                        <div>
+                                            4) Privacy Preserving - Many use
+                                            cases of BitBadges such as
+                                            transcripts and diplomas contain
+                                            sensitive information. BitBadges
+                                            offers the option to fully encrypt
+                                            the contents of a badge or use
+                                            zero-knowledge proofs.
+                                        </div>
+                                    </div>
                                 </Row>
                             </div>
                         </Col>
                         <Col xs={24} xl={7}>
-                            <div
-                                style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
-                                }}
-                            >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
-                                    <Col span={24}>
+                            <div className="home-page-info">
+                                <Row>
+                                    <div
+                                        style={{
+                                            padding: '0 0.3rem',
+                                            fontWeight: 'bolder',
+                                            fontSize: '1rem',
+                                            textAlign: 'left',
+                                        }}
+                                    >
                                         <div
                                             style={{
-                                                padding: '0 0.3rem',
+                                                fontSize: '1.8rem',
                                                 textAlign: 'center',
-                                                fontWeight: 'bolder',
                                             }}
                                         >
-                                            <div style={{ fontSize: '1.8rem' }}>
-                                                Website
-                                            </div>
-                                            <div style={{ fontSize: '1rem' }}>
-                                                The BitBadges website is the
-                                                all-in-one user interface for
-                                                the BitBadges blockchain.
-                                                <br />
-                                                <br />
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    1) Browse - You can browse
-                                                    trending badges, recent
-                                                    activity, or other users'
-                                                    portfolios.
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    2) Mint - You can mint new
-                                                    badges via the Mint tab.
-                                                </div>
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    3) Display - Display your
-                                                    badges to the world! This
-                                                    site offers many profile
-                                                    customization options. Also,
-                                                    the 'Offering' tab on your
-                                                    portfolio is your place to
-                                                    show off the badges you are
-                                                    currently handing out!
-                                                </div>
-                                                <br />
-                                                <br />
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    In the future, we hope to
-                                                    add many new features to
-                                                    this site such as content
-                                                    hosting, integrations, and
-                                                    much more!
-                                                </div>
-                                            </div>
+                                            Website
                                         </div>
-                                    </Col>
+                                        <div style={{ textAlign: 'center' }}>
+                                            The BitBadges website is the
+                                            all-in-one user interface for the
+                                            BitBadges blockchain.
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <div>
+                                            1) Browse - You can browse trending
+                                            badges, recent activity, or other
+                                            users' portfolios.
+                                        </div>
+                                        <div>
+                                            2) Mint - You can mint new badges
+                                            via the Mint tab.
+                                        </div>
+                                        <div>
+                                            3) Display - Display your badges to
+                                            the world! This site offers many
+                                            profile customization options. Also,
+                                            the 'Offering' tab on your portfolio
+                                            is your place to show off the badges
+                                            you are currently handing out!
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <div>
+                                            In the future, we hope to add many
+                                            new features to this site such as
+                                            content hosting, integrations, and
+                                            much more!
+                                        </div>
+                                    </div>
                                 </Row>
                             </div>
                         </Col>
                         <Col xs={24} xl={7}>
-                            <div
-                                style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
-                                }}
-                                href="https://decentralizeduniversity.org/"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
-                                    <Col span={24}>
+                            <div className="home-page-info">
+                                <Row>
+                                    <div
+                                        style={{
+                                            padding: '0 0.3rem',
+                                            fontWeight: 'bolder',
+                                            fontSize: '1rem',
+                                            textAlign: 'left',
+                                        }}
+                                    >
                                         <div
                                             style={{
-                                                padding: '0 0.3rem',
+                                                fontSize: '1.8rem',
                                                 textAlign: 'center',
-                                                fontWeight: 'bolder',
                                             }}
                                         >
-                                            <div style={{ fontSize: '1.8rem' }}>
-                                                Developer Tools
-                                            </div>
-                                            <div style={{ fontSize: '1rem' }}>
-                                                We welcome any developers to
-                                                join the BitBadges ecosystem and
-                                                build on top of the BitBadges
-                                                blockchain. We offer a public
-                                                API and SDK which can be found{' '}
-                                                <a
-                                                    href="https://bitbadges.github.io/"
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    style={{ color: 'blue' }}
-                                                >
-                                                    here
-                                                </a>
-                                                .
-                                                <br />
-                                                <br />
-                                                <div
-                                                    style={{
-                                                        textAlign: 'left',
-                                                    }}
-                                                >
-                                                    There are many cool things
-                                                    planned for developers in
-                                                    the future such as grants,
-                                                    seed funds, and much more!
-                                                </div>
+                                            Developer Tools
+                                        </div>
+                                        <div style={{ textAlign: 'center' }}>
+                                            We welcome any developers to join
+                                            the BitBadges ecosystem and build on
+                                            top of the BitBadges blockchain. We
+                                            offer a public API and SDK which can
+                                            be found{' '}
+                                            <a
+                                                href="https://bitbadges.github.io/"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                style={{
+                                                    color: LINK_COLOR,
+                                                }}
+                                                className="link-button-nav"
+                                            >
+                                                here
+                                            </a>
+                                            .
+                                            <br />
+                                            <br />
+                                            <div>
+                                                There are many cool things
+                                                planned for developers in the
+                                                future such as grants, seed
+                                                funds, and much more!
                                             </div>
                                         </div>
-                                    </Col>
+                                    </div>
                                 </Row>
                             </div>
                         </Col>
@@ -519,69 +317,33 @@ export function Home() {
                 </Content>
                 <Content
                     style={{
-                        alignItems: 'center',
-                        // minHeight: '40vh',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
                         justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                Meet the Team
-                            </div>
-                        </Col>
+                        <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            Meet the Team
+                        </div>
                     </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
+                    <Row justify="space-around">
                         <Col xs={24} xl={11}>
                             <div
                                 style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
                                     alignItems: 'center',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
                                 }}
+                                className="home-page-info"
                             >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
-                                    <Col
-                                        span={4}
-                                        style={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                        }}
-                                    >
+                                <Row>
+                                    <Col span={4}>
                                         <img
                                             src="untitled-design-56.png"
                                             style={{
@@ -616,24 +378,11 @@ export function Home() {
                         <Col xs={24} xl={11}>
                             <div
                                 style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
                                     alignItems: 'center',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
                                 }}
+                                className="home-page-info"
                             >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
+                                <Row>
                                     <Col
                                         span={4}
                                         style={{
@@ -679,67 +428,36 @@ export function Home() {
                 </Content>
                 <Content
                     style={{
-                        alignItems: 'center',
-                        // minHeight: '40vh',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
-                        justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                Partner Projects
-                            </div>
-                        </Col>
+                        <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            Partner Projects
+                        </div>
                     </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
+                    <Row justify="space-around">
                         <Col xs={24} xl={11}>
                             <a
-                                className="scale"
+                                className="scale home-page-info"
                                 style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
                                     alignItems: 'center',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
                                     cursor: 'pointer',
+                                    color: PRIMARY_TEXT,
                                 }}
                                 href="https://decentralizeduniversity.org/"
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
+                                <Row justify="space-around">
                                     <Col
                                         span={6}
                                         style={{
@@ -752,7 +470,6 @@ export function Home() {
                                             style={{
                                                 maxWidth: '20vw',
                                                 width: '100%',
-                                                // height: '100%',
                                             }}
                                             alt="Decentralized University"
                                         />
@@ -785,30 +502,17 @@ export function Home() {
                         </Col>
                         <Col xs={24} xl={11}>
                             <a
-                                className="scale"
+                                className="scale home-page-info"
                                 style={{
-                                    borderRadius: '10px',
-                                    background: '#3e83f8',
-                                    boxShadow:
-                                        'inset 0 0 0 1px #ebebf0,0 15px 30px 0 rgba(0,0,0,0.15)',
-                                    height: '100%',
-                                    width: '100%',
-                                    padding: '1rem',
-                                    display: 'flex',
-                                    flexDirection: 'row',
                                     alignItems: 'center',
-                                    color: 'white',
-                                    justifyContent: 'space-between',
+                                    color: PRIMARY_TEXT,
                                     cursor: 'pointer',
                                 }}
                                 href="https://cloutcontracts.net/"
                                 target="_blank"
                                 rel="noreferrer"
                             >
-                                <Row
-                                    justify="space-around"
-                                    style={{ width: '100%' }}
-                                >
+                                <Row justify="space-around">
                                     <Col
                                         span={6}
                                         style={{
@@ -821,7 +525,6 @@ export function Home() {
                                             style={{
                                                 maxWidth: '20vw',
                                                 width: '100%',
-                                                // height: '100%',
                                             }}
                                             alt="CloutContracts"
                                         />
@@ -858,102 +561,54 @@ export function Home() {
                 </Content>
                 <Content
                     style={{
-                        // background:
-                        //     'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-
-                        alignItems: 'center',
-                        // padding: '3rem 0',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
-                        justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                Demo Videos
-                            </div>
-                        </Col>
+                        <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            Demo Videos
+                        </div>
                     </Row>
-                    <Row justify="space-around" style={{ width: '100%' }}>
+                    <Row justify="space-around">
                         <Col xs={24} xl={11}>
-                            <div>
-                                <YoutubeEmbed embedId={'kRnFKrDM-mA'} />
-                            </div>
+                            <YoutubeEmbed embedId={'kRnFKrDM-mA'} />
                         </Col>
                         <Col xs={24} xl={11}>
-                            <div>
-                                <YoutubeEmbed embedId={'vgL1BR4PZNU'} />
-                            </div>
+                            <YoutubeEmbed embedId={'vgL1BR4PZNU'} />
                         </Col>
                     </Row>
                 </Content>
                 <Content
                     style={{
-                        // background:
-                        //     'linear-gradient(0deg, #Ea1795 0,#3e83f8 100%)',
-
-                        alignItems: 'center',
-                        // padding: '3rem 0',
-                        textAlign: 'center',
-                        width: '100%',
                         padding: '1rem 5rem',
                     }}
                 >
                     <Row
-                        justify="space-around"
                         style={{
-                            width: '100%',
                             marginTop: '5rem',
                             marginBottom: '1rem',
                         }}
                     >
-                        <Col span={24}>
-                            <div
-                                style={{
-                                    color: 'white',
-                                    fontFamily: "'Inter',sans-serif",
-                                    fontSize: '3em',
-                                    fontWeight: 'bolder',
-                                    // paddingBottom: '1rem',
-                                    fontStyle: 'normal',
-                                    lineHeight: '1.2',
-                                    width: '100%',
-                                    wordBreak: 'break-word',
-                                    wordWrap: 'break-word',
-                                }}
-                            >
-                                Roadmap
-                            </div>
-                        </Col>
+                        <div
+                            className="primary-text"
+                            style={{ fontSize: '3rem' }}
+                        >
+                            Roadmap
+                        </div>
                     </Row>
                     <Row
                         justify="space-around"
                         style={{ width: '100%', fontSize: 30, color: 'white' }}
                     >
-                        <Col xs={24}>
-                            <div>Coming Soon....</div>
-                        </Col>
+                        <div>Coming Soon....</div>
                     </Row>
                 </Content>
             </Layout>

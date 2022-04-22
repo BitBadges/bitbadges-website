@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Menu, Dropdown, Popover } from 'antd';
 
-const React = require('react');
-const { Menu, Dropdown, Popover } = require('antd');
-
-export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
+export function Tabs({ setTab, tabInfo, fullWidth, theme, noSelectedKeys }) {
     const navigate = useNavigate();
 
+    const widthPerTab = fullWidth
+        ? `calc(100% / ${tabInfo.length})`
+        : undefined;
+        
     const tabs = tabInfo.map((tab) => {
         const menuItem = (
             <Menu.Item
@@ -19,7 +22,7 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
                 onClick={
                     tab.onClick
                         ? tab.onClick
-                        : ({ item, key, keyPath, domEvent }) => {
+                        : () => {
                               setTab(tab.key);
                           }
                 }
@@ -33,7 +36,7 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
                 <Dropdown
                     placement="bottom"
                     overlay={tab.subMenuOverlay ? tab.subMenuOverlay : <></>}
-                    onClick={({ item, key, keyPath, domEvent }) => {
+                    onClick={() => {
                         navigate(tab.key);
                     }}
                     trigger={tab.subMenuTrigger}
@@ -49,7 +52,6 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
     });
 
     return (
-        // <Content style={{ padding: '0' }}>
         <Menu
             style={{ display: 'flex' }}
             theme={theme ? theme : 'dark'}
@@ -60,6 +62,5 @@ export function Tabs({ setTab, tabInfo, widthPerTab, theme, noSelectedKeys }) {
         >
             {tabs}
         </Menu>
-        // </Content>
     );
 }

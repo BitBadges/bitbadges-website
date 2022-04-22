@@ -1,78 +1,53 @@
-import { Web3ModalButtons } from '../components/Web3ModalButtons';
+import { Web3ModalButtons } from '../components/Web3ModalConnectButton';
 import { getInjectedProviderName } from 'web3modal';
+import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Layout, Typography } from 'antd';
+import { PRIMARY_BLUE, PRIMARY_TEXT, SECONDARY_BLUE } from '../constants';
 
-const React = require('react');
-const { Layout, Typography } = require('antd');
 const { Content } = Layout;
 const { Text } = Typography;
-const { useSelector } = require('react-redux');
 
 function DisconnectedWrapper({ screenNode }) {
     const address = useSelector((state) => state.user.address);
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
+    const [disconnected, setDisconnected] = useState(
+        !web3Modal || !web3Modal.cachedProvider || !address
+    );
+
+    useEffect(() => {
+        setDisconnected(!web3Modal || !web3Modal.cachedProvider || !address);
+    }, [address, web3Modal]);
 
     return (
         <Layout>
-            <Content
-                style={{
-                    background: 'linear-gradient(0deg, #3e83f8 0,#001529 75%)',
-                    display: 'flex',
-                    // alignItems: 'center',
-                    minHeight: '100vh',
-                    padding: '0',
-                    textAlign: 'center',
-                }}
-            >
-                {!web3Modal || !web3Modal.cachedProvider || !address ? (
-                    <div
-                        style={{
-                            padding: '20 1rem',
-                            width: '100%',
-                            marginRight: 'auto',
-                            marginLeft: 'auto',
-                        }}
-                    >
-                        <Content
-                            style={{
-                                padding: '0',
-                                textAlign: 'center',
-                                color: 'white',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                            }}
-                        >
+            {disconnected ? (
+                <Content
+                    style={{
+                        background: `linear-gradient(0deg, ${SECONDARY_BLUE} 0, ${PRIMARY_BLUE} 75%)`,
+                        minHeight: '100vh',
+                    }}
+                >
+                    <div>
+                        <Content>
                             <Text
                                 strong
-                                style={{ fontSize: 36, color: 'white' }}
+                                style={{ fontSize: 36, color: PRIMARY_TEXT }}
                             >
                                 Welcome!
                             </Text>
                         </Content>
-                        <Content
-                            style={{
-                                padding: '0',
-                                textAlign: 'center',
-                                color: 'white',
-                                // display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                width: '100%',
-                            }}
-                        >
-                            <div>
-                                <Text
-                                    strong
-                                    style={{ fontSize: 20, color: 'white' }}
-                                >
-                                    {web3Modal &&
-                                    web3Modal.cachedProvider &&
-                                    !address
-                                        ? `You are connected to ${getInjectedProviderName()}. Please sign in or connect a new wallet to continue.`
-                                        : 'Please connect a wallet to continue.'}
-                                </Text>
-                            </div>
+                        <Content>
+                            <Text
+                                strong
+                                style={{ fontSize: 20, color: PRIMARY_TEXT }}
+                            >
+                                {web3Modal &&
+                                web3Modal.cachedProvider &&
+                                !address
+                                    ? `You are connected to ${getInjectedProviderName()}. Please sign in or connect a new wallet to continue.`
+                                    : 'Please connect a wallet to continue.'}
+                            </Text>
 
                             <div
                                 style={{
@@ -89,10 +64,10 @@ function DisconnectedWrapper({ screenNode }) {
 
                         <img src="./bitbadgeslogo.png" alt="BitBadges Logo" />
                     </div>
-                ) : (
-                    screenNode
-                )}
-            </Content>
+                </Content>
+            ) : (
+                screenNode
+            )}
         </Layout>
     );
 }

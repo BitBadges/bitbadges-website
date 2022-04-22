@@ -1,18 +1,11 @@
-const { UserAddOutlined } = require('@ant-design/icons');
-const {
-    Typography,
-    Form,
-    Avatar,
-    Button,
-    Input,
-    Select,
-    InputNumber,
-} = require('antd');
-const React = require('react');
+import { getAbbreviatedAddress } from '../utils/AddressUtils';
+import { UserAddOutlined } from '@ant-design/icons';
+import { Typography, Form, Button, Input, Select, InputNumber } from 'antd';
+import React from 'react';
+import web3 from 'web3';
+import { useState } from 'react';
+import { RecipientList } from './RecipientList';
 
-const web3 = require('web3');
-
-const { useState } = require('react');
 const { Text } = Typography;
 const { Option } = Select;
 
@@ -30,6 +23,17 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
         setVisible(false);
     };
 
+    const formatOwnersForRecipientList = () => {
+        const formattedOwners = [];
+        for (const owner of owners) {
+            formattedOwners.push({
+                to: owner.address,
+                amount: owner.amount,
+            });
+        }
+        return formattedOwners;
+    };
+
     return (
         <Form.Item
             label={
@@ -37,45 +41,18 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                     Owners
                 </Text>
             }
-            shouldUpdate={(prevValues, curValues) =>
-                prevValues.users !== curValues.users
-            }
         >
-            {owners.length > 0 && (
-                <>
-                    {owners.map((owner) => (
-                        <div
-                            style={{
-                                marginBottom: 3,
-                                color: 'white',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            <Avatar
-                                src={
-                                    'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png'
-                                }
-                                style={{ marginRight: 3 }}
-                            />
-                            {`${owner.address.substr(
-                                0,
-                                10
-                            )}...${owner.address.substr(-4)}  (x${
-                                owner.amount
-                            })`}
-                        </div>
-                    ))}
-                </>
-            )}
+            <RecipientList
+                recipients={formatOwnersForRecipientList()}
+                setRecipients={setOwners}
+            />
+
             <div>
                 {!visible && (
                     <Button
-                        style={{
-                            width: '100%',
-                            backgroundColor: '#001529',
-                            color: 'white',
-                        }}
+                        style={{ width: '100%' }}
                         size="small"
+                        className="screen-button"
                         onClick={showUserModal}
                     >
                         Add Owner
@@ -83,6 +60,7 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                     </Button>
                 )}
             </div>
+
             {visible && (
                 <>
                     <Input
@@ -105,6 +83,24 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                             />
                         }
                     />
+                    <div
+                        style={{
+                            marginTop: 10,
+                        }}
+                    >
+                        <RecipientList
+                            recipients={[
+                                {
+                                    to: `${addedUserChain}:${addedUserAddress}`,
+                                    amount: addedUserAmount,
+                                    reason: '',
+                                },
+                            ]}
+                            setRecipients={() => {}}
+                            showWarnings
+                            hideTotals
+                        />
+                    </div>
 
                     <div
                         style={{
@@ -116,12 +112,9 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                     >
                         <Button
                             htmlType="button"
-                            style={{
-                                width: '48%',
-                                backgroundColor: '#001529',
-                                color: 'white',
-                            }}
+                            style={{ width: '48%' }}
                             onClick={hideUserModal}
+                            className="screen-button"
                         >
                             Cancel
                         </Button>
@@ -151,19 +144,12 @@ export function BurnOwnerFormItem({ setOwners, owners }) {
                             Revoke {addedUserAmount} from{' '}
                             {`${addedUserChain}:${
                                 addedUserAddress.length > 9
-                                    ? addedUserAddress.substr(0, 4) +
-                                      '...' +
-                                      addedUserAddress.substr(-3)
+                                    ? getAbbreviatedAddress(addedUserAddress)
                                     : addedUserAddress
                             }`}
                         </Button>
                     </div>
 
-                    {!web3.utils.isAddress(addedUserAddress) && (
-                        <Text style={{ color: 'lightgrey' }}>
-                            *Invalid address specified
-                        </Text>
-                    )}
                     <hr />
                 </>
             )}

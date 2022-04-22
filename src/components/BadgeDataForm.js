@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Badge } from './Badge';
 import { RecipientFormItem } from './RecipientFormItem';
-const {
+import {
     PlusOutlined,
     DownOutlined,
     CalendarOutlined,
-    CaretLeftFilled,
-    CaretRightFilled,
-} = require('@ant-design/icons');
-const {
+} from '@ant-design/icons';
+import {
     Typography,
     Form,
     Input,
@@ -18,16 +16,21 @@ const {
     Space,
     Divider,
     InputNumber,
-} = require('antd');
-const isuri = require('isuri');
-
-const React = require('react');
-const { useEffect, useState } = require('react');
-const { MAX_DATE_TIMESTAMP } = require('../constants');
+} from 'antd';
+import isuri from 'isuri';
+import { useSelector } from 'react-redux';
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { MAX_DATE_TIMESTAMP, PRIMARY_BLUE, PRIMARY_TEXT } from '../constants';
+import { FormNavigationHeader } from './FormNavigationHeader';
 
 const { Text } = Typography;
-const { useSelector } = require('react-redux');
 const { Option } = Select;
+
+const FINAL_STEP_NUM = 8;
+const FIRST_STEP_NUM = 0;
+const CURR_TIMELINE_STEP_NUM = 1;
+
 export function BadgeDataForm({
     setCurrStepNumber,
     setBadge,
@@ -124,8 +127,8 @@ export function BadgeDataForm({
     );
 
     const incrementStep = () => {
-        if (stepNum === 8) {
-            setCurrStepNumber(2);
+        if (stepNum === FINAL_STEP_NUM) {
+            setCurrStepNumber(CURR_TIMELINE_STEP_NUM + 1);
         } else {
             setStepNum(stepNum + 1);
             setNextButton(stepNum + 1);
@@ -133,10 +136,10 @@ export function BadgeDataForm({
     };
 
     const decrementStep = () => {
-        if (stepNum === 0 && !isConceptForm) {
-            setCurrStepNumber(0);
-        } else if (stepNum === 1 && isConceptForm) {
-            setCurrStepNumber(0);
+        if (stepNum === FIRST_STEP_NUM && !isConceptForm) {
+            setCurrStepNumber(CURR_TIMELINE_STEP_NUM - 1);
+        } else if (stepNum === FIRST_STEP_NUM + 1 && isConceptForm) {
+            setCurrStepNumber(CURR_TIMELINE_STEP_NUM - 1);
         } else {
             setStepNum(stepNum - 1);
             setNextButton(stepNum - 1);
@@ -217,6 +220,20 @@ export function BadgeDataForm({
         );
     };
 
+    const resetToDefaults = () => {
+        setRecipientsArr([]);
+        setTitle('');
+        setDescription('');
+        setImageUrl('https://bitbadges.web.app/img/icons/logo.png');
+        setBackgroundColor('black');
+        // setExpirationDate(false);
+        setExpirationDateValue(undefined);
+        setType(0);
+        setCategory('BitBadge');
+        setExternalUrl(undefined);
+        setSupply(0);
+    };
+
     useEffect(() => {
         updateBadgeData();
         setNextButton(stepNum);
@@ -253,79 +270,59 @@ export function BadgeDataForm({
         }
     };
 
+    const getTitleElem = (title) => {
+        return (
+            <div
+                style={{
+                    justifyContent: 'center',
+                    display: 'flex',
+                }}
+            >
+                <Typography.Text
+                    style={{
+                        color: PRIMARY_TEXT,
+                        fontSize: 20,
+                        marginBottom: 10,
+                    }}
+                    strong
+                >
+                    {title}
+                </Typography.Text>
+            </div>
+        );
+    };
+
+    const getTitleDescription = (description) => {
+        return (
+            <div
+                style={{
+                    justifyContent: 'center',
+                    display: 'flex',
+                }}
+            >
+                <Typography.Text
+                    style={{
+                        color: PRIMARY_TEXT,
+                        fontSize: 14,
+                    }}
+                    strong
+                >
+                    {description}
+                </Typography.Text>
+            </div>
+        );
+    };
+
     return (
         <div style={{ textAlign: 'left' }}>
             <Form.Provider>
-                <div
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <button
-                        // className="link-button"
-                        style={{
-                            // position: 'absolute',
-                            // left: 5,
-                            backgroundColor: 'inherit',
-                            color: '#ddd',
-                            fontSize: 17,
-                        }}
-                        onClick={() => decrementStep()}
-                        className="opacity link-button"
-                    >
-                        <CaretLeftFilled size={40} />
-                        Back
-                    </button>
-                    <Typography.Text
-                        strong
-                        style={{
-                            color: 'white',
-                            fontSize: 20,
-                            marginLeft: 50,
-                            marginRight: 50,
-                        }}
-                        align="center"
-                    >
-                        {stepNum} / 8
-                    </Typography.Text>
-                    {nextButtonDisabled ? (
-                        <button
-                            // className="link-button"
-                            style={{
-                                // position: 'absolute',
-                                // left: 5,
-                                backgroundColor: 'inherit',
-                                color: '#ddd',
-                                fontSize: 17,
-                                cursor: 'not-allowed',
-                            }}
-                            onClick={() => incrementStep()}
-                            className="opacity link-button"
-                            disabled={nextButtonDisabled}
-                        >
-                            Next
-                            <CaretRightFilled size={40} />
-                        </button>
-                    ) : (
-                        <button
-                            // className="link-button"
-                            style={{
-                                // position: 'absolute',
-                                // left: 5,
-                                backgroundColor: 'inherit',
-                                color: '#ddd',
-                                fontSize: 17,
-                            }}
-                            onClick={() => incrementStep()}
-                            className="opacity link-button"
-                        >
-                            Next
-                            <CaretRightFilled size={40} />
-                        </button>
-                    )}
-                </div>
+                <FormNavigationHeader
+                    decrementStep={decrementStep}
+                    incrementStep={incrementStep}
+                    stepNum={stepNum}
+                    finalStepNumber={8}
+                    nextButtonDisabled={nextButtonDisabled}
+                />
 
                 <Form
                     labelCol={{ span: 6 }}
@@ -334,43 +331,12 @@ export function BadgeDataForm({
                 >
                     {stepNum === 0 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Use Saved Data?
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Use Saved Data?')}
                             {title !== '' ? (
                                 <>
-                                    <div
-                                        style={{
-                                            justifyContent: 'center',
-                                            display: 'flex',
-                                        }}
-                                    >
-                                        <Typography.Text
-                                            style={{
-                                                color: 'white',
-                                                fontSize: 14,
-                                            }}
-                                            strong
-                                        >
-                                            Would you like to proceed with your
-                                            saved changes from last time or
-                                            start from scratch?
-                                        </Typography.Text>
-                                    </div>
+                                    {getTitleDescription(
+                                        'Would you like to proceed with your saved changes or start from scratch?'
+                                    )}
 
                                     <div
                                         style={{
@@ -408,11 +374,10 @@ export function BadgeDataForm({
                                             style={{
                                                 width: '200px',
                                                 marginTop: 10,
-                                                backgroundColor: '#001529',
-                                                color: 'white',
                                                 marginRight: 10,
                                                 marginLeft: 10,
                                             }}
+                                            className="screen-button"
                                             onClick={() => {
                                                 incrementStep();
                                             }}
@@ -423,28 +388,13 @@ export function BadgeDataForm({
                                             style={{
                                                 width: '200px',
                                                 marginTop: 10,
-                                                backgroundColor: '#001529',
-                                                color: 'white',
 
                                                 marginRight: 10,
                                                 marginLeft: 10,
                                             }}
+                                            className="screen-button"
                                             onClick={() => {
-                                                setRecipientsArr([]);
-                                                setTitle('');
-                                                setDescription('');
-                                                setImageUrl(
-                                                    'https://bitbadges.web.app/img/icons/logo.png'
-                                                );
-                                                setBackgroundColor('black');
-                                                // setExpirationDate(false);
-                                                setExpirationDateValue(
-                                                    undefined
-                                                );
-                                                setType(0);
-                                                setCategory('BitBadge');
-                                                setExternalUrl(undefined);
-                                                setSupply(0);
+                                                resetToDefaults();
                                                 incrementStep();
                                             }}
                                         >
@@ -454,24 +404,9 @@ export function BadgeDataForm({
                                 </>
                             ) : (
                                 <>
-                                    <div
-                                        style={{
-                                            justifyContent: 'center',
-                                            display: 'flex',
-                                        }}
-                                    >
-                                        <Typography.Text
-                                            style={{
-                                                color: 'white',
-                                                fontSize: 14,
-                                            }}
-                                            strong
-                                        >
-                                            We have not detected any saved
-                                            changes. We will proceed by creating
-                                            the badge from scratch.
-                                        </Typography.Text>
-                                    </div>
+                                    {getTitleDescription(
+                                        'We have not detected any saved changes. We will proceed by creating the badge from scratch.'
+                                    )}
                                     <div
                                         style={{
                                             justifyContent: 'center',
@@ -482,26 +417,11 @@ export function BadgeDataForm({
                                             style={{
                                                 width: '50%',
                                                 marginTop: 10,
-                                                backgroundColor: '#001529',
-                                                color: 'white',
                                                 marginLeft: 10,
                                             }}
+                                            className="screen-button"
                                             onClick={() => {
-                                                setRecipientsArr([]);
-                                                setTitle('');
-                                                setDescription('');
-                                                setImageUrl(
-                                                    'https://bitbadges.web.app/img/icons/logo.png'
-                                                );
-                                                setBackgroundColor('black');
-                                                // setExpirationDate(false);
-                                                setExpirationDateValue(
-                                                    undefined
-                                                );
-                                                setType(0);
-                                                setCategory('BitBadge');
-                                                setExternalUrl(undefined);
-                                                setSupply(0);
+                                                resetToDefaults();
                                                 incrementStep();
                                             }}
                                         >
@@ -515,27 +435,14 @@ export function BadgeDataForm({
 
                     {stepNum === 1 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Describe your badge
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Describe your badge')}
                             <div>
                                 <Form.Item
                                     label={
-                                        <Text style={{ color: 'white' }} strong>
+                                        <Text
+                                            style={{ color: PRIMARY_TEXT }}
+                                            strong
+                                        >
                                             Title
                                         </Text>
                                     }
@@ -547,14 +454,17 @@ export function BadgeDataForm({
                                             setTitle(e.target.value);
                                         }}
                                         style={{
-                                            backgroundColor: '#001529',
-                                            color: 'white',
+                                            backgroundColor: PRIMARY_BLUE,
+                                            color: PRIMARY_TEXT,
                                         }}
                                     />
                                 </Form.Item>
                                 <Form.Item
                                     label={
-                                        <Text style={{ color: 'white' }} strong>
+                                        <Text
+                                            style={{ color: PRIMARY_TEXT }}
+                                            strong
+                                        >
                                             Description
                                         </Text>
                                     }
@@ -565,8 +475,8 @@ export function BadgeDataForm({
                                             setDescription(e.target.value)
                                         }
                                         style={{
-                                            backgroundColor: '#001529',
-                                            color: 'white',
+                                            backgroundColor: PRIMARY_BLUE,
+                                            color: PRIMARY_TEXT,
                                         }}
                                     />
                                 </Form.Item>
@@ -575,23 +485,7 @@ export function BadgeDataForm({
                     )}
                     {stepNum === 2 && !isConceptForm && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Add Recipients (Optional)
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Add Recipients (Optional)')}
                             <RecipientFormItem
                                 recipients={recipients}
                                 setRecipients={setRecipientsArr}
@@ -601,27 +495,14 @@ export function BadgeDataForm({
 
                     {stepNum === 2 && isConceptForm && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Supply
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Supply')}
                             <div>
                                 <Form.Item
                                     label={
-                                        <Text style={{ color: 'white' }} strong>
+                                        <Text
+                                            style={{ color: PRIMARY_TEXT }}
+                                            strong
+                                        >
                                             Total Supply
                                         </Text>
                                     }
@@ -634,8 +515,8 @@ export function BadgeDataForm({
                                             saveSupply(e);
                                         }}
                                         style={{
-                                            backgroundColor: '#001529',
-                                            color: 'white',
+                                            backgroundColor: PRIMARY_BLUE,
+                                            color: PRIMARY_TEXT,
                                             width: '100%',
                                         }}
                                     />
@@ -644,40 +525,15 @@ export function BadgeDataForm({
                         </>
                     )}
 
-                    {/* <Form.Item label={<Text style={{color: 'white'}} strong>Badge Type</Text>}>
-                        <Select
-                            value={type}
-                            defaultValue={type}
-                            onSelect={(e) => setType(e)}
-                        >
-                            <Select.Option value={0}>
-                                Public (Image + Category Required)
-                            </Select.Option>
-                        </Select>
-                    </Form.Item> */}
-
                     {stepNum === 3 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Select a Category
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Select a Category')}
                             <Form.Item
                                 label={
-                                    <Text style={{ color: 'white' }} strong>
+                                    <Text
+                                        style={{ color: PRIMARY_TEXT }}
+                                        strong
+                                    >
                                         Category
                                     </Text>
                                 }
@@ -689,12 +545,12 @@ export function BadgeDataForm({
                                     placeholder="Default: Other"
                                     onChange={(e) => setCategory(e)}
                                     style={{
-                                        backgroundColor: '#001529',
-                                        color: 'white',
+                                        backgroundColor: PRIMARY_BLUE,
+                                        color: PRIMARY_TEXT,
                                     }}
                                     suffixIcon={
                                         <DownOutlined
-                                            style={{ color: 'white' }}
+                                            style={{ color: PRIMARY_TEXT }}
                                         />
                                     }
                                     dropdownRender={(menu) => (
@@ -737,47 +593,29 @@ export function BadgeDataForm({
 
                     {stepNum === 4 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Select an Image
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Select an Image')}
                             <Form.Item
                                 label={
-                                    <Text style={{ color: 'white' }} strong>
+                                    <Text
+                                        style={{ color: PRIMARY_TEXT }}
+                                        strong
+                                    >
                                         Image URI
                                     </Text>
                                 }
                                 required={type === 0}
                             >
-                                {/* <Input
-                            value={imageUrl}
-                            onChange={(e) => setImageUrl(e.target.value)}
-                        /> */}
                                 <Select
                                     className="selector"
                                     value={imageUrl}
-                                    // placeholder="Default: Other"
                                     onChange={(e) => setImageUrl(e)}
                                     style={{
-                                        backgroundColor: '#001529',
-                                        color: 'white',
+                                        backgroundColor: PRIMARY_BLUE,
+                                        color: PRIMARY_TEXT,
                                     }}
                                     suffixIcon={
                                         <DownOutlined
-                                            style={{ color: 'white' }}
+                                            style={{ color: PRIMARY_TEXT }}
                                         />
                                     }
                                     dropdownRender={(menu) => (
@@ -846,26 +684,13 @@ export function BadgeDataForm({
 
                     {stepNum === 5 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Select a Color
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Select a Color')}
                             <Form.Item
                                 label={
-                                    <Text style={{ color: 'white' }} strong>
+                                    <Text
+                                        style={{ color: PRIMARY_TEXT }}
+                                        strong
+                                    >
                                         Color
                                     </Text>
                                 }
@@ -876,12 +701,12 @@ export function BadgeDataForm({
                                     defaultValue={backgroundColor}
                                     onSelect={(e) => setBackgroundColor(e)}
                                     style={{
-                                        backgroundColor: '#001529',
-                                        color: 'white',
+                                        backgroundColor: PRIMARY_BLUE,
+                                        color: PRIMARY_TEXT,
                                     }}
                                     suffixIcon={
                                         <DownOutlined
-                                            style={{ color: 'white' }}
+                                            style={{ color: PRIMARY_TEXT }}
                                         />
                                     }
                                 >
@@ -940,26 +765,13 @@ export function BadgeDataForm({
 
                     {stepNum === 6 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Add External URL (Optional)
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Add External URL (Optional)')}
                             <Form.Item
                                 label={
-                                    <Text style={{ color: 'white' }} strong>
+                                    <Text
+                                        style={{ color: PRIMARY_TEXT }}
+                                        strong
+                                    >
                                         External URL
                                     </Text>
                                 }
@@ -970,8 +782,8 @@ export function BadgeDataForm({
                                         setExternalUrl(e.target.value)
                                     }
                                     style={{
-                                        backgroundColor: '#001529',
-                                        color: 'white',
+                                        backgroundColor: PRIMARY_BLUE,
+                                        color: PRIMARY_TEXT,
                                     }}
                                 />
                                 <div style={{ fontSize: 12 }}>
@@ -987,146 +799,56 @@ export function BadgeDataForm({
 
                     {stepNum === 7 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Set Expiration Date (Optional)
-                                </Typography.Text>
-                            </div>
-                            <>
-                                {/* <Form.Item
-                                    label={
-                                        <Text style={{ color: 'white' }} strong>
-                                            Expires?
-                                        </Text>
-                                    }
-                                >
-                                    {
-                                        <Switch
-                                            defaultChecked={expirationDate}
-                                            onChange={() => {
-                                                if (expirationDate) {
-                                                    hideExpirationDate();
-                                                } else {
-                                                    showExpirationDate();
-                                                }
-                                            }}
-                                        />
-                                    }
-                                </Form.Item> */}
+                            {getTitleElem('Set Expiration Date (Optional)')}
 
-                                {
-                                    <Form.Item
-                                        label={
-                                            <Text
-                                                style={{ color: 'white' }}
-                                                strong
-                                            >
-                                                Expiration Date
-                                            </Text>
-                                        }
+                            <Form.Item
+                                label={
+                                    <Text
+                                        style={{ color: PRIMARY_TEXT }}
+                                        strong
                                     >
-                                        <DatePicker
+                                        Expiration Date
+                                    </Text>
+                                }
+                            >
+                                <DatePicker
+                                    style={{
+                                        width: '100%',
+                                        backgroundColor: PRIMARY_BLUE,
+                                        color: PRIMARY_TEXT,
+                                    }}
+                                    suffixIcon={
+                                        <CalendarOutlined
                                             style={{
-                                                width: '100%',
-                                                backgroundColor: '#001529',
-                                                color: 'white',
-                                            }}
-                                            suffixIcon={
-                                                <CalendarOutlined
-                                                    style={{ color: 'white' }}
-                                                />
-                                            }
-                                            onChange={(date, dateString) => {
-                                                setExpirationDateValue(
-                                                    new Date(
-                                                        dateString
-                                                    ).valueOf()
-                                                );
+                                                color: PRIMARY_TEXT,
                                             }}
                                         />
-                                    </Form.Item>
-                                }
-                            </>
+                                    }
+                                    onChange={(date, dateString) => {
+                                        setExpirationDateValue(
+                                            new Date(dateString).valueOf()
+                                        );
+                                    }}
+                                />
+                            </Form.Item>
                         </>
                     )}
 
                     {stepNum === 8 && (
                         <>
-                            <div
-                                style={{
-                                    justifyContent: 'center',
-                                    display: 'flex',
-                                }}
-                            >
-                                <Typography.Text
-                                    style={{
-                                        color: 'white',
-                                        fontSize: 20,
-                                        marginBottom: 10,
-                                    }}
-                                    strong
-                                >
-                                    Confirm Metadata and Continue
-                                </Typography.Text>
-                            </div>
+                            {getTitleElem('Confirm Metadata and Continue')}
                             <>
-                                {/* <Form.Item
-                                    label={
-                                        <Text style={{ color: 'white' }} strong>
-                                            Expires?
-                                        </Text>
-                                    }
-                                >
-                                    {
-                                        <Switch
-                                            defaultChecked={expirationDate}
-                                            onChange={() => {
-                                                if (expirationDate) {
-                                                    hideExpirationDate();
-                                                } else {
-                                                    showExpirationDate();
-                                                }
-                                            }}
-                                        />
-                                    }
-                                </Form.Item> */}
-                                <div
-                                    style={{
-                                        justifyContent: 'center',
-                                        display: 'flex',
-                                    }}
-                                >
-                                    <Typography.Text
-                                        style={{
-                                            color: 'white',
-                                            fontSize: 16,
-                                            marginBottom: 10,
-                                        }}
-                                        strong
-                                    >
-                                        Badge metadata is permanent. Please take
-                                        a moment to confirm all metadata is
-                                        correct.
-                                    </Typography.Text>
-                                </div>
+                                {getTitleDescription(
+                                    'Badge metadata is permanent. Please take a moment to confirm all metadata is correct.'
+                                )}
+
                                 <div
                                     style={{
                                         width: '100%',
                                         display: 'flex',
                                         justifyContent: 'center',
                                         alignItems: 'center',
+                                        marginTop: 10,
                                     }}
                                 >
                                     <Button
@@ -1154,7 +876,7 @@ export function BadgeDataForm({
                                     marginTop: 20,
                                 }}
                             >
-                                <Text style={{ color: 'white' }} strong>
+                                <Text style={{ color: PRIMARY_TEXT }} strong>
                                     Badge Preview (Click to View More)
                                 </Text>
                             </div>
@@ -1186,37 +908,6 @@ export function BadgeDataForm({
                             </div>
                         </>
                     )}
-                    {/* <div
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Button
-                            disabled={
-                                !title.length ||
-                                (expirationDate && !expirationDateValue)
-                            }
-                            type="primary"
-                            style={{ width: '48%' }}
-                            onClick={() => {
-                                setCurrStepNumber(2);
-                                setBadge(badgeData);
-                            }}
-                        >
-                            Confirm Data
-                        </Button>
-                        <Button
-                            style={{ width: '48%' }}
-                            onClick={async () => {
-                                setCurrStepNumber(0);
-                            }}
-                        >
-                            Go Back
-                        </Button>
-                    </div> */}
                 </Form>
             </Form.Provider>
         </div>

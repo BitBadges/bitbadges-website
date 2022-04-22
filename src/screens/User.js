@@ -1,48 +1,31 @@
 import { Tabs } from '../components/Tabs';
 import { BadgeDisplay } from '../components/BadgeDisplay';
-import { ShowingResultsFor } from '../components/ShowingResultsFor';
+import { AccountDisplay } from '../components/AccountDisplay';
 import { useParams } from 'react-router-dom';
-const React = require('react');
-const { useState, useEffect } = require('react');
-const { Layout } = require('antd');
+import { PRIMARY_BLUE, SECONDARY_BLUE } from '../constants';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { Layout } from 'antd';
+import { getBadgeDataForAddress } from '../api/api';
+import { defaultProfileInfo } from '../redux/userSlice';
+import {
+    getAddressFromPartitionedAddress,
+    getChainFromPartitionedAddress,
+} from '../utils/AddressUtils';
 
 const { Content } = Layout;
-const { getBadgeDataForAddress } = require('../api/api');
 
 export function User() {
-    // const [inputAddress, setInputAddress] = useState();
     const [tab, setTab] = useState('received');
     const [issued, setIssued] = useState([]);
     const [received, setReceived] = useState([]);
     const [liked, setLiked] = useState([]);
     const [managing, setManaging] = useState([]);
-
-    const [profileInfo, setProfileInfo] = useState({
-        username: '',
-        bio: '',
-        email: '',
-        twitter: '',
-        instagram: '',
-        website: '',
-        profilePic: '',
-        bannerColorOne: '',
-        bannerColorTwo: '',
-        activity: [],
-        likes: [],
-        pinned: [],
-        customDisplay: {},
-        hidden: [],
-        blockedUsers: [],
-        loading: true,
-        offering: [],
-        concepts: [],
-    });
-
+    const [profileInfo, setProfileInfo] = useState({ ...defaultProfileInfo });
     const urlParams = useParams();
 
     useEffect(() => {
         async function updateValues(value) {
-            // setInputAddress(value);
             const { issued, received, profileInfo, liked, managing } =
                 await getBadgeDataForAddress('ETH', value, false);
             setIssued(issued);
@@ -51,39 +34,28 @@ export function User() {
             setManaging(managing);
             setProfileInfo(profileInfo);
         }
-        updateValues(urlParams.userId.split(':')[1]);
+        updateValues(getAddressFromPartitionedAddress(urlParams.userId));
     }, [urlParams]);
 
+    const primaryGradient = profileInfo.bannerColorTwo
+        ? profileInfo.bannerColorTwo
+        : PRIMARY_BLUE;
+
+    const secondaryGradient = profileInfo.bannerColorOne
+        ? profileInfo.bannerColorOne
+        : SECONDARY_BLUE;
+
     return (
-        <Content
-            style={{
-                padding: '0',
-                margin: 0,
-                width: '100%',
-                backgroundColor: '#001529',
-            }}
-        >
+        <Content className="primaryBg full-area">
             <div
+                className="full-area"
                 style={{
-                    padding: '0',
-                    margin: 0,
-                    width: '100%',
-                    // #Ea1795
-                    // #3e83f8
-                    background: `linear-gradient(0deg, ${
-                        profileInfo.bannerColorTwo
-                            ? profileInfo.bannerColorTwo
-                            : '#001529'
-                    }, ${
-                        profileInfo.bannerColorOne
-                            ? profileInfo.bannerColorOne
-                            : '#3e83f8'
-                    } 75%)`,
+                    background: `linear-gradient(0deg, ${primaryGradient}, ${secondaryGradient} 75%)`,
                 }}
             >
-                <ShowingResultsFor
-                    chain={urlParams.userId.split(':')[0]}
-                    address={urlParams.userId.split(':')[1]}
+                <AccountDisplay
+                    chain={getChainFromPartitionedAddress(urlParams.userId)}
+                    address={getAddressFromPartitionedAddress(urlParams.userId)}
                     userName={profileInfo.username}
                     bio={profileInfo.bio}
                     profilePic={profileInfo.profilePic}
@@ -105,7 +77,7 @@ export function User() {
                     { key: 'liked', content: 'Liked' },
                     { key: 'activity', content: 'Activity' },
                 ]}
-                widthPerTab={'calc(100% / 4)'}
+                fullWidth
             />
             <div>
                 {tab === 'issued' && <BadgeDisplay badges={issued} />}
@@ -113,8 +85,8 @@ export function User() {
                 {tab === 'offering' && (
                     <BadgeDisplay
                         badges={profileInfo.offering}
-                        offering
-                        concepts={profileInfo.concepts}
+                        isOffering={true}
+                        conceptBadges={profileInfo.concepts}
                     />
                 )}
                 {tab === 'activity' && <BadgeDisplay badges={[]} />}

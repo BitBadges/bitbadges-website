@@ -1,12 +1,9 @@
-const {
-    UserAddOutlined,
-    UploadOutlined,
-    DeleteOutlined,
-} = require('@ant-design/icons');
-const {
+import { PRIMARY_TEXT } from '../constants';
+import { RecipientList } from './RecipientList';
+import { UserAddOutlined, UploadOutlined } from '@ant-design/icons';
+import {
     Typography,
     Form,
-    Avatar,
     Button,
     Input,
     Select,
@@ -14,38 +11,40 @@ const {
     Divider,
     Upload,
     message,
-} = require('antd');
-const React = require('react');
-const web3 = require('web3');
-const Papa = require('papaparse');
+} from 'antd';
+import React from 'react';
+import web3 from 'web3';
+import Papa from 'papaparse';
+import { useState } from 'react';
 
-const { useState } = require('react');
 const { Text } = Typography;
 const { Option } = Select;
 
 export function RecipientFormItem({ setRecipients, recipients }) {
-    const [visible, setVisible] = useState(false);
     const [addedUserAmount, setAddedUserAmount] = useState(0);
     const [addedUserChain, setAddedUserChain] = useState('ETH');
     const [addedUserAddress, setAddedUserAddress] = useState('');
-    const [fileModalVisible, setFileModalVisible] = useState(false);
+
+    const [addManualModal, setAddManualModal] = useState(false);
+    const [addByCsvModal, setAddByCsvModal] = useState(false);
+
     const [fileRecipients, setFileRecipients] = useState([]);
     const [illegalEntries, setIllegalEntries] = useState([]);
 
-    const showUserModal = () => {
-        setVisible(true);
+    const showAddManualModal = () => {
+        setAddManualModal(true);
     };
 
-    const hideUserModal = () => {
-        setVisible(false);
+    const hideAddManualModal = () => {
+        setAddManualModal(false);
     };
 
-    const showFileModal = () => {
-        setFileModalVisible(true);
+    const showAddByCsvModal = () => {
+        setAddByCsvModal(true);
     };
 
-    const hideFileModal = () => {
-        setFileModalVisible(false);
+    const hideAddByCsvModal = () => {
+        setAddByCsvModal(false);
     };
 
     function getCSV(file) {
@@ -76,6 +75,7 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                         });
                     }
                 }
+
                 setIllegalEntries(illegalEntriesArr);
                 setFileRecipients(newRecipients);
             },
@@ -87,114 +87,47 @@ export function RecipientFormItem({ setRecipients, recipients }) {
             },
         });
     }
-    const getNumRecipients = () => {
-        let sum = 0;
-        for (const recipient of recipients) {
-            sum += recipient.amount;
-        }
-        return sum;
-    };
 
     return (
         <>
             <Form.Item
                 label={
-                    <Text strong style={{ color: 'white' }}>
+                    <Text strong style={{ color: PRIMARY_TEXT }}>
                         Recipients
                     </Text>
                 }
             >
-                {recipients.length > 0 && (
-                    <>
-                        {recipients.map((recipient, idx) => (
-                            <div
-                                style={{
-                                    marginBottom: 3,
-                                    display: 'flex',
-                                    width: '100%',
-                                    justifyContent: 'space-between',
-                                    color: 'white',
-                                    fontWeight: 'bold',
-                                }}
-                            >
-                                <div>
-                                    <Avatar
-                                        src={
-                                            'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png'
-                                        }
-                                        style={{ marginRight: 3 }}
-                                    />
-                                    {`${recipient.to.substr(
-                                        0,
-                                        10
-                                    )}...${recipient.to.substr(-4)}`}
-                                    {` (x${recipient.amount})`}
-                                </div>
-                                <div>
-                                    <button className="link-button">
-                                        {' '}
-                                        <DeleteOutlined
-                                            style={{ color: 'white' }}
-                                            onClick={() => {
-                                                const recipientsClone = [
-                                                    ...recipients,
-                                                ];
-                                                recipientsClone.splice(idx, 1);
-                                                setRecipients(recipientsClone);
-                                            }}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </>
-                )}
-                <div
-                    style={{
-                        marginBottom: 3,
-                        display: 'flex',
-                        width: '100%',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        fontSize: 20,
-                    }}
-                >
-                    Total: {getNumRecipients()} ({recipients.length} Addresses)
-                </div>
+                <RecipientList
+                    recipients={recipients}
+                    setRecipients={setRecipients}
+                />
                 <Divider style={{ margin: 4, color: 'lightgray' }} />
             </Form.Item>
 
             <Form.Item
                 label={
-                    <Text strong style={{ color: 'white' }}>
-                        {!visible && !fileModalVisible && 'Add More?'}
-                        {visible && 'Manual Add'}
-                        {fileModalVisible && 'CSV Add'}
+                    <Text strong style={{ color: PRIMARY_TEXT }}>
+                        {!addManualModal && !addByCsvModal && 'Add More?'}
+                        {addManualModal && 'Manual Add'}
+                        {addByCsvModal && 'CSV Add'}
                     </Text>
                 }
             >
                 <div>
-                    {!visible && !fileModalVisible && (
+                    {!addManualModal && !addByCsvModal && (
                         <>
                             <Button
-                                style={{
-                                    marginTop: 5,
-                                    width: '50%',
-                                    backgroundColor: '#001529',
-                                    color: 'white',
-                                }}
-                                onClick={showUserModal}
+                                style={{ width: '50%' }}
+                                className="screen-button"
+                                onClick={showAddManualModal}
                             >
                                 Add Manually
                                 <UserAddOutlined />
                             </Button>
                             <Button
-                                style={{
-                                    width: '50%',
-                                    backgroundColor: '#001529',
-                                    color: 'white',
-                                }}
-                                onClick={showFileModal}
+                                style={{ width: '50%' }}
+                                className="screen-button"
+                                onClick={showAddByCsvModal}
                             >
                                 Add by CSV
                                 <UserAddOutlined />
@@ -203,47 +136,49 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                         </>
                     )}
                 </div>
-                {visible && (
+                {addManualModal && (
                     <>
-                        <Input.Group
-                            compact
+                        <Input
+                            addonBefore={
+                                <Select
+                                    value={addedUserChain}
+                                    onSelect={(e) => setAddedUserChain(e)}
+                                    defaultValue="ETH"
+                                >
+                                    <Option value="ETH">ETH</Option>
+                                </Select>
+                            }
+                            placeholder="Enter Address (0x....)"
+                            value={addedUserAddress}
+                            onChange={(e) =>
+                                setAddedUserAddress(e.target.value)
+                            }
+                            suffix={
+                                <InputNumber
+                                    value={addedUserAmount}
+                                    onChange={(e) => setAddedUserAmount(e)}
+                                />
+                            }
+                        />
+                        <div
                             style={{
-                                marginTop: 5,
-                                width: '100%',
-                                backgroundColor: '#001529',
-                                color: 'white',
+                                marginTop: 10,
                             }}
                         >
-                            <Input
-                                addonBefore={
-                                    <Select
-                                        value={addedUserChain}
-                                        onSelect={(e) => setAddedUserChain(e)}
-                                        defaultValue="ETH"
-                                    >
-                                        <Option value="ETH">ETH</Option>
-                                    </Select>
-                                }
-                                // style={{ width: '55%' }}
-                                value={addedUserAddress}
-                                onChange={(e) =>
-                                    setAddedUserAddress(e.target.value)
-                                }
-                                suffix={
-                                    <InputNumber
-                                        // style={{ width: '20%' }}
-                                        value={addedUserAmount}
-                                        onChange={(e) => setAddedUserAmount(e)}
-                                    />
-                                }
+                            <RecipientList
+                                hideTotals
+                                showWarnings
+                                recipients={[
+                                    {
+                                        to: `${addedUserChain}:${addedUserAddress}`,
+                                        amount: addedUserAmount,
+                                    },
+                                ]}
+                                setRecipients={() => {
+                                    setAddedUserAddress('');
+                                    setAddedUserAmount(0);
+                                }}
                             />
-                        </Input.Group>
-                        <div>
-                            {!web3.utils.isAddress(addedUserAddress) && (
-                                <Text style={{ color: 'lightgrey' }}>
-                                    *Invalid address specified
-                                </Text>
-                            )}
                         </div>
                         <div
                             style={{
@@ -255,14 +190,10 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                         >
                             <Button
                                 htmlType="button"
-                                style={{
-                                    margin: '0',
-                                    width: '48%',
-                                    backgroundColor: '#001529',
-                                    color: 'white',
-                                }}
+                                className="screen-button"
+                                style={{ width: '48%' }}
                                 onClick={() => {
-                                    hideUserModal();
+                                    hideAddManualModal();
                                 }}
                             >
                                 Cancel
@@ -280,31 +211,20 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                     ]);
                                     setAddedUserAddress('');
                                     setAddedUserAmount(0);
-                                    hideUserModal();
+                                    hideAddManualModal();
                                 }}
                                 disabled={
                                     addedUserAmount <= 0 ||
                                     !web3.utils.isAddress(addedUserAddress)
                                 }
-                                style={{
-                                    margin: '0',
-                                    width: '48%',
-                                }}
+                                style={{ width: '48%' }}
                             >
-                                {/* Mint {addedUserAmount} to{' '}
-                                {`${addedUserChain}:${
-                                    addedUserAddress.length > 9
-                                        ? addedUserAddress.substr(0, 4) +
-                                          '...' +
-                                          addedUserAddress.substr(-3)
-                                        : addedUserAddress
-                                }`} */}
                                 Add Recipient
                             </Button>
                         </div>
                     </>
                 )}
-                {fileModalVisible && (
+                {addByCsvModal && (
                     <>
                         <Form.Item>
                             <Upload
@@ -336,50 +256,17 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                 }}
                                 style={{ width: '100%' }}
                                 accept=".csv"
-                                beforeUpload={(file, fileList) => {
-                                    // console.log(file);
-                                    // console.log(fileList);
-                                    // const isCSV = file.type === 'txt/csv';
-                                    // if (!isCSV) {
-                                    //     message.error(
-                                    //         `${file.name} is not a csv file`
-                                    //     );
-                                    //     return UPLOAD.LIST_IGNORE;
-                                    // }
-                                }}
                             >
                                 <Button
                                     icon={<UploadOutlined />}
                                     style={{
                                         width: '100%',
-                                        backgroundColor: '#001529',
-                                        color: 'white',
                                     }}
+                                    className="screen-button"
                                 >
                                     Upload Recipients CSV (Max: 1 File)
                                 </Button>
                             </Upload>
-                            {/* <Input.Group compact>
-                            <Select
-                                value={addedUserChain}
-                                onSelect={(e) => setAddedUserChain(e)}
-                                defaultValue="ETH"
-                            >
-                                <Option value="ETH">ETH</Option>
-                            </Select>
-                            <Input
-                                style={{ width: '55%' }}
-                                value={addedUserAddress}
-                                onChange={(e) =>
-                                    setAddedUserAddress(e.target.value)
-                                }
-                            />
-                            <InputNumber
-                                style={{ width: '20%' }}
-                                value={addedUserAmount}
-                                onChange={(e) => setAddedUserAmount(e)}
-                            />
-                        </Input.Group> */}
                         </Form.Item>
                         {fileRecipients.length > 0 && (
                             <>
@@ -394,61 +281,16 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                         strong
                                         style={{
                                             textAlign: 'center',
-                                            color: 'white',
+                                            color: PRIMARY_TEXT,
                                         }}
                                     >
                                         Recipients to Add
                                     </Text>
                                 </div>
-                                {fileRecipients.map((recipient, idx) => (
-                                    <div
-                                        style={{
-                                            marginBottom: 3,
-                                            display: 'flex',
-                                            width: '100%',
-                                            justifyContent: 'space-between',
-                                            color: 'white',
-                                            fontWeight: 'bold',
-                                        }}
-                                    >
-                                        <div>
-                                            <Avatar
-                                                src={
-                                                    'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png'
-                                                }
-                                                style={{ marginRight: 3 }}
-                                            />
-                                            {`${recipient.to.substr(
-                                                0,
-                                                10
-                                            )}...${recipient.to.substr(
-                                                -4
-                                            )}  (x${recipient.amount})`}
-                                        </div>
-                                        <div>
-                                            <button className="link-button">
-                                                {' '}
-                                                <DeleteOutlined
-                                                    style={{ color: 'white' }}
-                                                    onClick={() => {
-                                                        const recipientsClone =
-                                                            [...fileRecipients];
-                                                        recipientsClone.splice(
-                                                            idx,
-                                                            1
-                                                        );
-                                                        console.log(
-                                                            recipientsClone
-                                                        );
-                                                        setFileRecipients(
-                                                            recipientsClone
-                                                        );
-                                                    }}
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                <RecipientList
+                                    recipients={fileRecipients}
+                                    setRecipients={setFileRecipients}
+                                />
                                 {illegalEntries.length > 0 && (
                                     <>
                                         <div
@@ -463,83 +305,23 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                                 strong
                                                 style={{
                                                     textAlign: 'center',
-                                                    color: 'white',
+                                                    color: PRIMARY_TEXT,
                                                 }}
                                             >
                                                 Illegal Entries (Delete or
                                                 Upload Again)
                                             </Text>
                                         </div>
-                                        {illegalEntries.map((recipient) => (
-                                            <div
-                                                style={{
-                                                    marginBottom: 3,
-                                                    display: 'flex',
-                                                    width: '100%',
-                                                    justifyContent:
-                                                        'space-between',
-                                                    color: 'white',
-                                                    fontWeight: 'bold',
-                                                }}
-                                            >
-                                                <div>
-                                                    <Avatar
-                                                        src={
-                                                            'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png'
-                                                        }
-                                                        style={{
-                                                            marginRight: 3,
-                                                        }}
-                                                    />
-                                                    <span
-                                                        style={{
-                                                            color:
-                                                                recipient.amount >
-                                                                0
-                                                                    ? 'red'
-                                                                    : undefined,
-                                                        }}
-                                                    >{`${recipient.to.substr(
-                                                        0,
-                                                        10
-                                                    )}...${recipient.to.substr(
-                                                        -4
-                                                    )}`}</span>
-                                                    <span
-                                                        style={{
-                                                            color:
-                                                                recipient.amount <=
-                                                                0
-                                                                    ? 'red'
-                                                                    : undefined,
-                                                        }}
-                                                    >{` (x${recipient.amount})`}</span>
-                                                </div>
-                                                <div>
-                                                    <button className="link-button">
-                                                        {' '}
-                                                        <DeleteOutlined
-                                                            onClick={() => {
-                                                                setIllegalEntries(
-                                                                    illegalEntries.filter(
-                                                                        (
-                                                                            elem
-                                                                        ) =>
-                                                                            elem.id !==
-                                                                            recipient.id
-                                                                    )
-                                                                );
-                                                            }}
-                                                        />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))}
+                                        <RecipientList
+                                            recipients={illegalEntries}
+                                            setRecipients={setIllegalEntries}
+                                            showWarnings
+                                        />
                                     </>
                                 )}
                             </>
                         )}
-                        <div style={{ fontSize: 10 }}>
+                        <div style={{ fontSize: 11 }}>
                             <Text style={{ color: 'lightgrey' }}>
                                 *All CSV rows must be in the format:
                                 chain,address,amount. Don't include any header
@@ -562,14 +344,10 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                         >
                             <Button
                                 htmlType="button"
-                                style={{
-                                    margin: '0',
-                                    width: '48%',
-                                    backgroundColor: '#001529',
-                                    color: 'white',
-                                }}
+                                className="screen-button"
+                                style={{ width: '48%' }}
                                 onClick={() => {
-                                    hideFileModal();
+                                    hideAddByCsvModal();
                                     setFileRecipients([]);
                                 }}
                             >
@@ -583,13 +361,10 @@ export function RecipientFormItem({ setRecipients, recipients }) {
                                         ...recipients,
                                         ...fileRecipients,
                                     ]);
-                                    hideFileModal();
+                                    hideAddByCsvModal();
                                     setFileRecipients([]);
                                 }}
-                                style={{
-                                    margin: '0',
-                                    width: '48%',
-                                }}
+                                style={{ width: '48%' }}
                                 disabled={
                                     fileRecipients.length <= 0 ||
                                     illegalEntries.length > 0

@@ -1,0 +1,76 @@
+/* 
+  .ant-row-rtl #components-layout-demo-top .logo {
+    float: right;
+    margin: 16px 0 16px 24px;
+  } */
+
+  
+.ant-popover-arrow {
+    display: none;
+}
+
+.ant-collapse-content-box {
+    padding: 4px !important; 
+}
+
+
+.ant-form-item {
+    margin-bottom: 10px;
+}
+
+.ant-upload {
+    width: 100%;
+}
+
+.ant-popover-placement-top {
+    left: 0;
+}
+
+
+.ant-timeline-item-head-custom {
+    padding: 0;
+}
+
+.selector > .ant-select-selector {
+  background-color: #001529 !important;
+}
+
+.selector > .ant-select-selector.selector::after {
+  color: white;
+}
+
+.ant-picker-input > input {
+    color: white;
+}
+
+.ant-radio-inner {
+  width: 40px;
+  height: 40px;
+
+  
+}
+.ant-radio-inner::after {
+  width: 20px;
+  height: 20px;
+}
+
+.ant-checkbox-inner {
+  width: 40px;
+  height: 40px;
+}
+.ant-checkbox-inner::after {
+  width: 8px;
+  height: 20px;
+}
+.ant-radio,
+.ant-checkbox {
+  font-size: 40px;
+}
+
+.ant-switch {
+  background-color: grey;
+}
+
+.ant-switch-checked {
+    background-color: #1890ff;
+}

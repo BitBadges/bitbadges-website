@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // TODO: fix this react hooks warning
-const { Button } = require('antd');
-const { ethers } = require('ethers');
-const React = require('react');
-const { useSelector, useDispatch } = require('react-redux');
-const { useCallback, useEffect } = require('react');
-const { userActions } = require('../redux/userSlice');
-const { getBadgeDataForAddress } = require('../api/api');
+import { Button } from 'antd';
+import { ethers } from 'ethers';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useCallback, useEffect } from 'react';
+import { userActions } from '../redux/userSlice';
+import { getBadgeDataForAddress } from '../api/api';
 
 export function Web3ModalButtons() {
     const web3Modal = useSelector((state) => state.web3Modal.web3Modal);
@@ -114,7 +114,6 @@ export function Web3ModalButtons() {
                     }}
                     shape="round"
                     size="large"
-                    /* type={minimized ? "default" : "primary"}     too many people just defaulting to MM and having a bad time */
                     onClick={loadWeb3Modal}
                 >
                     connect

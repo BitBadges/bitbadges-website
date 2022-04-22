@@ -1,5 +1,26 @@
 const { createSlice } = require('@reduxjs/toolkit');
 
+export const defaultProfileInfo = {
+    username: '',
+    bio: '',
+    email: '',
+    twitter: '',
+    instagram: '',
+    website: '',
+    profilePic: '',
+    bannerColorOne: '',
+    bannerColorTwo: '',
+    activity: [],
+    likes: [],
+    pinned: [],
+    customDisplay: {},
+    hidden: [],
+    blockedUsers: [],
+    loading: true,
+    offering: [],
+    concepts: [],
+};
+
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -15,24 +36,7 @@ export const userSlice = createSlice({
         numPending: 0,
         badgeMap: {},
         profileInfo: {
-            username: '',
-            bio: '',
-            email: '',
-            twitter: '',
-            instagram: '',
-            website: '',
-            profilePic: '',
-            bannerColorOne: '',
-            bannerColorTwo: '',
-            activity: [],
-            likes: [],
-            pinned: [],
-            customDisplay: {},
-            hidden: [],
-            blockedUsers: [],
-            loading: true,
-            offering: [],
-            concepts: [],
+            ...defaultProfileInfo,
         },
     },
     reducers: {

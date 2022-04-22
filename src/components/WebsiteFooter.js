@@ -1,7 +1,6 @@
 import { Content } from 'antd/lib/layout/layout';
-const { Row, Col, Button } = require('antd');
-const React = require('react');
-// const { setScreen } = require('../redux/screenSlice');
+import { Row, Col, Button } from 'antd';
+import React from 'react';
 
 export function WalletFooter() {
     return (
@@ -10,10 +9,8 @@ export function WalletFooter() {
                 backgroundColor: 'black',
                 display: 'flex',
                 alignItems: 'center',
-                textAlign: 'center',
-                width: '100%',
                 padding: '1rem 5rem',
-                minHeight: '25vh',
+                minHeight: '20vh',
             }}
         >
             <Row justify="space-around" style={{ width: '100%' }}>
@@ -21,10 +18,7 @@ export function WalletFooter() {
                     <Button
                         style={{
                             minWidth: '20vw',
-                            // backgroundColor: '#005af0',
-                            // borderColor: '#005af0',
                             fontWeight: 'bolder',
-                            // color: 'white',
                             margin: '1rem',
                         }}
                         type="primary"
@@ -38,10 +32,7 @@ export function WalletFooter() {
                     <Button
                         style={{
                             minWidth: '20vw',
-                            // backgroundColor: '#005af0',
-                            // borderColor: '#005af0',
                             fontWeight: 'bolder',
-                            // color: 'white',
                             margin: '1rem',
                         }}
                         type="primary"
@@ -55,10 +46,7 @@ export function WalletFooter() {
                     <Button
                         style={{
                             minWidth: '20vw',
-                            // backgroundColor: '#005af0',
-                            // borderColor: '#005af0',
                             fontWeight: 'bolder',
-                            // color: 'white',
                             margin: '1rem',
                         }}
                         type="primary"
