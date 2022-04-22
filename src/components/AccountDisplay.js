@@ -112,12 +112,14 @@ export function AccountDisplay({
                     >
                         <Avatar size={150} src={profilePicSrc} />
                         {!userName && (
-                            <Address
-                                style={{ marginTop: 4 }}
-                                address={address}
-                                fontSize={30}
-                                showTooltip
-                            />
+                            <div>
+                                <Address
+                                    style={{ marginTop: 4 }}
+                                    address={address}
+                                    fontSize={30}
+                                    showTooltip
+                                />
+                            </div>
                         )}
                         {userName && (
                             <>
