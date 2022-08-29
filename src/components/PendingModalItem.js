@@ -1,9 +1,10 @@
 import { Badge } from './Badge';
 import React from 'react';
-import { Button, Tooltip, Typography } from 'antd';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Avatar, Button, Tooltip, Typography } from 'antd';
+import { CheckOutlined, CloseOutlined, MailOutlined } from '@ant-design/icons';
 import { signAndSubmitTxn } from '../api/api';
 import { PRIMARY_TEXT } from '../constants';
+import { getAddressFromPartitionedAddress } from '../utils/AddressUtils';
 
 const { Text } = Typography;
 
@@ -14,7 +15,12 @@ export function PendingModalItem({
     badge,
     balance,
     id,
+    address,
 }) {
+    const blockScanLink =
+        'https://chat.blockscan.com/index?a=' +
+        getAddressFromPartitionedAddress(address);
+
     return (
         <div>
             <div
@@ -29,6 +35,19 @@ export function PendingModalItem({
                 <Text strong style={{ color: PRIMARY_TEXT }}>
                     {title}
                 </Text>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Tooltip title="Message this User" placement="bottom">
+                    <a href={blockScanLink} target="_blank" rel="noreferrer">
+                        <Avatar
+                            size="large"
+                            onClick={() => {}}
+                            className="screen-button account-socials-button"
+                        >
+                            <MailOutlined />
+                        </Avatar>
+                    </a>
+                </Tooltip>
             </div>
             <br />
             <div

@@ -5,6 +5,7 @@ import {
     LinkOutlined,
     ShareAltOutlined,
     TwitterOutlined,
+    MailOutlined,
 } from '@ant-design/icons';
 import { SECONDARY_TEXT, WEBSITE_HOSTNAME } from '../constants';
 import React from 'react';
@@ -30,6 +31,8 @@ export function AccountDisplay({
     ) : (
         <Blockies seed={address.toLowerCase()} size={40} />
     );
+
+    const blockScanLink = 'https://chat.blockscan.com/index?a=' + address;
 
     return (
         <div>
@@ -73,6 +76,17 @@ export function AccountDisplay({
                         </Tooltip>
                     </a>
                 )}
+                <Tooltip title="Message this User" placement="bottom">
+                    <a href={blockScanLink} target="_blank" rel="noreferrer">
+                        <Avatar
+                            size="large"
+                            onClick={() => {}}
+                            className="screen-button account-socials-button"
+                        >
+                            <MailOutlined />
+                        </Avatar>
+                    </a>
+                </Tooltip>
                 <Tooltip title="Share (Copy Link)" placement="bottom">
                     <Avatar
                         size="large"

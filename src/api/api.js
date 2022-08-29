@@ -14,6 +14,9 @@ import {
     EIP712_MINT_TXN,
     EIP712_REVOKE_TXN,
     EIP712_TRANSFERMANAGER_TXN,
+    EIP712_MINTREQUEST_TXN,
+    EIP712_MINTAPPROVAL_TXN,
+    EIP712_REMOVEAPPROVAL_TXN,
 } from './eip712Types';
 import { message } from 'antd';
 
@@ -54,6 +57,22 @@ export async function getBadgeDataForAddress(
 
                 newUserBalancesMap[badgeKey].received =
                     res.data.balances[badgeKey];
+            }
+
+            for (const approval of res.data.approvals) {
+                const badgeKey = approval.badgeId;
+
+                newUserBalancesMap[badgeKey] = newUserBalancesMap[badgeKey]
+                    ? newUserBalancesMap[badgeKey]
+                    : {};
+
+                newUserBalancesMap[badgeKey].approvals = newUserBalancesMap[
+                    badgeKey
+                ].approvals
+                    ? newUserBalancesMap[badgeKey].approvals
+                    : [];
+
+                newUserBalancesMap[badgeKey].approvals.push(approval);
             }
 
             for (const obj of res.data.inPending) {
@@ -127,6 +146,8 @@ export async function getBadgeDataForAddress(
                         permissions: badge.permissions,
                         supply: badge.supply,
                         manager: badge.manager,
+                        mintApprovals: badge.mintApprovals,
+                        mintRequests: badge.mintRequests,
                         _id: badge._id,
                     };
                 }
@@ -190,6 +211,38 @@ const txnParamsMap = {
     '/badges/transferManager': {
         txnType: EIP712_TXN_TYPE_IDS.EIP712_TRANSFERMANAGER_TXN,
         eip712Types: EIP712_TRANSFERMANAGER_TXN,
+    },
+    '/badges/addMintRequest': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTREQUEST_TXN,
+        eip712Types: EIP712_MINTREQUEST_TXN,
+    },
+    '/badges/removeMintRequest': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTREQUEST_TXN,
+        eip712Types: EIP712_MINTREQUEST_TXN,
+    },
+    '/badges/mintFromMintApproval': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTREQUEST_TXN,
+        eip712Types: EIP712_MINTREQUEST_TXN,
+    },
+    '/badges/addMintApproval': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTAPPROVAL_TXN,
+        eip712Types: EIP712_MINTAPPROVAL_TXN,
+    },
+    '/badges/removeMintApproval': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTAPPROVAL_TXN,
+        eip712Types: EIP712_MINTAPPROVAL_TXN,
+    },
+    '/badges/acceptFromMintRequestToMintApproval': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTAPPROVAL_TXN,
+        eip712Types: EIP712_MINTAPPROVAL_TXN,
+    },
+    '/badges/approve': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_MINTAPPROVAL_TXN,
+        eip712Types: EIP712_MINTAPPROVAL_TXN,
+    },
+    '/badges/removeApprovalById': {
+        txnType: EIP712_TXN_TYPE_IDS.EIP712_REMOVEAPPROVAL_TXN,
+        eip712Types: EIP712_REMOVEAPPROVAL_TXN,
     },
 };
 

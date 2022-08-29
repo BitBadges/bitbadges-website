@@ -5,7 +5,9 @@ import React from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { BadgeModalOverview } from './BadgeModalOverview';
 import { PRIMARY_TEXT } from '../constants';
-import { BadgeModalActions } from './BadgeModalActions';
+import { BadgeModalManagerActions } from './BadgeModalManagerActions';
+import { BadgeModalUserActions } from './BadgeModalUserActions';
+import { useSelector } from 'react-redux';
 
 export function BadgeModal({
     modalIsVisible,
@@ -15,8 +17,31 @@ export function BadgeModal({
     hidePermissions,
 }) {
     const [tab, setTab] = useState('overview');
+    const address = useSelector((state) => state.user.address);
+    const chain = useSelector((state) => state.user.chain);
 
     if (!badge) return <></>;
+
+    const tabInfo = [{ key: 'overview', content: 'Overview' }];
+
+    if (address && chain) {
+        tabInfo.push({
+            key: 'status',
+            content: 'Status',
+        });
+    }
+
+    if (badge.manager === `${chain}:${address}`) {
+        tabInfo.push({
+            key: 'manageractions',
+            content: 'Manager Actions',
+        });
+    }
+
+    tabInfo.push(
+        { key: 'owners', content: 'Owners' },
+        { key: 'activity', content: 'Activity' }
+    );
 
     return (
         <>
@@ -33,12 +58,7 @@ export function BadgeModal({
                 }}
                 title={
                     <Tabs
-                        tabInfo={[
-                            { key: 'overview', content: 'Overview' },
-                            { key: 'actions', content: 'Actions' },
-                            { key: 'owners', content: 'Owners' },
-                            { key: 'activity', content: 'Activity' },
-                        ]}
+                        tabInfo={tabInfo}
                         setTab={setTab}
                         widthPerTab={undefined}
                         theme="dark"
@@ -64,8 +84,15 @@ export function BadgeModal({
                         hidePermissions={hidePermissions}
                     />
                 )}
-                {tab === 'actions' && (
-                    <BadgeModalActions
+                {tab === 'status' && (
+                    <BadgeModalUserActions
+                        badge={badge}
+                        conceptBadge={conceptBadge}
+                        hidePermissions={hidePermissions}
+                    />
+                )}
+                {tab === 'manageractions' && (
+                    <BadgeModalManagerActions
                         badge={badge}
                         conceptBadge={conceptBadge}
                         hidePermissions={hidePermissions}

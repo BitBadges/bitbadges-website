@@ -485,7 +485,12 @@ export function BadgeDataForm({
                     )}
                     {stepNum === 2 && !isConceptForm && (
                         <>
-                            {getTitleElem('Add Recipients (Optional)')}
+                            {getTitleElem(
+                                'Whitelist Recipients to Mint (Optional)'
+                            )}
+                            {getTitleDescription(
+                                'You can approve certain addresses to be able to mint a specified amount of this badge.'
+                            )}
                             <RecipientFormItem
                                 recipients={recipients}
                                 setRecipients={setRecipientsArr}
@@ -673,7 +678,9 @@ export function BadgeDataForm({
                                 <br />
                                 <div style={{ fontSize: 12 }}>
                                     <Text style={{ color: 'lightgray' }}>
-                                        *If you use a custom image, please use a
+                                        *If you use a custom image, please note
+                                        that you can never change the URL. It is
+                                        permanent. We recommend using a
                                         permanent file storage solution such as
                                         IPFS.
                                     </Text>

@@ -58,6 +58,9 @@ export const EIP712_TXN_TYPE_IDS = {
     EIP712_REVOKE_TXN: 3,
     EIP712_LOCK_TXN: 4,
     EIP712_TRANSFERMANAGER_TXN: 5,
+    EIP712_MINTREQUEST_TXN: 6,
+    EIP712_MINTAPPROVAL_TXN: 7,
+    EIP712_REMOVEAPPROVAL_TXN: 8,
 };
 
 export const EIP712_CREATE_BADGE_TXN = {
@@ -95,10 +98,33 @@ export const EIP712_LOCK_TXN = {
     Data: [{ name: 'badgeId', type: 'string' }],
     StandardTxn: StandardTxn,
 };
+
 export const EIP712_TRANSFERMANAGER_TXN = {
     Data: [
         { name: 'badgeId', type: 'string' },
         { name: 'newManager', type: 'string' },
     ],
+    StandardTxn: StandardTxn,
+};
+
+export const EIP712_MINTREQUEST_TXN = {
+    Data: [
+        { name: 'badgeId', type: 'string' },
+        { name: 'amount', type: 'uint256' },
+    ],
+    StandardTxn: StandardTxn,
+};
+
+export const EIP712_MINTAPPROVAL_TXN = {
+    Data: [
+        { name: 'badgeId', type: 'string' },
+        { name: 'amount', type: 'uint256' },
+        { name: 'approvedAddress', type: 'string' },
+    ],
+    StandardTxn: StandardTxn,
+};
+
+export const EIP712_REMOVEAPPROVAL_TXN = {
+    Data: [{ name: 'approvalId', type: 'string' }],
     StandardTxn: StandardTxn,
 };

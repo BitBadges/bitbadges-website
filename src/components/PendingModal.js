@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout, Tooltip, Empty, List, Typography } from 'antd';
-import { WarningOutlined } from '@ant-design/icons';
+import { Layout, Tooltip, Empty, List, Typography, Avatar } from 'antd';
+import { MailOutlined, WarningOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { ETH_NULL_ADDRESS, PRIMARY_TEXT } from '../constants';
 import { PendingModalItem } from './PendingModalItem';
@@ -46,6 +46,11 @@ export function Pending({ tab }) {
                     {tab === 'incoming' && (
                         <>
                             <PendingModalItem
+                                address={
+                                    pendingData.from === ETH_NULL_ADDRESS
+                                        ? badgeMap[pendingData.badge].manager
+                                        : pendingData.from
+                                }
                                 title={
                                     <>
                                         {pendingData.from !==
@@ -139,6 +144,7 @@ export function Pending({ tab }) {
                     )}
                     {tab === 'outgoing' && (
                         <PendingModalItem
+                            address={pendingData.to}
                             title={
                                 <>
                                     {' '}

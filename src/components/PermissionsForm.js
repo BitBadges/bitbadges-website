@@ -6,7 +6,7 @@ import { FormNavigationHeader } from './FormNavigationHeader';
 
 const { Text } = Typography;
 
-const FINAL_STEP_NUM = 4;
+const FINAL_STEP_NUM = 3;
 const FIRST_STEP_NUM = 1;
 const CURR_TIMELINE_STEP_NUM = 2;
 
@@ -71,10 +71,10 @@ export function PermissionsForm({
                     decrementStep={decrementStep}
                     stepNum={permissionsStepNum}
                     nextButtonDisabled={permissionsStepNum === FINAL_STEP_NUM}
-                    finalStepNumber={4}
+                    finalStepNumber={FINAL_STEP_NUM}
                 />
                 <Form layout="horizontal">
-                    {permissionsStepNum === 1 && (
+                    {/* {permissionsStepNum === 1 && (
                         <>
                             {getTitleElement('Can Mint More?')}
                             <div
@@ -106,9 +106,9 @@ export function PermissionsForm({
                                 </Text>
                             </div>
                         </>
-                    )}
+                    )} */}
 
-                    {permissionsStepNum === 2 && (
+                    {permissionsStepNum === 1 && (
                         <>
                             {getTitleElement('Can Revoke?')}
                             <div
@@ -143,7 +143,7 @@ export function PermissionsForm({
                         </>
                     )}
 
-                    {permissionsStepNum === 3 && (
+                    {permissionsStepNum === 2 && (
                         <>
                             {getTitleElement('Transferable?')}
                             <div
@@ -176,7 +176,7 @@ export function PermissionsForm({
                             </div>
                         </>
                     )}
-                    {permissionsStepNum === 4 && (
+                    {permissionsStepNum === 3 && (
                         <>
                             {getTitleElement(
                                 'Confirm Permissions and Continue'
@@ -213,10 +213,13 @@ export function PermissionsForm({
                                             marginBottom: 10,
                                         }}
                                     >
-                                        -{' '}
-                                        {canMintMore
+                                        -
+                                        {
+                                            'You will be able to lock the supply at any time in the future. This is standard for all created badges.'
+                                        }
+                                        {/* {canMintMore
                                             ? 'Supply is not locked (can be locked in the future)'
-                                            : 'Supply is locked (can never be unlocked)'}
+                                            : 'Supply is locked (can never be unlocked)'} */}
                                     </Typography.Text>
                                 </div>
                                 <div

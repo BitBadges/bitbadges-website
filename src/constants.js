@@ -1,11 +1,11 @@
-export const NODE_URL = 'https://bit-badges.herokuapp.com';
-// NODE_URL: 'http://localhost:3000',
+// export const NODE_URL = 'https://bit-badges.herokuapp.com';
+export const NODE_URL = 'http://localhost:1234';
 
 export const WEBSITE_HOSTNAME = 'localhost:3001'; //used for the copy / share profile link
 
 // export const PRIVATE_API_URL = 'https://bitbadges-private-api.herokuapp.com';
-export const PRIVATE_API_URL = 'https://api.circlegame.io';
-// export const PRIVATE_API_URL = 'http://localhost:3000';
+// export const PRIVATE_API_URL = 'https://api.circlegame.io';
+export const PRIVATE_API_URL = 'http://localhost:3000';
 
 export const MAX_DATE_TIMESTAMP = 8640000000000000;
 export const ETH_NULL_ADDRESS =
@@ -45,3 +45,6 @@ export const SAMPLE_BADGE = {
     manager: 'ETH:0xe00dD9D317573f7B4868D8f2578C65544B153A27',
     _id: 'f729504ee514b7c2e9c5dbfae92da5493007cb558d44e236dd19aa934dc0254a',
 };
+
+export const ETH_LOGO =
+    'https://e7.pngegg.com/pngimages/407/710/png-clipart-ethereum-cryptocurrency-bitcoin-cash-smart-contract-bitcoin-blue-angle-thumbnail.png';
